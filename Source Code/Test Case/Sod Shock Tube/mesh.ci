@@ -1,0 +1,22 @@
+module mesh{
+  array[3D] Mesh{
+    entry Mesh();
+    entry void refinemesh();
+
+    entry void comm(){
+      serial{
+        face(0,idx,idy,idz).cfcomm(m1);
+        face(0,idx+1,idy,idz).cfcomm(m2);
+        face(1,idx,idy,idz).cfcomm(m3);
+        face(1,idx+1,idy,idz).cfcomm(m4);
+        face(2,idx,idy,idz).cfcomm(m5);
+        face(2,idx+1,idy,idz).cfcomm(m6);
+      }
+
+      overlap{
+
+      }
+    };
+
+  };
+};

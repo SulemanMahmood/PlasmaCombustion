@@ -1,7 +1,0 @@
-module interfaceflux{
-  array[4D] Intflux{
-    void interfaceflux(){
-
-    }
-  };
-};
