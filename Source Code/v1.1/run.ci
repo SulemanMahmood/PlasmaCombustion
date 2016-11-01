@@ -1,0 +1,6 @@
+mainmodule{
+  mainchare main{
+    entry main();
+    entry [reductiontarget] convergence();
+  };
+};
