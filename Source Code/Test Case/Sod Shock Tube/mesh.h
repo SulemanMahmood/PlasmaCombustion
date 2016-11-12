@@ -12,7 +12,7 @@ class Mesh: public CBase_Mesh{
   public:
     Mesh(){
       r_level = 1;
-      numdiv = pow(2,r_level)*mindiv;
+      numdiv = pow(2,r_level)*min_div;
       local_tsteps = ref_iter*pow(2,r_level);
     }
 
@@ -23,7 +23,7 @@ class Mesh: public CBase_Mesh{
       double3D temp_P = P;
       int temp_level = r_level;
       r_level = newlevel;
-      numdiv = pow(2,r_level)*mindiv;
+      numdiv = pow(2,r_level)*min_div;
       local_tsteps = ref_iter*pow(2,r_level);
       initializeflow3D(k1,numdiv);
       initializeflow3D(k2,numdiv);
@@ -44,7 +44,20 @@ class Mesh: public CBase_Mesh{
     }
 
     void refinemesh(flow3D v_new, flow3D v_old, double3D P_new, double3D P_old){
-
+      int n_size = v_new.size();
+      int old_size = v_old.size();
+      int s = int(n_size / old_size);
+      for (int i = 0; i < n_size; i++){
+        for (int j = 0; j < n_size; j++){
+          for (int k = 0; k < n_size; k++){
+            i_o = int(i/s);
+            j_o = int(j/s);
+            k_o = int(k/s);
+            v_new[i][j][k] = v_old[i_o][j_o][k_o];
+            P_new[i][j][k] = P_old[i_o][j_o][k_o];
+          }
+        }
+      }
     }
 
     void coarsenmesh(flow3D v_new, flow3D v_old, double3D P_new, double3D P_old){
