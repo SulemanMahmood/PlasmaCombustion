@@ -12,13 +12,18 @@ class Mesh: public CBase_Mesh{
   public:
     Mesh(){
       r_level = 1;
-
+      numdiv = pow(2,r_level)*mindiv;
+      local_tsteps = ref_iter*pow(2,r_level);
     }
 
     Mesh(CkMigrateMessage *);
 
     void refinemesh(){
 
+    }
+
+    void coarsenmesh(){
+      
     }
 
 }
