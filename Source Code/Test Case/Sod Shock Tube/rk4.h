@@ -10,7 +10,7 @@ class RK4{
   public:
 
     RK4(){
-      initialize(fval_old,P,numdiv);
+      initialize(fval_old,P);
     }
 
     void solve(){
