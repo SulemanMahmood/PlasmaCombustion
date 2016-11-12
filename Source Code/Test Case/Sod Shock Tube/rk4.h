@@ -10,18 +10,7 @@ class RK4{
   public:
 
     RK4(){
-      resizeflow3D(k1,numdiv);
-      resizeflow3D(k2,numdiv);
-      resizeflow3D(k3,numdiv);
-      resizeflow3D(k4,numdiv);
-      resizeflow3D(fval_old,numdiv);
-      resizeflow3D(fval_new,numdiv);
-      resizeflow3D(temp,numdiv);
-      resizeflow3D(temp2,numdiv);
-      resizeflow3D(var1,numdiv);
-      resizeflow3D(var2,numdiv);
-      resizeflow3D(var3,numdiv);
-      resizedouble3D(P,numdiv);
+      initialize(fval_old,P,numdiv);
     }
 
     void solve(){
