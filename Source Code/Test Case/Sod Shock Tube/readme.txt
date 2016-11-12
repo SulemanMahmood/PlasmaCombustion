@@ -7,6 +7,7 @@ Completed:
 5. run.C
 6. structdef.h
 7. vecdef.h
+8. rk4.h
 
 Incomplete:
 
@@ -14,5 +15,4 @@ Incomplete:
 2. interface.h
 3. mesh.ci
 4. mesh.h
-5. rk4.h
-6. run.ci
+5. run.ci
