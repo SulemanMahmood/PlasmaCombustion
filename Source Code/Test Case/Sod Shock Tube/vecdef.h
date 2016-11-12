@@ -15,6 +15,16 @@ void initializeflow3D(flow3D a, int nd){
   }
 }
 
+void initializeasymflow3D(flow3D a, int ndx, int ndy, int ndz){
+  a.resize(ndx);
+  for (int i = 0; i < ndx; i++){
+    a[i].resize(ndy);
+    for (int j = 0; j < ndy; j++){
+      a[i][j].resize(ndz);
+    }
+  }
+}
+
 void initializedouble3D(double3D a, int nd){
   a.resize(nd);
   for (int i = 0; i < nd; i++){

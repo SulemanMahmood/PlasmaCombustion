@@ -1,12 +1,7 @@
 #ifndef STRUCTDEF_H_
 #define STRUCTDEF_H_
 
-struct species{
-  std::vector<double> Y;
-  Y.resize(numspecies);
-}
-
-struct flow: public species{
+struct flow{
   double r, u, v, w, E;
 };
 

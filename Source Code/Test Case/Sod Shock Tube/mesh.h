@@ -18,12 +18,37 @@ class Mesh: public CBase_Mesh{
 
     Mesh(CkMigrateMessage *);
 
-    void refinemesh(){
+    void changemesh(int newlevel){
+      flow3D temp_fval = fval_old;
+      double3D temp_P = P;
+      int temp_level = r_level;
+      r_level = newlevel;
+      numdiv = pow(2,r_level)*mindiv;
+      local_tsteps = ref_iter*pow(2,r_level);
+      initializeflow3D(k1,numdiv);
+      initializeflow3D(k2,numdiv);
+      initializeflow3D(k3,numdiv);
+      initializeflow3D(k4,numdiv);
+      initializeflow3D(fval_old,numdiv);
+      initializeflow3D(fval_new,numdiv);
+      initializeflow3D(temp,numdiv);
+      initializeflow3D(temp2,numdiv);
+      initializeflow3D(var1,numdiv);
+      initializeflow3D(var2,numdiv);
+      initializeflow3D(var3,numdiv);
+      initializedouble3D(P,numdiv);
+      if (r_level < temp_level)
+        coarsenmesh(fval_old,temp_fval,P,temp_P);
+      else
+        refinemesh(fval_old,temp_fval,P,temp_P);
+    }
+
+    void refinemesh(flow3D v_new, flow3D v_old, double3D P_new, double3D P_old){
 
     }
 
-    void coarsenmesh(){
-      
+    void coarsenmesh(flow3D v_new, flow3D v_old, double3D P_new, double3D P_old){
+
     }
 
 }
