@@ -8,7 +8,7 @@ class totalFlux{
 
       flow3D flux_i[3];
       if ((flux_f.size() - flux_i.size()) != 1){
-        initializeasymflow3D(flux_i,numdiv+1,numdiv,numdiv);
+        resizeasymflow3D(flux_i,numdiv+1,numdiv,numdiv);
       }
 
       inviscidFlux(flux_i,val_c,P);

@@ -25,18 +25,18 @@ class Mesh: public CBase_Mesh{
       r_level = newlevel;
       numdiv = pow(2,r_level)*min_div;
       local_tsteps = ref_iter*pow(2,r_level);
-      initializeflow3D(k1,numdiv);
-      initializeflow3D(k2,numdiv);
-      initializeflow3D(k3,numdiv);
-      initializeflow3D(k4,numdiv);
-      initializeflow3D(fval_old,numdiv);
-      initializeflow3D(fval_new,numdiv);
-      initializeflow3D(temp,numdiv);
-      initializeflow3D(temp2,numdiv);
-      initializeflow3D(var1,numdiv);
-      initializeflow3D(var2,numdiv);
-      initializeflow3D(var3,numdiv);
-      initializedouble3D(P,numdiv);
+      resizeflow3D(k1,numdiv);
+      resizeflow3D(k2,numdiv);
+      resizeflow3D(k3,numdiv);
+      resizeflow3D(k4,numdiv);
+      resizeflow3D(fval_old,numdiv);
+      resizeflow3D(fval_new,numdiv);
+      resizeflow3D(temp,numdiv);
+      resizeflow3D(temp2,numdiv);
+      resizeflow3D(var1,numdiv);
+      resizeflow3D(var2,numdiv);
+      resizeflow3D(var3,numdiv);
+      resizedouble3D(P,numdiv);
       if (r_level < temp_level)
         coarsenmesh(fval_old,temp_fval,P,temp_P);
       else
@@ -61,7 +61,7 @@ class Mesh: public CBase_Mesh{
     }
 
     void coarsenmesh(flow3D v_new, flow3D v_old, double3D P_new, double3D P_old){
-      
+
     }
 
 }

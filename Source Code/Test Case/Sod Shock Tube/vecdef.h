@@ -5,7 +5,7 @@ typedef vector<vector<vector<int>>> int3D;
 typedef vector<vector<vector<double>>> double3D;
 typedef vector<vector<vector<flow>>> flow3D;
 
-void initializeflow3D(flow3D a, int nd){
+void resizeflow3D(flow3D a, int nd){
   a.resize(nd);
   for (int i = 0; i < nd; i++){
     a[i].resize(nd);
@@ -15,7 +15,7 @@ void initializeflow3D(flow3D a, int nd){
   }
 }
 
-void initializeasymflow3D(flow3D a, int ndx, int ndy, int ndz){
+void resizeasymflow3D(flow3D a, int ndx, int ndy, int ndz){
   a.resize(ndx);
   for (int i = 0; i < ndx; i++){
     a[i].resize(ndy);
@@ -25,7 +25,7 @@ void initializeasymflow3D(flow3D a, int ndx, int ndy, int ndz){
   }
 }
 
-void initializedouble3D(double3D a, int nd){
+void resizedouble3D(double3D a, int nd){
   a.resize(nd);
   for (int i = 0; i < nd; i++){
     a[i].resize(nd);
