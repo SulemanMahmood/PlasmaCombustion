@@ -21,7 +21,7 @@ module mesh{
       forall[i](1:6,1){
         when volume[i](int tag, Msg *m) serial{
           if (i == 1){
-
+            datacopy(); //Copy msg
           }
           delete m;
         }
