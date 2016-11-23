@@ -1,6 +1,10 @@
 #ifndef FLUX_H_
 #define FLUX_H_
 
+#include "structdef.h"
+#include "vecdef.h"
+#include "hrslau2.h"
+
 class totalFlux{
   public:
 

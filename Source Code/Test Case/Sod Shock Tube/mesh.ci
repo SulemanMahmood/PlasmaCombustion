@@ -1,20 +1,30 @@
 module mesh{
+
+  message Msg;
+
   array[3D] Mesh{
     entry Mesh();
-    entry void refinemesh();
+    entry void changemesh(int newlevel);
+    entry void volume();
 
     entry void comm(){
+      Msg m1 = ;
       serial{
-        face(0,idx,idy,idz).cfcomm(m1);
-        face(0,idx+1,idy,idz).cfcomm(m2);
-        face(1,idx,idy,idz).cfcomm(m3);
-        face(1,idx+1,idy,idz).cfcomm(m4);
-        face(2,idx,idy,idz).cfcomm(m5);
-        face(2,idx+1,idy,idz).cfcomm(m6);
+        face(0,idx,idy,idz,1).cfcomm(m1);
+        face(0,idx+1,idy,idz,2).cfcomm(m2);
+        face(1,idx,idy,idz,3).cfcomm(m3);
+        face(1,idx+1,idy,idz,4).cfcomm(m4);
+        face(2,idx,idy,idz,5).cfcomm(m5);
+        face(2,idx+1,idy,idz,6).cfcomm(m6);
       }
 
-      overlap{
+      forall[i](1:6,1){
+        when volume[i](int tag, Msg *m) serial{
+          if (i == 1){
 
+          }
+          delete m;
+        }
       }
     };
 

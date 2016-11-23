@@ -1,7 +1,7 @@
 mainmodule main{
 	readonly CProxy_Mesh cell;
   readonly CProxy_Intflux face;
-  
+
 	mainchare Main{
     entry Main(CkArgMsg* msg);
     entry [reductiontarget] void done();

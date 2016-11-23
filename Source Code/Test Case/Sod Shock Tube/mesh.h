@@ -1,6 +1,9 @@
 #ifndef MESH_H_
 #define MESH_H_
 
+#include "structdef.h"
+#include "vecdef.h"
+
 class Mesh: public CBase_Mesh{
   friend class IDEALGAS, RK4, HRSLAU2;
 

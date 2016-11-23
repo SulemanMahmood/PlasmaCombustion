@@ -1,4 +1,10 @@
-#include"main.decl.h"
+#include "main.decl.h"
+#include "flux.h"
+#include "idealgas.h"
+#include "input.h"
+#include "interface.h"
+#include "mesh.h"
+#include "rk4.h"
 
 \*readonly*\ CProxy_Mesh cell;
 \*readonly*\ CProxy_Intflux face;

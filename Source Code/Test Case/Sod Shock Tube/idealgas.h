@@ -1,6 +1,9 @@
 #ifndef IDEALGAS_H_
 #define IDEALGAS_H_
 
+#include "structdef.h"
+#include "vecdef.h" 
+
 class IDEALGAS{
   public:
     void gaslaw(double3D p, flow3D a, int ndiv){

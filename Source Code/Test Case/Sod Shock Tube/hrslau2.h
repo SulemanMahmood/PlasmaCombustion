@@ -1,6 +1,9 @@
 #ifndef HRSLAU2_H_
 #define HRSLAU2_H_
 
+#include "structdef.h"
+#include "vecdef.h" 
+
 class HRSLAU2{
   public:
     void inviscidFlux(flow3D fl[], flow3D a, double3D p){

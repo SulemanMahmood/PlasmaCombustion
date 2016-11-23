@@ -1,6 +1,9 @@
 #ifndef RK4_H_
 #define RK4_H_
 
+#include "structdef.h"
+#include "vecdef.h" 
+
 class RK4{
   private:
     flow3D k1, k2, k3, k4, fval_old, fval_new;
