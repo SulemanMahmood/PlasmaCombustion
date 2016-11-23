@@ -20,7 +20,7 @@ class totalFlux{
       for (int i = 0; i < numdiv; i++){
         for (int j = 0; j < numdiv; j++){
           for (int k = 0; k < numdiv; k++){
-            cell[i][j][k] = 0.0 - face[0][i+1][j][k] + face[0][i][j][k] - face[1][j+1][k][i] + face[1][j][i][k] - face[2][k+1][i][j] + face[2][k][i][j];
+            cell[i][j][k] = face[0][i][j][k] - face[0][i+1][j][k] - face[1][j+1][k][i] + face[1][j][i][k] - face[2][k+1][i][j] + face[2][k][i][j];
           }
         }
       }
