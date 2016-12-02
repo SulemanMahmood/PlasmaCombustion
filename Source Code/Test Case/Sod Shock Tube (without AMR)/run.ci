@@ -1,9 +1,13 @@
 mainmodule main{
-	readonly CProxy_Mesh cell;
-  readonly CProxy_Intflux face;
+	readonly CProxy_Cell cellProxy;
+  readonly CProxy_Intflux interfaceProxy;
 
 	mainchare Main{
     entry Main(CkArgMsg* msg);
     entry [reductiontarget] void done();
   };
+
+	array[3D] Cell{
+	
+	}
 };

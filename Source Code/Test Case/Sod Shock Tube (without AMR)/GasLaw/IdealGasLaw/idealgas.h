@@ -3,7 +3,7 @@
 
 class IdealGas : public Cell{
   public:
-    void gaslaw();
+    void gaslaw(flow3D);
 }
 
 #endif
