@@ -1,7 +1,7 @@
 #include "hrslau2.h"
 
 // Inviscid flux calculation using Hi-Res SLAU2
-void Flux::inviscidFlux(){
+void Flux::inviscidFlux(flow3D a){
   double r_l, r_r, r_h, P_l, P_r, g_mix_r, g_mix_l, C_p;
   vector<flow> a_l, a_r;
   double c_l, c_r, c_h, chi, g, g_HR, nx, ny nz;
@@ -16,14 +16,14 @@ void Flux::inviscidFlux(){
 
           a_r = a[i][j][k];
           r_r = a_r.r;
-          P_r = p[i][j][k];
+          P_r = P[i][j][k];
           u_r = a_r.u/r_r;
           v_r = a_r.v/r_r;
           w_r = a_r.w/r_r;
           if (n == 0){
             a_l = a[i-1][j][k];
             r_l = a_l.r;
-            P_l = p[i-1][j][k];
+            P_l = P[i-1][j][k];
             u_l = a_l.u/r_l;
             v_l = a_l.v/r_l;
             w_l = a_l.w/r_l;
@@ -34,7 +34,7 @@ void Flux::inviscidFlux(){
           else if (n == 1){
             a_l = a[k][i-1][j];
             r_l = a_l.r;
-            P_l = p[k][i-1][j];
+            P_l = P[k][i-1][j];
             u_l = a_l.u/r_l;
             v_l = a_l.v/r_l;
             w_l = a_l.w/r_l;
@@ -45,7 +45,7 @@ void Flux::inviscidFlux(){
           else {
             a_l = a[j][k][i-1];
             r_l = a_l.r;
-            P_l = p[j][k][i-1];
+            P_l = P[j][k][i-1];
             u_l = a_l.u/r_l;
             v_l = a_l.v/r_l;
             w_l = a_l.w/r_l;
