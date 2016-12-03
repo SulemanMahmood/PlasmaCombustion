@@ -19,6 +19,7 @@ class Cell: public CBase_Cell{
     flow3D flux_c;
     double3D P;
     int numdiv;
+    double gam;
 
   public:
 

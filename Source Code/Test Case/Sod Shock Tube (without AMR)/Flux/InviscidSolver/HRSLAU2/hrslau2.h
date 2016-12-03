@@ -7,7 +7,7 @@
 
 class HRSLAU2: public Flux{
   public:
-    void inviscidFlux(flow3D);
+    void inviscidFlux(flow3D[],flow3D);
 };
 
 #endif
