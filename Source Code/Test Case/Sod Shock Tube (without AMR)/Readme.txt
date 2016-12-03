@@ -19,5 +19,5 @@ Partially compiled:
 Incomplete:
 1. interface.ci, .C, .h
 2. run.ci, run.C, run.h
-3. Input
-4. Output
+3. read.c, read.h
+4. writ.c, write.h

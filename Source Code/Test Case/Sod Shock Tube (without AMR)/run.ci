@@ -8,6 +8,8 @@ mainmodule main{
   };
 
 	array[3D] Cell{
-	
+		entry void run(){
+			
+		}
 	}
 };
