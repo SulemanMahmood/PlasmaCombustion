@@ -1,6 +1,6 @@
 #include "run.h"
 
-void Cell::fluxFacetoCell(){
+void Flux::fluxFacetoCell(){
   for (int i = 0; i < numdiv; i++){
     for (int j = 0; j < numdiv; j++){
       for (int k = 0; k < numdiv; k++){
@@ -10,11 +10,10 @@ void Cell::fluxFacetoCell(){
   }
 }
 
-void Cell::volflux(flow3D a_n, flow3D a){
+void Flux::volflux(flow3D a_n, flow3D a){
 
   inviscidFlux(flux_i,a);
   comm();
-  flux_f = 0.0 - flux_i;
   fluxFacetoCell();
 
 }

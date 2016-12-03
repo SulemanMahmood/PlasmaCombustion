@@ -6,7 +6,7 @@
 class Flux{
 
   protected:
-    flow3D flux_f[3], flux_i[3];
+    flow3D flux_i[3];
 
   public:
     void fluxFacetoCell();

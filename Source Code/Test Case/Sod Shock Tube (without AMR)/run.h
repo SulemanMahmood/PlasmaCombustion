@@ -4,8 +4,9 @@
 #include <cmath>
 
 /*readonly*/ CProxy_Cell cellProxy;
+/*readonly*/ CProxy_Flux fluxProxy;
 /*readonly*/ CProxy_Intflux interfaceProxy;
-/*readonly*/ int global_t_steps;
+/*readonly*/ int t_steps;
 
 class Main: public CBase_Main{
   private:
@@ -23,18 +24,17 @@ class Cell: public CBase_Cell{
     double3D P;
     int numdiv;
     double gam;
-    int local_tsteps;
-    double local_dt, local_L;
+    int t_steps;
+    double dt, local_L;
     flow3D k1, k2, k3, k4, fval_old, fval_new;
     flow3D temp, temp2, var1, var2, var3;
 
   public:
     void gaslaw(flow3D);
-    void volflux(flow3D,flow3D);
     void solve();
 
 };
 
 class Flux: public CBase_Flux{
-  
+
 };

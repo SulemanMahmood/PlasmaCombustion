@@ -12,7 +12,7 @@ mainmodule main{
 		entry void calc_val();
 		entry void run(){
 			for (iter = 0; iter < t_steps; iter++){
-				fluxProxy(thisIndex.x,thisIndex.y,thisIndex.z).calc_flux();
+				serial{fluxProxy(thisIndex.x,thisIndex.y,thisIndex.z).calc_flux();}
 				when calc_val() serial{
 					volflux(k1,fval_old);
 					calcvar3D(var1,fval_old,k1);
@@ -20,7 +20,7 @@ mainmodule main{
 					vecadd3D(temp,fval_old,temp2,numdiv);
 					gaslaw(temp);
 				}
-				fluxProxy(thisIndex.x,thisIndex.y,thisIndex.z).calc_flux();
+				serial{fluxProxy(thisIndex.x,thisIndex.y,thisIndex.z).calc_flux();}
 				when calc_val() serial{
 					volflux(k2,temp);
 					calcvar3D(var2,var1,k2);
@@ -28,14 +28,14 @@ mainmodule main{
 					vecadd3D(temp,fval_old,temp2,numdiv);
 					gaslaw(temp);
 				}
-				fluxProxy(thisIndex.x,thisIndex.y,thisIndex.z).calc_flux();
+				serial{fluxProxy(thisIndex.x,thisIndex.y,thisIndex.z).calc_flux();}
 				when calc_val() serial{
 					volflux(k3,temp);
 					calcvar3D(var3,var2,k3);
 					vecadd3D(temp,fval_old,var3,numdiv);
 					gaslaw(temp);
 				}
-				fluxProxy(thisIndex.x,thisIndex.y,thisIndex.z).calc_flux();
+				serial{fluxProxy(thisIndex.x,thisIndex.y,thisIndex.z).calc_flux();}
 				when calc_val() serial{
 					volflux(k4,temp);
 				}
