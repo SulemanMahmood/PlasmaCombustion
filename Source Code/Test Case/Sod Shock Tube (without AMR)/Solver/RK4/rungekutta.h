@@ -15,9 +15,7 @@ class rk4 : public Cell{
     rk4();
     void solve();
     void calcvar3D(flow3D v_n, flow3D v_o, flow3D fl);
-    virtual void gaslaw(flow3D f){};
-    virtual void volflux(flow3D l, flow3D m);
-
+    
 };
 
 #endif

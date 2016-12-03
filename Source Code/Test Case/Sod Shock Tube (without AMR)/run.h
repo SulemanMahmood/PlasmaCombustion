@@ -22,5 +22,7 @@ class Cell: public CBase_Cell{
     double gam;
 
   public:
+    virtual void gaslaw(flow3D)=0;
+    virtual void volflux(flow3D,flow3D)=0;
 
 };
