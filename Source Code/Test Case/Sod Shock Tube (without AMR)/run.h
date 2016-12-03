@@ -13,8 +13,9 @@ class Main: public CBase_Main{
 }
 
 class Cell: public CBase_Cell{
-  private:
+  protected:
+    flow3D flux_c;
 
   public:
-    
+
 }

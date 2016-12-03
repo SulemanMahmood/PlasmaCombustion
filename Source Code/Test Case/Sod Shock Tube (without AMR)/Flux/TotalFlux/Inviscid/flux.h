@@ -12,6 +12,6 @@ class Flux : public Cell{
     void volflux();
     virtual void comm(){}
     virtual void inviscidFlux(){}
-}
+};
 
 #endif
