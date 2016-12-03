@@ -20,16 +20,16 @@ struct flow{
   return *lhs;
 }*/
 
-flow& operator+=(flow& lhs, const flow& rhs) {
+flow operator+=(flow& lhs, const flow& rhs) {
   for (int i = 0; i < lhs.Y.size(); i++){
     lhs.Y[i] += rhs.Y[i];
   }
-  lhs->r += rhs->r;
+  lhs.r += rhs.r;
   lhs.u += rhs.u;
   lhs.v += rhs.v;
   lhs.w += rhs.w;
   lhs.E += rhs.E;
-  return *lhs;
+  return lhs;
 }
 
 flow& operator-=(flow& lhs, const flow& rhs) {
