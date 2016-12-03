@@ -1,10 +1,6 @@
 Compiled:
-1. hrslau2.h
-2. hrslau2.C
-3. RK4.C (without communication)
-4. RK4.h  (without communication)
-5. idealgas.C
-6. idealgas.h
+1. idealgas.C
+2. idealgas.h
 
 
 

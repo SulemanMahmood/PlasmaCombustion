@@ -10,8 +10,8 @@ class Flux : public Cell{
   public:
     void fluxFacetoCell();
     void volflux();
-    virtual void comm(){}
-    virtual void inviscidFlux(){}
+    virtual void comm();
+    virtual void inviscidFlux(flow3D);
 };
 
 #endif
