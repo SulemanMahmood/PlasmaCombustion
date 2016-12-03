@@ -19,16 +19,16 @@ struct flow{
     return *this;
   }
 
-  flow& operator+=(flow& lhs, const flow& rhs) {
-    for (int i = 0; i < lhs.Y.size(); i++){
-      lhs.Y[i] += rhs.Y[i];
+  flow& operator+=(flow& rhs) {
+    for (int i = 0; i < rhs.Y.size(); i++){
+      this->Y[i] += rhs.Y[i];
     }
-    lhs.r += rhs.r;
-    lhs.u += rhs.u;
-    lhs.v += rhs.v;
-    lhs.w += rhs.w;
-    lhs.E += rhs.E;
-    return *lhs;
+    this->r += rhs.r;
+    this->u += rhs.u;
+    this->v += rhs.v;
+    this->w += rhs.w;
+    this->E += rhs.E;
+    return *this;
   }
 
 
