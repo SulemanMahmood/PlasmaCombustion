@@ -6,20 +6,26 @@
 struct flow{
   double r, u, v, w, E;
   std::vector<double> Y;
+  flow operator=(const flow& k) {
+    flow temp;
+    for (int i = 0; i < temp.Y.size(); i++){
+      temp.Y[i] = k.Y[i];
+    }
+    temp.r = k.r;
+    temp.u = k.u;
+    temp.v = k.v;
+    temp.w = k.w;
+    temp.E = k.E;
+    return temp;
+  }
 };
 
-flow operator=(const flow& k) {
-  flow temp;
-  for (int i = 0; i < temp.Y.size(); i++){
-    temp.Y[i] = k.Y[i];
-  }
-  temp.r = k.r;
-  temp.u = k.u;
-  temp.v = k.v;
-  temp.w = k.w;
-  temp.E = k.E;
-  return temp;
-}
+/*class Flow{
+  public:
+    flow operator=(const flow&);
+};*/
+
+
 
 flow operator+=(flow& lhs, const flow& rhs) {
   for (int i = 0; i < lhs.Y.size(); i++){
