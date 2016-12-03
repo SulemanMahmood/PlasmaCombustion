@@ -3,7 +3,7 @@
 // Inviscid flux calculation using Hi-Res SLAU2
 void Flux::inviscidFlux(flow3D a){
   double r_l, r_r, r_h, P_l, P_r, g_mix_r, g_mix_l, C_p;
-  vector<flow> a_l, a_r;
+  std::vector<flow> a_l, a_r;
   double c_l, c_r, c_h, chi, g, g_HR, nx, ny nz;
   double u_r, u_l, v_r, v_l, w_l, w_r, V, V_l, V_r;
   double M, M_L, M_R, f_L, f_R;
