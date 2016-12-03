@@ -1,7 +1,7 @@
 #ifndef FLUX_H_
 #define FLUX_H_
 
-#include "run.h"
+#include "../../../run.h"
 
 class Flux : public Cell{
   protected:
