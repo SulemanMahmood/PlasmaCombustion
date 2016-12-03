@@ -8,6 +8,6 @@ class IdealGas : public Cell{
    double gam;
   public:
     void gaslaw(flow3D);
-}
+};
 
 #endif
