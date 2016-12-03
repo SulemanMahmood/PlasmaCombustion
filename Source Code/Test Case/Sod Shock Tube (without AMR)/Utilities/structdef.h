@@ -97,14 +97,14 @@ flow operator+(const flow& lhs, const double& k) {
 flow operator+(const double& k, const flow& rhs) {
   flow temp;
   for (int i = 0; i < lhs.Y.size(); i++){
-    flow.Y[i] = k + rhs.Y[i];
+    temp.Y[i] = k + rhs.Y[i];
   }
-  flow.r = rhs.r + k;
-  flow.u = rhs.u + k;
-  flow.v = rhs.v + k;
-  flow.w = rhs.w + k;
-  flow.E = rhs.E + k;
-  return flow;
+  temp.r = rhs.r + k;
+  temp.u = rhs.u + k;
+  temp.v = rhs.v + k;
+  temp.w = rhs.w + k;
+  temp.E = rhs.E + k;
+  return temp;
 }
 
 flow operator-(const flow& lhs, const flow& rhs) {
