@@ -10,7 +10,7 @@ class Main: public CBase_Main{
   public:
     Main(CkArgMsg*);
     void done();
-}
+};
 
 class Cell: public CBase_Cell{
   protected:
@@ -18,4 +18,4 @@ class Cell: public CBase_Cell{
 
   public:
 
-}
+};
