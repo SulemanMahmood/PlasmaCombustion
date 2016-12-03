@@ -9,22 +9,22 @@ struct flow{
 
   flow& operator=(const flow& k) {
     for (int i = 0; i < this->Y.size(); i++){
-      this->Y[i] = k.Y[i];
+      this->Y[i] = k->Y[i];
     }
-    this->r = k.r;
-    this->u = k.u;
-    this->v = k.v;
-    this->w = k.w;
-    this->E = k.E;
+    this->r = k->r;
+    this->u = k->u;
+    this->v = k->v;
+    this->w = k->w;
+    this->E = k->E;
     return *this;
   }
 
   flow& operator+=(flow& lhs, const flow& rhs) {
     for (int i = 0; i < lhs->Y.size(); i++){
-      lhs->Y[i] += rhs.Y[i];
+      lhs->Y[i] += rhs->Y[i];
     }
     lhs->r += rhs.r;
-    lhsu += rhs.u;
+    lhs->u += rhs.u;
     lhs.v += rhs.v;
     lhs.w += rhs.w;
     lhs.E += rhs.E;
