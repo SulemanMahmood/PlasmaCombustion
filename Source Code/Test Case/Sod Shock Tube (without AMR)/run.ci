@@ -39,14 +39,16 @@ mainmodule main{
 				when calc_val() serial{
 					volflux(k4,temp);
 				}
-				vecselfmul3D(k2,double(2),numdiv);
-				vecselfmul3D(k3,double(2),numdiv);
-				vecselfadd3D(k1,k2,numdiv);
-				vecselfadd3D(k3,k4,numdiv);
-				vecselfadd3D(k1,k3,numdiv);
-				vecselfdiv3D(k1,double(6),numdiv);
-				calcvar3D(fval_new,fval_old,k1);
-				gaslaw(fval_new);
+				serial{
+					vecselfmul3D(k2,double(2),numdiv);
+					vecselfmul3D(k3,double(2),numdiv);
+					vecselfadd3D(k1,k2,numdiv);
+					vecselfadd3D(k3,k4,numdiv);
+					vecselfadd3D(k1,k3,numdiv);
+					vecselfdiv3D(k1,double(6),numdiv);
+					calcvar3D(fval_new,fval_old,k1);
+					gaslaw(fval_new);
+				}
 			}
 			serial{
 				CkCallback cb(CkReductionTarget(Main,done),mainProxy);
