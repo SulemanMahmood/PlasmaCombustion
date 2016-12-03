@@ -1,2 +1,3 @@
 all:
-	charmc -c hrslau2.C > CompilationOutput.txt
+	charmc -c hrslau2.C
+	
