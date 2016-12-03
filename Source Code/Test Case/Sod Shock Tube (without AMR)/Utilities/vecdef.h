@@ -39,8 +39,7 @@ void resizedouble3D(double3D a, int nd){
 
 
 template<typename T>
-typedef std::vector<std::vector<std::vector<T>>> T3D
-void vecadd3D(T3D res, T3D lhs, T3D rhs, int dim){
+void vecadd3D(T res, T lhs, T rhs, int dim){
   for(int i = 0; i < dim; i++){
     for(int j = 0; j < dim; j++){
       for(int k = 0; k < dim; k++){
@@ -51,8 +50,7 @@ void vecadd3D(T3D res, T3D lhs, T3D rhs, int dim){
 }
 
 template<typename T>
-typedef std::vector<std::vector<std::vector<T>>> T3D
-void vecdiv3D(T3D res, T3D lhs, double rhs, int dim){
+void vecdiv3D(T res, T lhs, double rhs, int dim){
   for(int i = 0; i < dim; i++){
     for(int j = 0; j < dim; j++){
       for(int k = 0; k < dim; k++){
@@ -63,8 +61,7 @@ void vecdiv3D(T3D res, T3D lhs, double rhs, int dim){
 }
 
 template<typename T>
-typedef std::vector<std::vector<std::vector<T>>> T3D
-void vecselfadd3D(T3D lhs, T3D rhs, int dim){
+void vecselfadd3D(T lhs, T rhs, int dim){
   for(int i = 0; i < dim; i++){
     for(int j = 0; j < dim; j++){
       for(int k = 0; k < dim; k++){
@@ -75,8 +72,7 @@ void vecselfadd3D(T3D lhs, T3D rhs, int dim){
 }
 
 template<typename T>
-typedef std::vector<std::vector<std::vector<T>>> T3D
-void vecselfsub3D(T3D lhs, T3D rhs, int dim){
+void vecselfsub3D(T lhs, T rhs, int dim){
   for(int i = 0; i < dim; i++){
     for(int j = 0; j < dim; j++){
       for(int k = 0; k < dim; k++){
@@ -87,8 +83,7 @@ void vecselfsub3D(T3D lhs, T3D rhs, int dim){
 }
 
 template<typename T>
-typedef std::vector<std::vector<std::vector<T>>> T3D
-void vecselfmul3D(T3D lhs, double rhs, int dim){
+void vecselfmul3D(T lhs, double rhs, int dim){
   for(int i = 0; i < dim; i++){
     for(int j = 0; j < dim; j++){
       for(int k = 0; k < dim; k++){
@@ -99,8 +94,7 @@ void vecselfmul3D(T3D lhs, double rhs, int dim){
 }
 
 template<typename T>
-typedef std::vector<std::vector<std::vector<T>>> T3D
-void vecselfdiv3D(T3D lhs, double rhs, int dim){
+void vecselfdiv3D(T lhs, double rhs, int dim){
   for(int i = 0; i < dim; i++){
     for(int j = 0; j < dim; j++){
       for(int k = 0; k < dim; k++){
@@ -111,8 +105,7 @@ void vecselfdiv3D(T3D lhs, double rhs, int dim){
 }
 
 template<typename T>
-typedef std::vector<std::vector<std::vector<T>>> T3D
-void vecselfadd4D(T3D lhs[], T3D rhs[], int dim){
+void vecselfadd4D(T lhs[], T rhs[], int dim){
   for(int n = 0; n < 3; n++){
     for(int i = 0; i < dim; i++){
       for(int j = 0; j < dim; j++){
@@ -125,8 +118,7 @@ void vecselfadd4D(T3D lhs[], T3D rhs[], int dim){
 }
 
 template<typename T>
-typedef std::vector<std::vector<std::vector<T>>> T3D
-void vecselfsub4D(T3D lhs[], T3D rhs[], int dim){
+void vecselfsub4D(T lhs[], T rhs[], int dim){
   for(int n = 0; n < 3; n++){
     for(int i = 0; i < dim; i++){
       for(int j = 0; j < dim; j++){
