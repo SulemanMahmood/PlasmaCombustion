@@ -6,17 +6,17 @@
 struct flow{
   double r, u, v, w, E;
   std::vector<double> Y;
-  flow operator=(const flow& k) {
-    flow temp;
+
+  flow& operator=(const flow& k) {
     for (int i = 0; i < temp.Y.size(); i++){
-      temp.Y[i] = k.Y[i];
+      this->Y[i] = k.Y[i];
     }
-    temp.r = k.r;
-    temp.u = k.u;
-    temp.v = k.v;
-    temp.w = k.w;
-    temp.E = k.E;
-    return temp;
+    this->r = k.r;
+    this->u = k.u;
+    this->v = k.v;
+    this->w = k.w;
+    this->E = k.E;
+    return *this;
   }
 };
 
