@@ -1,4 +1,4 @@
-module interfaceflux{
+module Intflux{
   array[4D] Intflux{
     entry void inter_flux(Msg*);
     entry void calc();
