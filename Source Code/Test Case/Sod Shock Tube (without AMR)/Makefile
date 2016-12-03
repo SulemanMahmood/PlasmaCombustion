@@ -1,5 +1,8 @@
 all:
-	cd Flux/Interface; charmc interface.ci
+	cd Flux/Interface; make
+	cd Flux/InviscidSolver/HRSLAU2; make
+	cd Flux/TotalFlux/Inviscid; make
+	
 	charmc run.ci
-	cd Flux/InviscidSolver/HRSLAU2; g++ -c hrslau2.C
+	
 	
