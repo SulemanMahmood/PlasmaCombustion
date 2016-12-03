@@ -1,8 +1,9 @@
 #ifndef RUNGEKUTTA_H_
 #define RUNGEKUTTA_H_
-#include"./../../Utilities/vecdef.h"
+#include "./../../Utilities/vecdef.h"
+#include "./../../run.h"
 
-class rk4{
+class rk4 : public Cell{
   private:
     flow3D k1, k2, k3, k4, fval_old, fval_new;
     double3D P;
