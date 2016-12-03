@@ -1,5 +1,6 @@
 #ifndef RUNGEKUTTA_H_
 #define RUNGEKUTTA_H_
+#include"./../../Utilities/vecdef.h"
 
 class rk4{
   private:

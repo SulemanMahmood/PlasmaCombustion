@@ -1,3 +1,5 @@
+#include"rungekutta.h"
+
 rk4::rk4(){
   initialize(fval_old,P);
 }
