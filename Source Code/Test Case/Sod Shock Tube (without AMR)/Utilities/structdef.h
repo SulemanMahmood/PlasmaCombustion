@@ -68,16 +68,17 @@ flow operator/=(flow& lhs, const double rhs) {
   return lhs;
 }
 
-flow& operator+(const flow& lhs, const flow& rhs) {
+flow operator+(const flow& lhs, const flow& rhs) {
+  flow temp;
   for (int i = 0; i < lhs.Y.size(); i++){
-    this->Y[i] = lhs.Y[i] + rhs.Y[i];
+    temp.Y[i] = lhs.Y[i] + rhs.Y[i];
   }
-  this->r = lhs.r + rhs.r;
-  this->u = lhs.u + rhs.u;
-  this->v = lhs.v + rhs.v;
-  this->w = lhs.w + rhs.w;
-  this->E = lhs.E + rhs.E;
-  return *this;
+  temp.r = lhs.r + rhs.r;
+  temp.u = lhs.u + rhs.u;
+  temp.v = lhs.v + rhs.v;
+  temp.w = lhs.w + rhs.w;
+  temp.E = lhs.E + rhs.E;
+  return temp;
 }
 
 flow& operator+(const flow& lhs, const double& k) {
