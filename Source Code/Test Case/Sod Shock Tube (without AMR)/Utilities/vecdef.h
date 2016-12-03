@@ -54,7 +54,7 @@ void vecdiv3D(T res, T lhs, double rhs, int dim){
   for(int i = 0; i < dim; i++){
     for(int j = 0; j < dim; j++){
       for(int k = 0; k < dim; k++){
-        res[i][j][k] = lhs[i][j][k] / rhs[i][j][k];
+        res[i][j][k] = lhs[i][j][k] / rhs;
       }
     }
   }

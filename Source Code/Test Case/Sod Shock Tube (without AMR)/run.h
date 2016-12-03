@@ -1,9 +1,9 @@
 #include "main.decl.h"
-#include "./Flux/Interface/Intflux.decl.h"
+//#include "./Flux/Interface/Intflux.decl.h"
 #include "Utilities/vecdef.h"
 
 /*readonly*/ CProxy_Cell cellProxy;
-/*readonly*/ CProxy_Intflux interfaceProxy;
+/*readonly*/// CProxy_Intflux interfaceProxy;
 
 class Main: public CBase_Main{
   private:
@@ -18,6 +18,7 @@ class Cell: public CBase_Cell{
   protected:
     flow3D flux_c;
     double3D P;
+    int numdiv;
 
   public:
 
