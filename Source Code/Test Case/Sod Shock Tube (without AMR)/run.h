@@ -3,14 +3,13 @@
 #include "Utilities/vecdef.h"
 #include <cmath>
 
+/*readonly*/ CProxy_Main mainProxy;
 /*readonly*/ CProxy_Cell cellProxy;
 /*readonly*/ CProxy_Flux fluxProxy;
 /*readonly*/ CProxy_Intflux interfaceProxy;
 /*readonly*/ int t_steps;
 
 class Main: public CBase_Main{
-  private:
-    int iter, max_iter;
 
   public:
     Main(CkArgMsg*);

@@ -3,6 +3,7 @@
 Main::Main(CkArgMsg* msg){
   delete msg;
   iter = 0;
+  mainProxy = thisProxy;
   cellProxy = CProxy_Cell::ckNew(dimX,dimY,dimZ);
   interfaceProxyface = CProxy_Intflux::ckNew(3,dimX+1,dimY,dimZ);
   fluxProxy = CProxy_Flux::ckNew(dimX,dimY,dimZ);
@@ -10,9 +11,7 @@ Main::Main(CkArgMsg* msg){
 }
 
 Main::void done(){
-  if ((++iter) == max_iter){
-    CkExit();
-  }
+  CkExit();
 }
 
 void Cell::calcvar3D(flow3D v_n, flow3D v_o, flow3D fl){

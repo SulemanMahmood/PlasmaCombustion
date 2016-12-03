@@ -48,11 +48,29 @@ mainmodule main{
 				calcvar3D(fval_new,fval_old,k1);
 				gaslaw(fval_new);
 			}
+			serial{
+				CkCallback cb(CkReductionTarget(Main,done),mainProxy);
+				contribute(cb);
+			}
 		}
 	};
 
 	array[3D] Flux{
+		entry void calc_flux();
+		entry void run_flux(){
+			for (iter = 0; iter < t_steps; iter++){
+				when calc_flux() serial{
+					inviscidFlux();
+				}
+				serial{
+					interfaceProxy().calc();
+				}
+				overlap{
 
+				}
+				cellProxy(thisIndex.x,thisIndex.y,thisIndex.z).calc_val(m);
+			}
+		}
 	}
 
 	array[4D] intFlux{
