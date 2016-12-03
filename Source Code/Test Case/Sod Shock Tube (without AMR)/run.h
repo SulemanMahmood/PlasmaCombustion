@@ -1,5 +1,5 @@
 #include "main.decl.h"
-#include "/Flux/Interface/Intflux.decl.h"
+#include "./Flux/Interface/Intflux.decl.h"
 #include "Utilities/vecdef.h"
 
 /*readonly*/ CProxy_Cell cellProxy;
