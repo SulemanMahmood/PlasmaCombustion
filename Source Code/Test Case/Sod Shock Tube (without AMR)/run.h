@@ -1,7 +1,7 @@
 #include "main.decl.h"
 
-\*readonly*\ CProxy_Cell cellProxy;
-\*readonly*\ CProxy_Intflux interfaceProxy;
+/*readonly*/ CProxy_Cell cellProxy;
+/*readonly*/ CProxy_Intflux interfaceProxy;
 
 class Main: public CBase_Main{
   private:
