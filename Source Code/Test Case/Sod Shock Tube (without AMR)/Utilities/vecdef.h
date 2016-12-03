@@ -3,9 +3,9 @@
 
 #include "structdef.h"
 
-typedef vector<vector<vector<int>>> int3D;
-typedef vector<vector<vector<double>>> double3D;
-typedef vector<vector<vector<flow>>> flow3D;
+typedef std::vector<std::vector<std::vector<int>>> int3D;
+typedef std::vector<std::vector<std::vector<double>>> double3D;
+typedef std::vector<std::vector<std::vector<flow>>> flow3D;
 
 void resizeflow3D(flow3D a, int nd){
   a.resize(nd);

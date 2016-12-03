@@ -5,6 +5,7 @@
 
 struct flow{
   double r, u, v, w, E;
+  std::vector<double> Y;
 };
 
 flow& operator=(flow& lhs, const double& k) {
