@@ -1,3 +1,5 @@
+#include "idealgas.h"
+
 void IdealGas::gaslaw(flow3D a){
   for (int x = 0; x < numdiv; x++){
     for (int y = 0; y < numdiv; y++){
