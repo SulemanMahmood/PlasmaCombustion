@@ -8,7 +8,7 @@ struct flow{
   std::vector<double> Y;
 };
 
-flow& operator=(const double& k) {
+/*flow& operator=(const double& k) {
   for (int i = 0; i < this.Y.size(); i++){
     this->Y[i] = k;
   }
@@ -18,7 +18,7 @@ flow& operator=(const double& k) {
   this->w = k;
   this->E = k;
   return (*this);
-}
+}*/
 
 flow operator+=(flow& lhs, const flow& rhs) {
   for (int i = 0; i < lhs.Y.size(); i++){
@@ -44,39 +44,39 @@ flow operator-=(flow& lhs, const flow& rhs) {
   return lhs;
 }
 
-flow& operator*=(flow& lhs, const double rhs) {
+flow operator*=(flow& lhs, const double rhs) {
   for (int i = 0; i < lhs.Y.size(); i++){
-    lhs.Y[i] *= rhs.Y[i];
+    lhs.Y[i] *= rhs;
   }
   lhs.r *= rhs;
   lhs.u *= rhs;
   lhs.v *= rhs;
   lhs.w *= rhs;
   lhs.E *= rhs;
-  return *lhs;
+  return lhs;
 }
 
-flow& operator/=(flow& lhs, const double rhs) {
+flow operator/=(flow& lhs, const double rhs) {
   for (int i = 0; i < lhs.Y.size(); i++){
-    lhs.Y[i] /= rhs.Y[i];
+    lhs.Y[i] /= rhs;
   }
   lhs.r /= rhs;
   lhs.u /= rhs;
   lhs.v /= rhs;
   lhs.w /= rhs;
   lhs.E /= rhs;
-  return *lhs;
+  return lhs;
 }
 
 flow& operator+(const flow& lhs, const flow& rhs) {
   for (int i = 0; i < lhs.Y.size(); i++){
-    this.Y[i] = lhs.Y[i] + rhs.Y[i];
+    this->Y[i] = lhs.Y[i] + rhs.Y[i];
   }
-  this.r = lhs.r + rhs.r;
-  this.u = lhs.u + rhs.u;
-  this.v = lhs.v + rhs.v;
-  this.w = lhs.w + rhs.w;
-  this.E = lhs.E + rhs.E;
+  this->r = lhs.r + rhs.r;
+  this->u = lhs.u + rhs.u;
+  this->v = lhs.v + rhs.v;
+  this->w = lhs.w + rhs.w;
+  this->E = lhs.E + rhs.E;
   return *this;
 }
 
