@@ -1,11 +1,11 @@
 module interfaceflux{
   array[4D] Intflux{
-    entry void inter_flux();
+    entry void inter_flux(Msg*);
     entry calc(){
-      when inter_flux(Msg *m){
+      when inter_flux(Msg* m) serial{
         memcpy();
         delete m;
-        
+
       }
     }
   };
