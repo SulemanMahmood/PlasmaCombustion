@@ -8,16 +8,16 @@ struct flow{
   std::vector<double> Y;
 };
 
-flow operator=(flow& lhs, const double& k) {
-  for (int i = 0; i < lhs.Y.size(); i++){
-    lhs.Y[i] = k;
+flow& operator=(const double& k) {
+  for (int i = 0; i < this.Y.size(); i++){
+    this->Y[i] = k;
   }
-  lhs.r = k;
-  lhs.u = k;
-  lhs.v = k;
-  lhs.w = k;
-  lhs.E = k;
-  return lhs;
+  this->r = k;
+  this->u = k;
+  this->v = k;
+  this->w = k;
+  this->E = k;
+  return (*this);
 }
 
 flow operator+=(flow& lhs, const flow& rhs) {
