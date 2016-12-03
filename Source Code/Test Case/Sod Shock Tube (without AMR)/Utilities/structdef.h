@@ -8,7 +8,7 @@ struct flow{
   std::vector<double> Y;
 
   flow& operator=(const flow& k) {
-    for (int i = 0; i < temp.Y.size(); i++){
+    for (int i = 0; i < this->Y.size(); i++){
       this->Y[i] = k.Y[i];
     }
     this->r = k.r;
@@ -18,26 +18,23 @@ struct flow{
     this->E = k.E;
     return *this;
   }
+
+  flow& operator+=(flow& lhs, const flow& rhs) {
+    for (int i = 0; i < lhs->Y.size(); i++){
+      lhs->Y[i] += rhs.Y[i];
+    }
+    lhs->r += rhs.r;
+    lhsu += rhs.u;
+    lhs.v += rhs.v;
+    lhs.w += rhs.w;
+    lhs.E += rhs.E;
+    return *lhs;
+  }
+
+
 };
 
-/*class Flow{
-  public:
-    flow operator=(const flow&);
-};*/
 
-
-
-flow operator+=(flow& lhs, const flow& rhs) {
-  for (int i = 0; i < lhs.Y.size(); i++){
-    lhs.Y[i] += rhs.Y[i];
-  }
-  lhs.r += rhs.r;
-  lhs.u += rhs.u;
-  lhs.v += rhs.v;
-  lhs.w += rhs.w;
-  lhs.E += rhs.E;
-  return lhs;
-}
 
 flow operator-=(flow& lhs, const flow& rhs) {
   for (int i = 0; i < lhs.Y.size(); i++){
