@@ -8,7 +8,7 @@ struct flow{
   std::vector<double> Y;
 
   flow& operator=(const flow& k) {
-    for (int i = 0; i < this->Y.size(); i++){
+    for (int i = 0; i < k.Y.size(); i++){
       this->Y[i] = k.Y[i];
     }
     this->r = k.r;
