@@ -1,2 +1,2 @@
 all:
-	charmc -c Idealgas.C
+	charmc -c idealgas.C
