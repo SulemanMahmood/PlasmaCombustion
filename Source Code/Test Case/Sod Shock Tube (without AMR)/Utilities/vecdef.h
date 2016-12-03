@@ -1,7 +1,7 @@
 #ifndef VECDEF_H_
 #define VECDEF_H_
 
-#include <vector>
+#include "structdef.h"
 
 typedef vector<vector<vector<int>>> int3D;
 typedef vector<vector<vector<double>>> double3D;
