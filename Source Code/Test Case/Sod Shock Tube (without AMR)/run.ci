@@ -34,7 +34,6 @@ mainmodule main{
 					calcvar3D(var3,var2,k3);
 					vecadd3D(temp,fval_old,var3,numdiv);
 					gaslaw(temp);
-
 				}
 				fluxProxy(thisIndex.x,thisIndex.y,thisIndex.z).calc_flux();
 				when calc_val() serial{
@@ -48,7 +47,6 @@ mainmodule main{
 				vecselfdiv3D(k1,double(6),numdiv);
 				calcvar3D(fval_new,fval_old,k1);
 				gaslaw(fval_new);
-				}
 			}
 		}
 	};

@@ -34,3 +34,7 @@ class Cell: public CBase_Cell{
     void solve();
 
 };
+
+class Flux: public CBase_Flux{
+  
+};
