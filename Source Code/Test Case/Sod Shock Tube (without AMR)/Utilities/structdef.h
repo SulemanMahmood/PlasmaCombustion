@@ -9,7 +9,7 @@ struct flow{
 };
 
 flow& operator=(flow& lhs, const double& k) {
-  for (int i = 0; i < Y.size(); i++){
+  for (int i = 0; i < lhs.Y.size(); i++){
     lhs.Y[i] = k;
   }
   lhs.r = k;
@@ -21,7 +21,7 @@ flow& operator=(flow& lhs, const double& k) {
 }
 
 flow& operator+=(flow& lhs, const flow& rhs) {
-  for (int i = 0; i < Y.size(); i++){
+  for (int i = 0; i < lhs.Y.size(); i++){
     lhs.Y[i] += rhs.Y[i];
   }
   lhs.r += rhs.r;
@@ -33,7 +33,7 @@ flow& operator+=(flow& lhs, const flow& rhs) {
 }
 
 flow& operator-=(flow& lhs, const flow& rhs) {
-  for (int i = 0; i < Y.size(); i++){
+  for (int i = 0; i < lhs.Y.size(); i++){
     lhs.Y[i] -= rhs.Y[i];
   }
   lhs.r -= rhs.r;
@@ -45,7 +45,7 @@ flow& operator-=(flow& lhs, const flow& rhs) {
 }
 
 flow& operator*=(flow& lhs, const double rhs) {
-  for (int i = 0; i < Y.size(); i++){
+  for (int i = 0; i < lhs.Y.size(); i++){
     lhs.Y[i] *= rhs.Y[i];
   }
   lhs.r *= rhs;
@@ -57,7 +57,7 @@ flow& operator*=(flow& lhs, const double rhs) {
 }
 
 flow& operator/=(flow& lhs, const double rhs) {
-  for (int i = 0; i < Y.size(); i++){
+  for (int i = 0; i < lhs.Y.size(); i++){
     lhs.Y[i] /= rhs.Y[i];
   }
   lhs.r /= rhs;
@@ -69,7 +69,7 @@ flow& operator/=(flow& lhs, const double rhs) {
 }
 
 flow& operator+(const flow& lhs, const flow& rhs) {
-  for (int i = 0; i < Y.size(); i++){
+  for (int i = 0; i < lhs.Y.size(); i++){
     this.Y[i] = lhs.Y[i] + rhs.Y[i];
   }
   this.r = lhs.r + rhs.r;
@@ -81,7 +81,7 @@ flow& operator+(const flow& lhs, const flow& rhs) {
 }
 
 flow& operator+(const flow& lhs, const double& k) {
-  for (int i = 0; i < Y.size(); i++){
+  for (int i = 0; i < lhs.Y.size(); i++){
     this.Y[i] = lhs.Y[i] + k;
   }
   this.r = lhs.r + k;
@@ -93,7 +93,7 @@ flow& operator+(const flow& lhs, const double& k) {
 }
 
 flow& operator+(const double& k, const flow& rhs) {
-  for (int i = 0; i < Y.size(); i++){
+  for (int i = 0; i < lhs.Y.size(); i++){
     this.Y[i] = k + rhs.Y[i];
   }
   this.r = rhs.r + k;
@@ -105,7 +105,7 @@ flow& operator+(const double& k, const flow& rhs) {
 }
 
 flow& operator-(const flow& lhs, const flow& rhs) {
-  for (int i = 0; i < Y.size(); i++){
+  for (int i = 0; i < lhs.Y.size(); i++){
     this.Y[i] = lhs.Y[i] - rhs.Y[i];
   }
   this.r = lhs.r - rhs.r;
@@ -117,7 +117,7 @@ flow& operator-(const flow& lhs, const flow& rhs) {
 }
 
 flow& operator-(const flow& lhs, const double& k) {
-  for (int i = 0; i < Y.size(); i++){
+  for (int i = 0; i < lhs.Y.size(); i++){
     this.Y[i] = lhs.Y[i] - k;
   }
   this.r = lhs.r - k;
@@ -129,7 +129,7 @@ flow& operator-(const flow& lhs, const double& k) {
 }
 
 flow& operator-(const double& k, const flow& rhs) {
-  for (int i = 0; i < Y.size(); i++){
+  for (int i = 0; i < lhs.Y.size(); i++){
     this.Y[i] = k - rhs.Y[i];
   }
   this.r = k - rhs.r;
@@ -141,7 +141,7 @@ flow& operator-(const double& k, const flow& rhs) {
 }
 
 flow& operator*(const flow& lhs, const flow& rhs) {
-  for (int i = 0; i < Y.size(); i++){
+  for (int i = 0; i < lhs.Y.size(); i++){
     this.Y[i] = lhs.Y[i] * rhs.Y[i];
   }
   this.r = lhs.r * rhs.r;
@@ -153,7 +153,7 @@ flow& operator*(const flow& lhs, const flow& rhs) {
 }
 
 flow& operator*(const flow& lhs, const double& k) {
-  for (int i = 0; i < Y.size(); i++){
+  for (int i = 0; i < lhs.Y.size(); i++){
     this.Y[i] = lhs.Y[i] * k;
   }
   this.r = lhs.r * k;
@@ -165,7 +165,7 @@ flow& operator*(const flow& lhs, const double& k) {
 }
 
 flow& operator*(const double& k, const flow& rhs) {
-  for (int i = 0; i < Y.size(); i++){
+  for (int i = 0; i < rhs.Y.size(); i++){
     this.Y[i] = k * rhs.Y[i];
   }
   this.r = k * rhs.r;
@@ -177,7 +177,7 @@ flow& operator*(const double& k, const flow& rhs) {
 }
 
 flow& operator/(const flow& lhs, const flow& rhs) {
-  for (int i = 0; i < Y.size(); i++){
+  for (int i = 0; i < lhs.Y.size(); i++){
     this.Y[i] = lhs.Y[i] / rhs.Y[i];
   }
   this.r = lhs.r / rhs.r;
@@ -189,7 +189,7 @@ flow& operator/(const flow& lhs, const flow& rhs) {
 }
 
 flow& operator/(const flow& lhs, const double& k) {
-  for (int i = 0; i < Y.size(); i++){
+  for (int i = 0; i < lhs.Y.size(); i++){
     this.Y[i] = lhs.Y[i] / k;
   }
   this.r = lhs.r / k;
@@ -201,7 +201,7 @@ flow& operator/(const flow& lhs, const double& k) {
 }
 
 flow& operator/(const double& k, const flow& rhs) {
-  for (int i = 0; i < Y.size(); i++){
+  for (int i = 0; i < rhs.Y.size(); i++){
     this.Y[i] = k / rhs.Y[i];
   }
   this.r = k / rhs.r;
