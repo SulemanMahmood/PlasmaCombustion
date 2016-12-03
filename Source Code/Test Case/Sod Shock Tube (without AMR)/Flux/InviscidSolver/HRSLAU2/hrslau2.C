@@ -95,7 +95,7 @@ void Flux::inviscidFlux(flow3D fl[], flow3D a){
             fl[n][i][j][k].E += P_l/r_l*m_dot;
           }
           else{
-            fl[n][i1][i2][i3] = m_dot*a_r;
+            fl[n][i][j][k] = m_dot*a_r;
             fl[n][i][j][k].r /= r_r;
             fl[n][i][j][k].u += P_r*nx;
             fl[n][i][j][k].v += P_r*ny;
