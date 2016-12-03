@@ -1,6 +1,8 @@
 #ifndef STRUCTDEF_H_
 #define STRUCTDEF_H_
 
+#include <vector>
+
 struct flow{
   double r, u, v, w, E;
 };

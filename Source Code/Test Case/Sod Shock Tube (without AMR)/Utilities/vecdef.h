@@ -1,6 +1,8 @@
 #ifndef VECDEF_H_
 #define VECDEF_H_
 
+#include <vector>
+
 typedef vector<vector<vector<int>>> int3D;
 typedef vector<vector<vector<double>>> double3D;
 typedef vector<vector<vector<flow>>> flow3D;
