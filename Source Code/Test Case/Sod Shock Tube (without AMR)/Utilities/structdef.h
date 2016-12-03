@@ -9,15 +9,15 @@ struct flow{
 };
 
 /*flow& operator=(const double& k) {
-  for (int i = 0; i < this.Y.size(); i++){
-    this->Y[i] = k;
+  for (int i = 0; i < temp.Y.size(); i++){
+    temp->Y[i] = k;
   }
-  this->r = k;
-  this->u = k;
-  this->v = k;
-  this->w = k;
-  this->E = k;
-  return (*this);
+  temp->r = k;
+  temp->u = k;
+  temp->v = k;
+  temp->w = k;
+  temp->E = k;
+  return (*temp);
 }*/
 
 flow operator+=(flow& lhs, const flow& rhs) {
@@ -81,136 +81,147 @@ flow operator+(const flow& lhs, const flow& rhs) {
   return temp;
 }
 
-flow& operator+(const flow& lhs, const double& k) {
+flow operator+(const flow& lhs, const double& k) {
+  flow temp;
   for (int i = 0; i < lhs.Y.size(); i++){
-    this.Y[i] = lhs.Y[i] + k;
+    temp.Y[i] = lhs.Y[i] + k;
   }
-  this.r = lhs.r + k;
-  this.u = lhs.u + k;
-  this.v = lhs.v + k;
-  this.w = lhs.w + k;
-  this.E = lhs.E + k;
-  return *this;
+  temp.r = lhs.r + k;
+  temp.u = lhs.u + k;
+  temp.v = lhs.v + k;
+  temp.w = lhs.w + k;
+  temp.E = lhs.E + k;
+  return temp;
 }
 
-flow& operator+(const double& k, const flow& rhs) {
+flow operator+(const double& k, const flow& rhs) {
+  flow temp;
   for (int i = 0; i < lhs.Y.size(); i++){
-    this.Y[i] = k + rhs.Y[i];
+    flow.Y[i] = k + rhs.Y[i];
   }
-  this.r = rhs.r + k;
-  this.u = rhs.u + k;
-  this.v = rhs.v + k;
-  this.w = rhs.w + k;
-  this.E = rhs.E + k;
-  return *this;
+  flow.r = rhs.r + k;
+  flow.u = rhs.u + k;
+  flow.v = rhs.v + k;
+  flow.w = rhs.w + k;
+  flow.E = rhs.E + k;
+  return flow;
 }
 
-flow& operator-(const flow& lhs, const flow& rhs) {
+flow operator-(const flow& lhs, const flow& rhs) {
+  flow temp;
   for (int i = 0; i < lhs.Y.size(); i++){
-    this.Y[i] = lhs.Y[i] - rhs.Y[i];
+    temp.Y[i] = lhs.Y[i] - rhs.Y[i];
   }
-  this.r = lhs.r - rhs.r;
-  this.u = lhs.u - rhs.u;
-  this.v = lhs.v - rhs.v;
-  this.w = lhs.w - rhs.w;
-  this.E = lhs.E - rhs.E;
-  return *this;
+  temp.r = lhs.r - rhs.r;
+  temp.u = lhs.u - rhs.u;
+  temp.v = lhs.v - rhs.v;
+  temp.w = lhs.w - rhs.w;
+  temp.E = lhs.E - rhs.E;
+  return temp;
 }
 
-flow& operator-(const flow& lhs, const double& k) {
+flow operator-(const flow& lhs, const double& k) {
+  flow temp;
   for (int i = 0; i < lhs.Y.size(); i++){
-    this.Y[i] = lhs.Y[i] - k;
+    temp.Y[i] = lhs.Y[i] - k;
   }
-  this.r = lhs.r - k;
-  this.u = lhs.u - k;
-  this.v = lhs.v - k;
-  this.w = lhs.w - k;
-  this.E = lhs.E - k;
-  return *this;
+  temp.r = lhs.r - k;
+  temp.u = lhs.u - k;
+  temp.v = lhs.v - k;
+  temp.w = lhs.w - k;
+  temp.E = lhs.E - k;
+  return temp;
 }
 
-flow& operator-(const double& k, const flow& rhs) {
+flow operator-(const double& k, const flow& rhs) {
+  flow temp;
   for (int i = 0; i < lhs.Y.size(); i++){
-    this.Y[i] = k - rhs.Y[i];
+    temp.Y[i] = k - rhs.Y[i];
   }
-  this.r = k - rhs.r;
-  this.u = k - rhs.u;
-  this.v = k - rhs.v;
-  this.w = k - rhs.w;
-  this.E = k - rhs.E;
-  return *this;
+  temp.r = k - rhs.r;
+  temp.u = k - rhs.u;
+  temp.v = k - rhs.v;
+  temp.w = k - rhs.w;
+  temp.E = k - rhs.E;
+  return temp;
 }
 
-flow& operator*(const flow& lhs, const flow& rhs) {
+flow operator*(const flow& lhs, const flow& rhs) {
+  flow temp;
   for (int i = 0; i < lhs.Y.size(); i++){
-    this.Y[i] = lhs.Y[i] * rhs.Y[i];
+    temp.Y[i] = lhs.Y[i] * rhs.Y[i];
   }
-  this.r = lhs.r * rhs.r;
-  this.u = lhs.u * rhs.u;
-  this.v = lhs.v * rhs.v;
-  this.w = lhs.w * rhs.w;
-  this.E = lhs.E * rhs.E;
-  return *this;
+  temp.r = lhs.r * rhs.r;
+  temp.u = lhs.u * rhs.u;
+  temp.v = lhs.v * rhs.v;
+  temp.w = lhs.w * rhs.w;
+  temp.E = lhs.E * rhs.E;
+  return temp;
 }
 
-flow& operator*(const flow& lhs, const double& k) {
+flow operator*(const flow& lhs, const double& k) {
+  flow temp;
   for (int i = 0; i < lhs.Y.size(); i++){
-    this.Y[i] = lhs.Y[i] * k;
+    temp.Y[i] = lhs.Y[i] * k;
   }
-  this.r = lhs.r * k;
-  this.u = lhs.u * k;
-  this.v = lhs.v * k;
-  this.w = lhs.w * k;
-  this.E = lhs.E * k;
-  return *this;
+  temp.r = lhs.r * k;
+  temp.u = lhs.u * k;
+  temp.v = lhs.v * k;
+  temp.w = lhs.w * k;
+  temp.E = lhs.E * k;
+  return temp;
 }
 
-flow& operator*(const double& k, const flow& rhs) {
+flow operator*(const double& k, const flow& rhs) {
+  flow temp;
   for (int i = 0; i < rhs.Y.size(); i++){
-    this.Y[i] = k * rhs.Y[i];
+    temp.Y[i] = k * rhs.Y[i];
   }
-  this.r = k * rhs.r;
-  this.u = k * rhs.u;
-  this.v = k * rhs.v;
-  this.w = k * rhs.w;
-  this.E = k * rhs.E;
-  return *this;
+  temp.r = k * rhs.r;
+  temp.u = k * rhs.u;
+  temp.v = k * rhs.v;
+  temp.w = k * rhs.w;
+  temp.E = k * rhs.E;
+  return temp;
 }
 
-flow& operator/(const flow& lhs, const flow& rhs) {
+flow operator/(const flow& lhs, const flow& rhs) {
+  flow temp;
   for (int i = 0; i < lhs.Y.size(); i++){
-    this.Y[i] = lhs.Y[i] / rhs.Y[i];
+    temp.Y[i] = lhs.Y[i] / rhs.Y[i];
   }
-  this.r = lhs.r / rhs.r;
-  this.u = lhs.u / rhs.u;
-  this.v = lhs.v / rhs.v;
-  this.w = lhs.w / rhs.w;
-  this.E = lhs.E / rhs.E;
-  return *this;
+  temp.r = lhs.r / rhs.r;
+  temp.u = lhs.u / rhs.u;
+  temp.v = lhs.v / rhs.v;
+  temp.w = lhs.w / rhs.w;
+  temp.E = lhs.E / rhs.E;
+  return temp;
 }
 
-flow& operator/(const flow& lhs, const double& k) {
+flow operator/(const flow& lhs, const double& k) {
+  flow temp;
   for (int i = 0; i < lhs.Y.size(); i++){
-    this.Y[i] = lhs.Y[i] / k;
+    temp.Y[i] = lhs.Y[i] / k;
   }
-  this.r = lhs.r / k;
-  this.u = lhs.u / k;
-  this.v = lhs.v / k;
-  this.w = lhs.w / k;
-  this.E = lhs.E / k;
-  return *this;
+  temp.r = lhs.r / k;
+  temp.u = lhs.u / k;
+  temp.v = lhs.v / k;
+  temp.w = lhs.w / k;
+  temp.E = lhs.E / k;
+  return temp;
 }
 
-flow& operator/(const double& k, const flow& rhs) {
+flow operator/(const double& k, const flow& rhs) {
+  flow temp;
   for (int i = 0; i < rhs.Y.size(); i++){
-    this.Y[i] = k / rhs.Y[i];
+    temp.Y[i] = k / rhs.Y[i];
   }
-  this.r = k / rhs.r;
-  this.u = k / rhs.u;
-  this.v = k / rhs.v;
-  this.w = k / rhs.w;
-  this.E = k / rhs.E;
-  return *this;
+  temp.r = k / rhs.r;
+  temp.u = k / rhs.u;
+  temp.v = k / rhs.v;
+  temp.w = k / rhs.w;
+  temp.E = k / rhs.E;
+  return temp;
 }
 
 #endif
