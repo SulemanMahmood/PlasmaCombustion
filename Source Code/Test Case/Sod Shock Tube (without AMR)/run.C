@@ -14,4 +14,14 @@ Main::void done(){
   }
 }
 
+void Cell::calcvar3D(flow3D v_n, flow3D v_o, flow3D fl){
+  for (int i = 0; i < numdiv; i++){
+    for(int j = 0; j < numdiv; j++){
+      for(int k = 0; k < numdiv; k++){
+        v_n[i][j][k] = v_o[i][j][k] + local_dt *  fl[i][j][k] / local_L;
+      }
+    }
+  }
+}
+
 #include"main.def.h"

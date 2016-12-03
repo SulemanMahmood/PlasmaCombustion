@@ -3,7 +3,7 @@
 
 #include "../../../run.h"
 
-class Flux : public Cell{
+class Flux{
 
   protected:
     flow3D flux_f[3], flux_i[3];
@@ -11,8 +11,8 @@ class Flux : public Cell{
   public:
     void fluxFacetoCell();
     void volflux(flow3D,flow3D);
-    virtual void comm();
-    virtual void inviscidFlux(flow3D[],flow3D);
+    void comm();
+    void inviscidFlux(flow3D[],flow3D);
 };
 
 #endif

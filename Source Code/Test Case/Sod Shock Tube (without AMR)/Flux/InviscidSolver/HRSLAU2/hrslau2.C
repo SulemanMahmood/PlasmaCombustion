@@ -1,4 +1,4 @@
-#include "hrslau2.h"
+#include "../../TotalFlux/Inviscid.h"
 
 // Inviscid flux calculation using Hi-Res SLAU2
 void Flux::inviscidFlux(flow3D fl[], flow3D a){

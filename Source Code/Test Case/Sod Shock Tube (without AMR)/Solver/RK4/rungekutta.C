@@ -1,10 +1,9 @@
-#include"rungekutta.h"
+#include"../../run.h"
 
-rk4::rk4(){
-  initialize(fval_old,P);
-}
-
-void rk4::solve(){
+void Cell::solve(){
+  flow3D k1, k2, k3, k4, fval_old, fval_new;
+  flow3D temp, temp2, var1, var2, var3;
+  fval_old =
   for (int i = 0; i < local_tsteps; i++){
     volflux(k1,fval_old);
     calcvar3D(var1,fval_old,k1);
@@ -34,16 +33,5 @@ void rk4::solve(){
     calcvar3D(fval_new,fval_old,k1);
 
     gaslaw(fval_new);
-  }
-}
-
-
-void rk4::calcvar3D(flow3D v_n, flow3D v_o, flow3D fl){
-  for (int i = 0; i < numdiv; i++){
-    for(int j = 0; j < numdiv; j++){
-      for(int k = 0; k < numdiv; k++){
-        v_n[i][j][k] = v_o[i][j][k] + local_dt *  fl[i][j][k] / local_L;
-      }
-    }
   }
 }
