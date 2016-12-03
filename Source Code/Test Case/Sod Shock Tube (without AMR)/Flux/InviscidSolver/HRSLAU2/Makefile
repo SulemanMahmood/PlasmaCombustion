@@ -1,2 +1,2 @@
 all:
-	g++ -c hrslau2.C
+	charmc -c hrslau2.C > CompilationOutput.txt

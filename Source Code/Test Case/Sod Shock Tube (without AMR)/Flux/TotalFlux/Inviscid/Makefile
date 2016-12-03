@@ -1,2 +1,2 @@
 all:
-	g++ -c flux.c
+	charmc -c flux.c
