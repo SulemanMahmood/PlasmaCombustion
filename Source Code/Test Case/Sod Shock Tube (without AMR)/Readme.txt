@@ -6,7 +6,9 @@ Compiled:
 
 Partially compiled:
 1. hrslau2.C (g_w not defined)
-2. rk4
+2. RK4.h, Rk4.C (initialize not implemented)
+3. flux.h, flux.C (without communication)
+
 
 
 
@@ -15,6 +17,7 @@ Partially compiled:
 
 
 Incomplete:
-1. interface.ci
-2. interface.C
-3. interface.h
+1. interface.ci, .C, .h
+2. run.ci, run.C, run.h
+3. Input
+4. Output
