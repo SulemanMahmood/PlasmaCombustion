@@ -113,6 +113,7 @@ mainmodule main{
 				}
 			}
 			serial{
+				delete m;
 				CkCallback cb(CkReductionTarget(Main,done),mainProxy);
 				contribute(cb);
 			}
@@ -123,7 +124,7 @@ mainmodule main{
 		entry void calc_flux(flow3D);
 		entry void run_flux(){
 			for (iter = 0; iter < t_steps; iter++){
-				when calc_flux() serial{
+				when calc_flux[iter*4](int tag, Msg *m) serial{
 					inviscidFlux();
 					volflux(k1,fval_old);
 				}
