@@ -111,6 +111,7 @@ mainmodule main{
 					calcvar3D(fval_new,fval_old,k1);
 					gaslaw(fval_new);
 					fval_new = fval_old;
+					delete m;
 				}
 			}
 			serial{
@@ -124,27 +125,78 @@ mainmodule main{
 		entry void calc_flux(flow3D);
 		entry void run_flux(){
 			for (iter = 0; iter < t_steps; iter++){
-				when calc_flux[iter*4](int tag, Msg *m) serial{
+				for (it = 0; it < 4; it++){
+					when calc_flux[iter*4+it](int tag_c, Msg *m) serial{
+						for (int i = 0; i < numdiv; i++){
+							for (int j = 0; j < numdiv; j++){
+								for (int k = 0; k < numdiv; k++){
+									cell_val[i][j][k] = m->val[numdiv*numdiv*i+numdiv*j+k];
+								}
+							}
+						}
+					}
+					overlap{
+						serial{
+							inviscidFlux(flux_f,cell_val);
+						}
+						when flux_comm[0](int tag, Msg *m1){
+							for (int i = 0; i < numdiv; i++){
+								for (int j = 0; j < numdiv; j++){
+									flux_f[0][i][j] = m1->val[numdiv*i+j];
+								}
+							}
+						}
+						when flux_comm[1](int tag, Msg *m1){
+							for (int i = 0; i < numdiv; i++){
+								for (int j = 0; j < numdiv; j++){
+									flux_f[numdiv][i][j] = m1->val[numdiv*i+j];
+								}
+							}
+						}
+						when flux_comm[2](int tag, Msg *m1){
+							for (int i = 0; i < numdiv; i++){
+								for (int j = 0; j < numdiv; j++){
+									flux_f[i][0][j] = m1->val[numdiv*i+j];
+								}
+							}
+						}
+						when flux_comm[3](int tag, Msg *m1){
+							for (int i = 0; i < numdiv; i++){
+								for (int j = 0; j < numdiv; j++){
+									flux_f[i][numdiv][j] = m1->val[numdiv*i+j];
+								}
+							}
+						}
+						when flux_comm[4](int tag, Msg *m1){
+							for (int i = 0; i < numdiv; i++){
+								for (int j = 0; j < numdiv; j++){
+									flux_f[i][j][0] = m1->val[numdiv*i+j];
+								}
+							}
+						}
+						when flux_comm[5](int tag, Msg *m1){
+							for (int i = 0; i < numdiv; i++){
+								for (int j = 0; j < numdiv; j++){
+									flux_f[i][j][0] = m1->val[numdiv*i+j];
+								}
+							}
+						}
+					}
+					serial{
+						volflux(flux_c,cell_val);
+					}
+				}
 				for (int i = 0; i < numdiv; i++){
 					for (int j = 0; j < numdiv; j++){
 						for (int k = 0; k < numdiv; k++){
-							k4[i][j][k] = m->val[numdiv*numdiv*i+numdiv*j+k];
+							m->val[numdiv*numdiv*i+numdiv*j+k] = flux_c[i][j[k]];
 						}
 					}
 				}
-					inviscidFlux(flux_f,cell_val);
-					volflux(k,cell_val);
-				}
-				serial{
-
-				}
-				overlap{
-
-				}
-				cellProxy(thisIndex.x,thisIndex.y,thisIndex.z).calc_val(m);
+				cellProxy(thisIndex.x,thisIndex.y,thisIndex.z).calc_val(tag_c,m);
 			}
-		}
-	}
+		};
+	};
 
 	array[4D] intFlux{
 
