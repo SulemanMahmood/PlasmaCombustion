@@ -17,31 +17,88 @@ mainmodule main{
 		entry void calc_val(flow3D);
 		entry void run(){
 			for (iter = 0; iter < t_steps; iter++){
-				serial{fluxProxy(thisIndex.x,thisIndex.y,thisIndex.z).calc_flux(iter*4,m);}
 				serial{
+					Msg *m->dir_cp = 0;
+					//memcpy(m->val,fval_old,numdiv*numdiv*numdiv*sizeof(flow));
+					for (int i = 0; i < numdiv; i++){
+						for (int j = 0; j < numdiv; j++){
+							for (int k = 0; k < numdiv; k++){
+						 		m->val[numdiv*numdiv*i+numdiv*j+k] = fval_old[i][j][k];
+						 }
+						}
+					}
+					fluxProxy(thisIndex.x,thisIndex.y,thisIndex.z).calc_flux(iter*4,m);
+				}
+				when calc_val[iter*4](int tag, Msg *m) serial{
+					for (int i = 0; i < numdiv; i++){
+						for (int j = 0; j < numdiv; j++){
+							for (int k = 0; k < numdiv; k++){
+								k1[i][j][k] = m->val[numdiv*numdiv*i+numdiv*j+k];
+					 		}
+						}
+					}
 					calcvar3D(var1,fval_old,k1);
 					vecdiv3D(temp2,var1,double(2),numdiv);
 					vecadd3D(temp,fval_old,temp2,numdiv);
 					gaslaw(temp);
-					fluxProxy(thisIndex.x,thisIndex.y,thisIndex.z).calc_flux();
+					for (int i = 0; i < numdiv; i++){
+						for (int j = 0; j < numdiv; j++){
+							for (int k = 0; k < numdiv; k++){
+						 		m->val[numdiv*numdiv*i+numdiv*j+k] = var1[i][j][k];
+						 }
+						}
+					}
+					fluxProxy(thisIndex.x,thisIndex.y,thisIndex.z).calc_flux(iter*4+1,m);
 				}
-				when calc_val() serial{
-					volflux(k2,temp);
+				when calc_val[iter*4+1](int tag, Msg *m) serial{
+					for (int i = 0; i < numdiv; i++){
+						for (int j = 0; j < numdiv; j++){
+							for (int k = 0; k < numdiv; k++){
+								k2[i][j][k] = m->val[numdiv*numdiv*i+numdiv*j+k];
+					 		}
+						}
+					}
 					calcvar3D(var2,var1,k2);
 					vecdiv3D(temp2,var2,double(2),numdiv);
 					vecadd3D(temp,fval_old,temp2,numdiv);
 					gaslaw(temp);
+					for (int i = 0; i < numdiv; i++){
+						for (int j = 0; j < numdiv; j++){
+							for (int k = 0; k < numdiv; k++){
+						 		m->val[numdiv*numdiv*i+numdiv*j+k] = var2[i][j][k];
+						 }
+						}
+					}
+					fluxProxy(thisIndex.x,thisIndex.y,thisIndex.z).calc_flux(iter*4+2,m);
 				}
-				serial{fluxProxy(thisIndex.x,thisIndex.y,thisIndex.z).calc_flux();}
-				when calc_val() serial{
-					volflux(k3,temp);
+				when calc_val[iter*4+2](int tag, Msg *m) serial{
+					for (int i = 0; i < numdiv; i++){
+						for (int j = 0; j < numdiv; j++){
+							for (int k = 0; k < numdiv; k++){
+								k3[i][j][k] = m->val[numdiv*numdiv*i+numdiv*j+k];
+							}
+						}
+					}
 					calcvar3D(var3,var2,k3);
 					vecadd3D(temp,fval_old,var3,numdiv);
 					gaslaw(temp);
+					for (int i = 0; i < numdiv; i++){
+						for (int j = 0; j < numdiv; j++){
+							for (int k = 0; k < numdiv; k++){
+						 		m->val[numdiv*numdiv*i+numdiv*j+k] = var3[i][j][k];
+						 }
+						}
+					}
+					fluxProxy(thisIndex.x,thisIndex.y,thisIndex.z).calc_flux(iter*4+3,m);
 				}
-				serial{fluxProxy(thisIndex.x,thisIndex.y,thisIndex.z).calc_flux();}
-				when calc_val() serial{
-					volflux(k4,temp);
+				when calc_val[iter*4+3](int tag, Msg *m)) serial{
+					for (int i = 0; i < numdiv; i++){
+						for (int j = 0; j < numdiv; j++){
+							for (int k = 0; k < numdiv; k++){
+								k4[i][j][k] = m->val[numdiv*numdiv*i+numdiv*j+k];
+							}
+						}
+					}
 				}
 				serial{
 					vecselfmul3D(k2,double(2),numdiv);
@@ -52,6 +109,7 @@ mainmodule main{
 					vecselfdiv3D(k1,double(6),numdiv);
 					calcvar3D(fval_new,fval_old,k1);
 					gaslaw(fval_new);
+					fval_new = fval_old;
 				}
 			}
 			serial{
