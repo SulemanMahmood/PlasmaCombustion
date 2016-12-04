@@ -1,6 +1,5 @@
 #include "main.decl.h"
-#include "./Flux/Interface/Intflux.decl.h"
-#include "Utilities/vecdef.h"
+#include "vecdef.h"
 #include <cmath>
 
 /*readonly*/ CProxy_Main mainProxy;
@@ -16,12 +15,16 @@ class Main: public CBase_Main{
     void done();
 };
 
+class Msg: public CMessage_Msg{
+	
+}
+
 class Cell: public CBase_Cell{
   protected:
     flow3D flux_c;
     flow3D val;
     double3D P;
-    int numdiv;
+    int numdiv, iter;
     double gam;
     int t_steps;
     double dt, local_L;
@@ -35,5 +38,6 @@ class Cell: public CBase_Cell{
 };
 
 class Flux: public CBase_Flux{
-
+	private:
+		int numdiv, iter;
 };

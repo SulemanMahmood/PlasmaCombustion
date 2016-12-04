@@ -1,3 +1,0 @@
-all:
-	charmc interface.ci
-	

@@ -43,35 +43,37 @@ struct flow{
     return *this;
   }
 
+  flow& operator*=(flow& lhs, const double rhs) {
+    for (int i = 0; i < lhs.Y.size(); i++){
+      lhs.Y[i] *= rhs;
+    }
+    lhs.r *= rhs;
+    lhs.u *= rhs;
+    lhs.v *= rhs;
+    lhs.w *= rhs;
+    lhs.E *= rhs;
+    return lhs;
+  }
+
+  flow operator/=(flow& lhs, const double rhs) {
+    for (int i = 0; i < lhs.Y.size(); i++){
+      lhs.Y[i] /= rhs;
+    }
+    lhs.r /= rhs;
+    lhs.u /= rhs;
+    lhs.v /= rhs;
+    lhs.w /= rhs;
+    lhs.E /= rhs;
+    return lhs;
+  }
+
 };
 
 
 
 
 
-flow operator*=(flow& lhs, const double rhs) {
-  for (int i = 0; i < lhs.Y.size(); i++){
-    lhs.Y[i] *= rhs;
-  }
-  lhs.r *= rhs;
-  lhs.u *= rhs;
-  lhs.v *= rhs;
-  lhs.w *= rhs;
-  lhs.E *= rhs;
-  return lhs;
-}
 
-flow operator/=(flow& lhs, const double rhs) {
-  for (int i = 0; i < lhs.Y.size(); i++){
-    lhs.Y[i] /= rhs;
-  }
-  lhs.r /= rhs;
-  lhs.u /= rhs;
-  lhs.v /= rhs;
-  lhs.w /= rhs;
-  lhs.E /= rhs;
-  return lhs;
-}
 
 flow operator+(const flow& lhs, const flow& rhs) {
   flow temp;

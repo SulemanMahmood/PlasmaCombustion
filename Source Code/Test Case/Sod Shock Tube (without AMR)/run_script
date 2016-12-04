@@ -1,0 +1,9 @@
+#!/bin/sh
+#PBS -q cse
+#PBS -l nodes=10:ppn=12
+#PBS -N numt
+#PBS -j oe
+#PBS -W group_list=cs_598_lvk_class
+#PBS -l walltime=01:00:00
+
+cd ~/CS_598_Project/Shock_Tube/

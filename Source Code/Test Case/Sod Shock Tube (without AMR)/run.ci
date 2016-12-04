@@ -3,24 +3,28 @@ mainmodule main{
   readonly CProxy_Intflux interfaceProxy;
 	readonly int global_t_steps
 
+	message Msg{
+		int dir_cp;
+		flow val[];
+	};
+
 	mainchare Main{
     entry Main(CkArgMsg* msg);
     entry [reductiontarget] void done();
   };
 
 	array[3D] Cell{
-		entry void calc_val();
+		entry void calc_val(flow3D);
 		entry void run(){
 			for (iter = 0; iter < t_steps; iter++){
-				serial{fluxProxy(thisIndex.x,thisIndex.y,thisIndex.z).calc_flux();}
-				when calc_val() serial{
-					volflux(k1,fval_old);
+				serial{fluxProxy(thisIndex.x,thisIndex.y,thisIndex.z).calc_flux(iter*4,m);}
+				serial{
 					calcvar3D(var1,fval_old,k1);
 					vecdiv3D(temp2,var1,double(2),numdiv);
 					vecadd3D(temp,fval_old,temp2,numdiv);
 					gaslaw(temp);
+					fluxProxy(thisIndex.x,thisIndex.y,thisIndex.z).calc_flux();
 				}
-				serial{fluxProxy(thisIndex.x,thisIndex.y,thisIndex.z).calc_flux();}
 				when calc_val() serial{
 					volflux(k2,temp);
 					calcvar3D(var2,var1,k2);
@@ -54,15 +58,16 @@ mainmodule main{
 				CkCallback cb(CkReductionTarget(Main,done),mainProxy);
 				contribute(cb);
 			}
-		}
+		};
 	};
 
 	array[3D] Flux{
-		entry void calc_flux();
+		entry void calc_flux(flow3D);
 		entry void run_flux(){
 			for (iter = 0; iter < t_steps; iter++){
 				when calc_flux() serial{
 					inviscidFlux();
+					volflux(k1,fval_old);
 				}
 				serial{
 					interfaceProxy().calc();
