@@ -18,7 +18,8 @@ mainmodule main{
 		entry void run(){
 			for (iter = 0; iter < t_steps; iter++){
 				serial{
-					Msg *m->dir_cp = 0;
+					Msg *m;
+					m->dir_cp = 0;
 					//memcpy(m->val,fval_old,numdiv*numdiv*numdiv*sizeof(flow));
 					for (int i = 0; i < numdiv; i++){
 						for (int j = 0; j < numdiv; j++){
@@ -113,7 +114,6 @@ mainmodule main{
 				}
 			}
 			serial{
-				delete m;
 				CkCallback cb(CkReductionTarget(Main,done),mainProxy);
 				contribute(cb);
 			}
@@ -125,11 +125,18 @@ mainmodule main{
 		entry void run_flux(){
 			for (iter = 0; iter < t_steps; iter++){
 				when calc_flux[iter*4](int tag, Msg *m) serial{
-					inviscidFlux();
-					volflux(k1,fval_old);
+				for (int i = 0; i < numdiv; i++){
+					for (int j = 0; j < numdiv; j++){
+						for (int k = 0; k < numdiv; k++){
+							k4[i][j][k] = m->val[numdiv*numdiv*i+numdiv*j+k];
+						}
+					}
+				}
+					inviscidFlux(flux_f,cell_val);
+					volflux(k,cell_val);
 				}
 				serial{
-					interfaceProxy().calc();
+
 				}
 				overlap{
 
