@@ -63,6 +63,29 @@ void Cell::gaslaw(flow3D a){
   }
 }
 
+void Cell::WriteOutput(){
+	char filename[100];
+	sprintf(filename,"CellOutput_%d_%d_%d_%d",thisIndex.x, thisIndex.y, thisIndex.z, iter );
+	FILE* OutFile = fopen(filename, "w");
+  for (int i = 0; i < val.size(); i++){
+    for (int j = 0; j < val[i].size(); j++){
+      for (int k = 0; k < val[i][j].size(); k++){
+				fprintf(OutFile, "val[%d,%d,%d]:%lf %lf %lf %lf %lf Y[", i, j , k, val[i][j][k].r , val[i][j][k].u , val[i][j][k].v , val[i][j][k].w , val[i][j][k].E);
+				int ySize = val[i][j][k].Y.size();
+				for (int x = 0; x < ySize; x++ ){
+					fprintf(OutFile, "%lf",val[i][j][k].Y[x]);
+					if (x == (ySize - 1){		// its the last iteration
+						fprintf(OutFile, "]\n");
+					}
+					else{		// put a , if it isn't last
+						fprintf(OutFile, ",");
+					}
+				}
+      }
+    }
+  }
+}
+
 void Flux::inviscidFlux(flow3D fl[], flow3D a){
   double r_l, r_r, r_h, P_l, P_r, g_mix_r, g_mix_l, C_p;
   flow a_l, a_r;

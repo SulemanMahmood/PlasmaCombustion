@@ -1,5 +1,7 @@
 #include "main.decl.h"
 #include "vecdef.h"
+#include<string.h>
+#include<stdlib.h>
 #include <cmath>
 
 /*readonly*/ CProxy_Main mainProxy;
