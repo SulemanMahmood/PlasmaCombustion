@@ -16,7 +16,7 @@ class Main: public CBase_Main{
 };
 
 class Msg: public CMessage_Msg{
-	int dir_cp;
+	//int dir_cp;
 	flow *val;
 }
 

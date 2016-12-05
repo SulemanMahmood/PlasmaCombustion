@@ -138,10 +138,10 @@ mainmodule main{
 					serial{
 						interfaceProxy(0,thisIndex.x,thisIndex.y,thisIndex.z).interflux_comm(0,m11);
 						interfaceProxy(0,thisIndex.x+1,thisIndex.y,thisIndex.z).interflux_comm(1,m12);
-						interfaceProxy(1,thisIndex.x,thisIndex.y,thisIndex.z).interflux_comm(2,m13);
-						interfaceProxy(1,thisIndex.x,thisIndex.y+1,thisIndex.z).interflux_comm(3,m14);
-						interfaceProxy(2,thisIndex.x,thisIndex.y,thisIndex.z).interflux_comm(4,m15);
-						interfaceProxy(2,thisIndex.x,thisIndex.y,thisIndex.z+1).interflux_comm(5,m16);
+						interfaceProxy(1,thisIndex.y,thisIndex.z,thisIndex.x).interflux_comm(0,m13);
+						interfaceProxy(1,thisIndex.y+1,thisIndex.z,thisIndex.x).interflux_comm(1,m14);
+						interfaceProxy(2,thisIndex.z,thisIndex.x,thisIndex.y).interflux_comm(0,m15);
+						interfaceProxy(2,thisIndex.z+1,thisIndex.x,thisIndex.y).interflux_comm(1,m16);
 					}
 					overlap{
 						serial{
@@ -191,7 +191,7 @@ mainmodule main{
 						}
 					}
 					serial{
-						volflux(flux_c,cell_val);
+						fluxFacetoCell(flux_c,flux_v);
 					}
 				}
 				for (int i = 0; i < numdiv; i++){
@@ -208,8 +208,58 @@ mainmodule main{
 
 	array[4D] intFlux{
 		entry void run_interface(){
-			for (iter = 0; iter < t_steps; iter++){
-				forall[]
+			if (thisIndex.x == 0){
+				when interflux_comm[0](int tag, Msg *m){
+					wall();
+					// Add message packing
+					if (thisIndex.u == 0){
+						fluxProxy(thisIndex.x,thisIndex.y,thisIndex.z).flux_comm(0,m);
+					}
+					else if (thisIndex.u == 1){
+						fluxProxy(thisIndex.z,thisIndex.x,thisIndex.y).flux_comm(2,m);
+					}
+					else if (thisIndex.u == 2){
+						fluxProxy(thisIndex.y,thisIndex.z,thisIndex.x).flux_comm(4,m);
+					}
+				}
+			}
+			else if (thisIndex.x == numdiv){
+				when interflux_comm[1](int tag, Msg *m){
+					wall();
+					if (thisIndex.u == 0){
+						fluxProxy(thisIndex.x-1,thisIndex.y,thisIndex.z).flux_comm(1,m);
+					}
+					else if (thisIndex.u == 1){
+						fluxProxy(thisIndex.z,thisIndex.x-1,thisIndex.y).flux_comm(3,m);
+					}
+					else if (thisIndex.u == 2){
+						fluxProxy(thisIndex.y,thisIndex.z,thisIndex.x-1).flux_comm(5,m);
+					}
+				}
+			}
+			else{
+				overlap{
+					when interflux_comm[0](int tag, Msg *m){
+						//Message unpack
+					}
+					when interflux_comm[1](int tag, Msg *m){
+						//Message unpack
+					}
+					inviscidFlux();
+					//Message pack
+					if (thisIndex.u == 0){
+						fluxProxy(thisIndex.x,thisIndex.y,thisIndex.z).flux_comm(0,m);
+						fluxProxy(thisIndex.x-1,thisIndex.y,thisIndex.z).flux_comm(1,m);
+					}
+					else if (thisIndex.u == 1){
+						fluxProxy(thisIndex.z,thisIndex.x,thisIndex.y).flux_comm(2,m);
+						fluxProxy(thisIndex.z,thisIndex.x-1,thisIndex.y).flux_comm(3,m);
+					}
+					else if (thisIndex.u == 2){
+						fluxProxy(thisIndex.y,thisIndex.z,thisIndex.x).flux_comm(4,m);
+						fluxProxy(thisIndex.y,thisIndex.z,thisIndex.x-1).flux_comm(5,m);
+					}
+				}
 			}
 		};
 	}
