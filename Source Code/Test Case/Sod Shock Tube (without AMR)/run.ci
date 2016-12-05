@@ -18,7 +18,7 @@ mainmodule main{
 		entry void run(){
 			for (iter = 0; iter < t_steps; iter++){
 				serial{
-					Msg *m;
+					Msg *m; // ppp: variable-size messages need size
 					//m->dir_cp = 0;
 					//memcpy(m->val,fval_old,numdiv*numdiv*numdiv*sizeof(flow));
 					for (int i = 0; i < numdiv; i++){
@@ -189,7 +189,7 @@ mainmodule main{
 								}
 							}
 						}
-					}
+					} // end overlap
 					serial{
 						fluxFacetoCell(flux_c,flux_v);
 					}
