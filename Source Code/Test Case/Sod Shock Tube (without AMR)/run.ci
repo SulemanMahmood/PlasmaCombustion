@@ -193,15 +193,18 @@ mainmodule main{
 					serial{
 						fluxFacetoCell(flux_c,flux_v);
 					}
-				}
-				for (int i = 0; i < numdiv; i++){
-					for (int j = 0; j < numdiv; j++){
-						for (int k = 0; k < numdiv; k++){
-							m->val[numdiv*numdiv*i+numdiv*j+k] = flux_c[i][j[k]];
+				} // end for (it = 0 thru 3)
+				
+				serial { // ppp: probably need to add serial
+					for (int i = 0; i < numdiv; i++){
+						for (int j = 0; j < numdiv; j++){
+							for (int k = 0; k < numdiv; k++){
+								m->val[numdiv*numdiv*i+numdiv*j+k] = flux_c[i][j[k]];
+							}
 						}
 					}
+					cellProxy(thisIndex.x,thisIndex.y,thisIndex.z).calc_val(tag_c,m);
 				}
-				cellProxy(thisIndex.x,thisIndex.y,thisIndex.z).calc_val(tag_c,m);
 			}
 		};
 	};
