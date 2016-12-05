@@ -1,7 +1,9 @@
 mainmodule main{
+	readonly CProxy_Main mainProxy;
 	readonly CProxy_Cell cellProxy;
-  readonly CProxy_Intflux interfaceProxy;
-	readonly int global_t_steps
+	readonly CProxy_Flux fluxProxy;
+  	readonly CProxy_Intflux interfaceProxy;
+	readonly int t_steps;
 
 	message Msg{
 		//int dir_cp;
@@ -9,9 +11,9 @@ mainmodule main{
 	};
 
 	mainchare Main{
-    entry Main(CkArgMsg* msg);
-    entry [reductiontarget] void done();
-  };
+    	entry Main(CkArgMsg* msg);
+    	entry [reductiontarget] void done();
+  	};
 
 	array[3D] Cell{
 		entry Cell();
