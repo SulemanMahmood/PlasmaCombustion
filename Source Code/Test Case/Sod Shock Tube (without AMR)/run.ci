@@ -205,7 +205,7 @@ mainmodule main{
 					}
 					cellProxy(thisIndex.x,thisIndex.y,thisIndex.z).calc_val(tag_c,m);
 				}
-			}
+			} // end for(iterations)
 		};
 	};
 
