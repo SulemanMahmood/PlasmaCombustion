@@ -42,3 +42,10 @@ class Flux: public CBase_Flux{
 	private:
 		int numdiv, iter;
 };
+
+class intFlux: public CBase_intFlux{
+	private:
+
+	public:
+		
+}

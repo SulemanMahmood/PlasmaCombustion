@@ -14,11 +14,12 @@ mainmodule main{
   };
 
 	array[3D] Cell{
+		entry Cell();
 		entry void calc_val(flow3D);
 		entry void run(){
 			for (iter = 0; iter < t_steps; iter++){
 				serial{
-					Msg *m; // ppp: variable-size messages need size
+					Msg *m =  new (numdiv * numdiv * numdiv) Msg(); // ppp: variable-size messages need size
 					//m->dir_cp = 0;
 					//memcpy(m->val,fval_old,numdiv*numdiv*numdiv*sizeof(flow));
 					for (int i = 0; i < numdiv; i++){
@@ -100,6 +101,7 @@ mainmodule main{
 							}
 						}
 					}
+					delete m;
 				}
 				serial{
 					vecselfmul3D(k2,double(2),numdiv);
@@ -111,7 +113,6 @@ mainmodule main{
 					calcvar3D(fval_new,fval_old,k1);
 					gaslaw(fval_new);
 					fval_new = fval_old;
-					delete m;
 				}
 			}
 			serial{
@@ -126,7 +127,10 @@ mainmodule main{
 		entry void run_flux(){
 			for (iter = 0; iter < t_steps; iter++){
 				for (it = 0; it < 4; it++){
-					when calc_flux[iter*4+it](int tag_c, Msg *m) serial{
+					serial{
+						int tag_c = -1;
+					}
+					when calc_flux[iter*4+it](int tag, Msg *m) serial{
 						for (int i = 0; i < numdiv; i++){
 							for (int j = 0; j < numdiv; j++){
 								for (int k = 0; k < numdiv; k++){
@@ -134,8 +138,26 @@ mainmodule main{
 								}
 							}
 						}
+						tag_c = tag;
+						delete m;
 					}
 					serial{
+						Msg *m11 = new (numdiv * numdiv) Msg();
+						Msg *m12 = new (numdiv * numdiv) Msg();
+						Msg *m13 = new (numdiv * numdiv) Msg();
+						Msg *m14 = new (numdiv * numdiv) Msg();
+						Msg *m15 = new (numdiv * numdiv) Msg();
+						Msg *m16 = new (numdiv * numdiv) Msg();
+						for (int i = 0; i < numdiv; i++){
+							for (int j = 0; j < numdiv; j++){
+								m11->val[numdiv*i+j] = cell[0][i][j];
+								m12->val[numdiv*i+j] = cell[numdiv-1][i][j];
+								m13->val[numdiv*i+j] = cell[i][0][j];
+								m14->val[numdiv*i+j] = cell[i][numdiv-1][j];
+								m15->val[numdiv*i+j] = cell[i][j][0];
+								m16->val[numdiv*i+j] = cell[i][j][numdiv-1];
+							}
+						}
 						interfaceProxy(0,thisIndex.x,thisIndex.y,thisIndex.z).interflux_comm(0,m11);
 						interfaceProxy(0,thisIndex.x+1,thisIndex.y,thisIndex.z).interflux_comm(1,m12);
 						interfaceProxy(1,thisIndex.y,thisIndex.z,thisIndex.x).interflux_comm(0,m13);
@@ -153,6 +175,7 @@ mainmodule main{
 									flux_f[0][0][i][j] = m1->val[numdiv*i+j];
 								}
 							}
+							delete m1;
 						}
 						when flux_comm[1](int tag, Msg *m1){
 							for (int i = 0; i < numdiv; i++){
@@ -160,6 +183,7 @@ mainmodule main{
 									flux_f[0][numdiv][i][j] = m1->val[numdiv*i+j];
 								}
 							}
+							delete m1;
 						}
 						when flux_comm[2](int tag, Msg *m1){
 							for (int i = 0; i < numdiv; i++){
@@ -167,6 +191,7 @@ mainmodule main{
 									flux_f[1][0][i][j] = m1->val[numdiv*i+j];
 								}
 							}
+							delete m1;
 						}
 						when flux_comm[3](int tag, Msg *m1){
 							for (int i = 0; i < numdiv; i++){
@@ -174,6 +199,7 @@ mainmodule main{
 									flux_f[1][numdiv][i][j] = m1->val[numdiv*i+j];
 								}
 							}
+							delete m1;
 						}
 						when flux_comm[4](int tag, Msg *m1){
 							for (int i = 0; i < numdiv; i++){
@@ -181,6 +207,7 @@ mainmodule main{
 									flux_f[2][0][i][j] = m1->val[numdiv*i+j];
 								}
 							}
+							delete m1;
 						}
 						when flux_comm[5](int tag, Msg *m1){
 							for (int i = 0; i < numdiv; i++){
@@ -188,99 +215,119 @@ mainmodule main{
 									flux_f[2][numdiv][i][j] = m1->val[numdiv*i+j];
 								}
 							}
+							delete m1;
 						}
 					} // end overlap
 					serial{
 						fluxFacetoCell(flux_c,flux_v);
-					}
-				} // end for (it = 0 thru 3)
-				
-				serial { // ppp: probably need to add serial
-					for (int i = 0; i < numdiv; i++){
-						for (int j = 0; j < numdiv; j++){
-							for (int k = 0; k < numdiv; k++){
-								m->val[numdiv*numdiv*i+numdiv*j+k] = flux_c[i][j[k]];
+						Msg *m = new (numdiv * numdiv * numdiv) Msg();
+						for (int i = 0; i < numdiv; i++){
+							for (int j = 0; j < numdiv; j++){
+								for (int k = 0; k < numdiv; k++){
+									m->val[numdiv*numdiv*i+numdiv*j+k] = flux_c[i][j[k]];
+								}
 							}
 						}
+						cellProxy(thisIndex.x,thisIndex.y,thisIndex.z).calc_val(tag_c,m);
 					}
-					cellProxy(thisIndex.x,thisIndex.y,thisIndex.z).calc_val(tag_c,m);
-				}
+				} // end for (it = 0 thru 3)
 			} // end for(iterations)
 		};
 	};
 
 	array[4D] intFlux{ // ppp: declaration of intFlux in .C ???
 		entry void run_interface(){
-			// ppp: probably we need to pack message here ------------------
-			Msg* m = new (numdiv * numdiv * numdiv) Msg();
-			for (int i = 0; i < numdiv; i++){
-						for (int j = 0; j < numdiv; j++){
-							for (int k = 0; k < numdiv; k++){
-							// what to assign here?????
-						 		m->val[numdiv*numdiv*i+numdiv*j+k] = fval_old[i][j][k]; 
-						 }
-						}
-					}
-			fluxProxy(thisIndex.x,thisIndex.y,thisIndex.z).calc_flux(iter*4,m);
-			// end ppp --------------------
-
-
-			if (thisIndex.x == 0){
-				when interflux_comm[0](int tag, Msg *m){
-					wall();
-					// Add message packing -----------------> not here
-					if (thisIndex.u == 0){
-						fluxProxy(thisIndex.x,thisIndex.y,thisIndex.z).flux_comm(0,m);
-					}
-					else if (thisIndex.u == 1){
-						fluxProxy(thisIndex.z,thisIndex.x,thisIndex.y).flux_comm(2,m);
-					}
-					else if (thisIndex.u == 2){
-						fluxProxy(thisIndex.y,thisIndex.z,thisIndex.x).flux_comm(4,m);
-					}
-				}
-			}
-			else if (thisIndex.x == numdiv){
-				when interflux_comm[1](int tag, Msg *m){
-					wall();
-					if (thisIndex.u == 0){
-						fluxProxy(thisIndex.x-1,thisIndex.y,thisIndex.z).flux_comm(1,m);
-					}
-					else if (thisIndex.u == 1){
-						fluxProxy(thisIndex.z,thisIndex.x-1,thisIndex.y).flux_comm(3,m);
-					}
-					else if (thisIndex.u == 2){
-						fluxProxy(thisIndex.y,thisIndex.z,thisIndex.x-1).flux_comm(5,m);
-					}
-				}
-			}
-			else{
-				overlap{
+		for (iter = 0; iter < t_steps; iter++){
+			for (it = 0; it < 4; it++){
+				if (thisIndex.x == 0){
 					when interflux_comm[0](int tag, Msg *m){
-						//Message unpack
-					}
-					when interflux_comm[1](int tag, Msg *m){
-						//Message unpack
-					}
-					inviscidFlux();
-					//Message pack
-
-					serial { // ppp: serial block added
+						wall();
+						for (int i = 0; i < numdiv; i++){
+							m->val[i] = flux[i];
+						}
 						if (thisIndex.u == 0){
 							fluxProxy(thisIndex.x,thisIndex.y,thisIndex.z).flux_comm(0,m);
-							fluxProxy(thisIndex.x-1,thisIndex.y,thisIndex.z).flux_comm(1,m);
 						}
 						else if (thisIndex.u == 1){
 							fluxProxy(thisIndex.z,thisIndex.x,thisIndex.y).flux_comm(2,m);
-							fluxProxy(thisIndex.z,thisIndex.x-1,thisIndex.y).flux_comm(3,m);
 						}
 						else if (thisIndex.u == 2){
 							fluxProxy(thisIndex.y,thisIndex.z,thisIndex.x).flux_comm(4,m);
+						}
+					}
+				}
+				else if (thisIndex.x == numdiv){
+					when interflux_comm[1](int tag, Msg *m){
+						wall();
+						for (int i = 0; i < numdiv; i++){
+							m->val[i] = flux[i];
+						}
+						if (thisIndex.u == 0){
+							fluxProxy(thisIndex.x-1,thisIndex.y,thisIndex.z).flux_comm(1,m);
+						}
+						else if (thisIndex.u == 1){
+							fluxProxy(thisIndex.z,thisIndex.x-1,thisIndex.y).flux_comm(3,m);
+						}
+						else if (thisIndex.u == 2){
 							fluxProxy(thisIndex.y,thisIndex.z,thisIndex.x-1).flux_comm(5,m);
 						}
 					}
 				}
+				else{
+					overlap{
+						when interflux_comm[0](int tag, Msg *m){
+							for (int i = 0; i < numdiv; i++){
+								for (int j = 0; j < numdiv; j++){
+									a_r[i][j] = m->val[i*numdiv+j];
+								}
+							}
+							delete m;
+						}
+						when interflux_comm[1](int tag, Msg *m){
+							for (int i = 0; i < numdiv; i++){
+								for (int j = 0; j < numdiv; j++){
+									a_l[i][j] = m->val[i*numdiv+j];
+								}
+							}
+							delete m;
+						}
+					}
+						serial { // ppp: serial block added
+							inviscidFlux();
+							for (int i = 0; i < numdiv; i++){
+								for (int j = 0; j < numdiv; j++){
+									m1->val[i*numdiv+j] = fl[i][j];
+									m2->val[i*numdiv+j] = fl[i][j];
+								}
+							}
+							if (thisIndex.u == 0){
+								fluxProxy(thisIndex.x,thisIndex.y,thisIndex.z).flux_comm(0,m1);
+								fluxProxy(thisIndex.x-1,thisIndex.y,thisIndex.z).flux_comm(1,m2);
+							}
+							else if (thisIndex.u == 1){
+								fluxProxy(thisIndex.z,thisIndex.x,thisIndex.y).flux_comm(2,m1);
+								fluxProxy(thisIndex.z,thisIndex.x-1,thisIndex.y).flux_comm(3,m2);
+							}
+							else if (thisIndex.u == 2){
+								fluxProxy(thisIndex.y,thisIndex.z,thisIndex.x).flux_comm(4,m1);
+								fluxProxy(thisIndex.y,thisIndex.z,thisIndex.x-1).flux_comm(5,m2);
+							}
+					}
+				}
 			}
+		}
+			// ppp: probably we need to pack message here ------------------
+		/*	Msg* m = new (numdiv * numdiv * numdiv) Msg();
+			for (int i = 0; i < numdiv; i++){
+				for (int j = 0; j < numdiv; j++){
+					for (int k = 0; k < numdiv; k++){
+						// what to assign here?????
+						m->val[numdiv*numdiv*i+numdiv*j+k] = fval_old[i][j][k];
+					}
+				}
+			}
+			fluxProxy(thisIndex.x,thisIndex.y,thisIndex.z).calc_flux(iter*4,m);*/
+			// end ppp --------------------
 		};
 	}; // ppp: semicolon added here
 };

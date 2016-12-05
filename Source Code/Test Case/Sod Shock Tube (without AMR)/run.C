@@ -15,6 +15,34 @@ Main::void done(){
   CkExit();
 }
 
+void Cell::Cell(){
+	initialize();
+}
+
+void Cell::initialize(){
+		for (int i = 0; i < numdiv; i ++){
+			for (int j = 0; j < numdiv; j++){
+				for (int k = 0; k < numdiv; k++){
+					a[i][j][k].u = 0.0;
+					a[i][j][k].v = 0.0;
+					a[i][j][k].w = 0.0;
+					a[i][j][k].E = gam*P[i][j][k]/a[i][j][k].r;
+					if (thisIndex.x < N_DIM/2){
+						P[i][j][k] = 1.0;
+						a[i][j][k].r = 1.0;
+					}
+					else{
+						P[i][j][k] = 0.1;
+						a[i][j][k].r = 0.125;
+					}
+				}
+			}
+	}
+	else{
+
+	}
+}
+
 void Cell::calcvar3D(flow3D v_n, flow3D v_o, flow3D fl){
   for (int i = 0; i < numdiv; i++){
     for(int j = 0; j < numdiv; j++){
@@ -184,32 +212,33 @@ void intFlux::inviscidFlux(){
             u_l = a_l.u/r_l;
             v_l = a_l.v/r_l;
             w_l = a_l.w/r_l;
+					if (thisIndex.u == 0)
             nx = 1.0;
             ny = 0.0;
             nz = 0.0;
-          /*}
-          else if (n == 1){
-            a_l = a[k][i-1][j];
+          }
+          else if (thisIndex.u == 1){
+          /*  a_l = a[k][i-1][j];
             r_l = a_l.r;
             P_l = P[k][i-1][j];
             u_l = a_l.u/r_l;
             v_l = a_l.v/r_l;
-            w_l = a_l.w/r_l;
+            w_l = a_l.w/r_l;*/
             nx = 0.0;
             ny = 1.0;
             nz = 0.0;
           }
           else {
-            a_l = a[j][k][i-1];
+            /*a_l = a[j][k][i-1];
             r_l = a_l.r;
             P_l = P[j][k][i-1];
             u_l = a_l.u/r_l;
             v_l = a_l.v/r_l;
-            w_l = a_l.w/r_l;
+            w_l = a_l.w/r_l;*/
             nx = 0.0;
             ny = 0.0;
             nz = 1.0;
-          }*/
+          }
           r_h = (r_l + r_r)/2.0;
           c_l = sqrt(gam*P_l/r_l);
           c_r = sqrt(gam*P_r/r_r);
