@@ -209,12 +209,26 @@ mainmodule main{
 		};
 	};
 
-	array[4D] intFlux{
+	array[4D] intFlux{ // ppp: declaration of intFlux in .C ???
 		entry void run_interface(){
+			// ppp: probably we need to pack message here ------------------
+			Msg* m = new (numdiv * numdiv * numdiv) Msg();
+			for (int i = 0; i < numdiv; i++){
+						for (int j = 0; j < numdiv; j++){
+							for (int k = 0; k < numdiv; k++){
+							// what to assign here?????
+						 		m->val[numdiv*numdiv*i+numdiv*j+k] = fval_old[i][j][k]; 
+						 }
+						}
+					}
+			fluxProxy(thisIndex.x,thisIndex.y,thisIndex.z).calc_flux(iter*4,m);
+			// end ppp --------------------
+
+
 			if (thisIndex.x == 0){
 				when interflux_comm[0](int tag, Msg *m){
 					wall();
-					// Add message packing
+					// Add message packing -----------------> not here
 					if (thisIndex.u == 0){
 						fluxProxy(thisIndex.x,thisIndex.y,thisIndex.z).flux_comm(0,m);
 					}
@@ -250,20 +264,23 @@ mainmodule main{
 					}
 					inviscidFlux();
 					//Message pack
-					if (thisIndex.u == 0){
-						fluxProxy(thisIndex.x,thisIndex.y,thisIndex.z).flux_comm(0,m);
-						fluxProxy(thisIndex.x-1,thisIndex.y,thisIndex.z).flux_comm(1,m);
-					}
-					else if (thisIndex.u == 1){
-						fluxProxy(thisIndex.z,thisIndex.x,thisIndex.y).flux_comm(2,m);
-						fluxProxy(thisIndex.z,thisIndex.x-1,thisIndex.y).flux_comm(3,m);
-					}
-					else if (thisIndex.u == 2){
-						fluxProxy(thisIndex.y,thisIndex.z,thisIndex.x).flux_comm(4,m);
-						fluxProxy(thisIndex.y,thisIndex.z,thisIndex.x-1).flux_comm(5,m);
+
+					serial { // ppp: serial block added
+						if (thisIndex.u == 0){
+							fluxProxy(thisIndex.x,thisIndex.y,thisIndex.z).flux_comm(0,m);
+							fluxProxy(thisIndex.x-1,thisIndex.y,thisIndex.z).flux_comm(1,m);
+						}
+						else if (thisIndex.u == 1){
+							fluxProxy(thisIndex.z,thisIndex.x,thisIndex.y).flux_comm(2,m);
+							fluxProxy(thisIndex.z,thisIndex.x-1,thisIndex.y).flux_comm(3,m);
+						}
+						else if (thisIndex.u == 2){
+							fluxProxy(thisIndex.y,thisIndex.z,thisIndex.x).flux_comm(4,m);
+							fluxProxy(thisIndex.y,thisIndex.z,thisIndex.x-1).flux_comm(5,m);
+						}
 					}
 				}
 			}
 		};
-	}
+	}; // ppp: semicolon added here
 };
