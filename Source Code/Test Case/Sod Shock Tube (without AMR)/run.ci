@@ -21,8 +21,7 @@ mainmodule main{
 		entry void run(){
 			for (iter = 0; iter < t_steps; iter++){
 				serial{
-					Msg *m =  new (numdiv * numdiv * numdiv) Msg(); // ppp: variable-size messages need size
-					//m->dir_cp = 0;
+					Msg *m =  new (numdiv * numdiv * numdiv) Msg(); 
 					//memcpy(m->val,fval_old,numdiv*numdiv*numdiv*sizeof(flow));
 					for (int i = 0; i < numdiv; i++){
 						for (int j = 0; j < numdiv; j++){
