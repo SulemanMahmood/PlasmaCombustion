@@ -17,7 +17,7 @@ mainmodule main{
 
 	array[3D] Cell{
 		entry Cell();
-		entry void calc_val(flow3D);
+		entry void calc_val(int,flow3D);
 		entry void run(){
 			for (iter = 0; iter < t_steps; iter++){
 				serial{
