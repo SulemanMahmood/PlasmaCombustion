@@ -1,13 +1,13 @@
-#include "main.decl.h"
 #include "vecdef.h"
 #include<string.h>
 #include<stdlib.h>
 #include <cmath>
+#include "main.decl.h"
 
 /*readonly*/ CProxy_Main mainProxy;
 /*readonly*/ CProxy_Cell cellProxy;
 /*readonly*/ CProxy_Flux fluxProxy;
-/*readonly*/ CProxy_Intflux interfaceProxy;
+/*readonly*/ CProxy_intflux interfaceProxy;
 /*readonly*/ int t_steps;
 
 class Main: public CBase_Main{
