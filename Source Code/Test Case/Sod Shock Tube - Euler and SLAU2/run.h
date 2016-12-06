@@ -1,6 +1,7 @@
 #ifndef RUN_H
 #define RUN_H
 
+#include "pup.stl.h"
 #include "utility.h"
 #include "run.decl.h"
 
@@ -32,6 +33,14 @@ class Cell: public CBase_Cell{
 
 		Cell();
 		Cell(CkMigrateMessage* m){}
+		void pup(PUP::er &p){
+			CBase_Cell::pup(p);
+			__sdag_pup(p);
+			p|val_new;
+			p|val_old;
+			p|P;
+			p|iter;
+		}
 		void update();
 		void initialize();
 		void gaslaw();
@@ -48,6 +57,14 @@ class Flux: public CBase_Flux{
 
 		Flux();
 		Flux(CkMigrateMessage* m){}
+		void pup(PUP::er &p){
+			CBase_Flux::pup(p);
+			__sdag_pup(p);
+			p|flux_c;
+			p|flux_f;
+			p|P;
+			p|cell_val;
+		}
 		void inviscidFlux();
 		void fluxFacetoCell();
 };
@@ -60,6 +77,15 @@ class Interface: public CBase_Interface{
 
 		Interface();
 		Interface(CkMigrateMessage* m){}
+		void pup(PUP::er &p){
+			CBase_Cell::pup(p);
+			__sdag_pup(p);
+			p|val_l;
+			p|val_r;
+			p|P_left;
+			p|P_right;
+			p|flux;
+		}
 		void calc();
 		void wall(flow2D,flow2D,double2D,double2D);
 };
