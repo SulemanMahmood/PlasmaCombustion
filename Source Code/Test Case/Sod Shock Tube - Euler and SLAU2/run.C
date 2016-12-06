@@ -8,7 +8,7 @@ Main::Main(CkArgMsg* m){
 	dimZ = 5;
 	ndiv = 10;
 	gma = 1.4;
-	double dx = double(1)/(dimX*ndiv);
+	dx = double(1)/(dimX*ndiv);
 	double end_time = 0.2;
 	double Co = 0.1;
 	double dt = Co*dx;
@@ -28,6 +28,19 @@ void Main::done(){
 
 Cell::Cell(){
 	initialize();
+	val_new.resize(ndiv);
+	val_old.resize(ndiv);
+	P.resize(ndiv);
+	for (int i = 0; i < ndiv; i++){
+		val_new[i].resize(ndiv);
+		val_old[i].resize(ndiv);
+		P[i].resize(ndiv);
+		for (int j = 0; j < ndiv; j++){
+			val_new[i][j].resize(ndiv);
+			val_old[i][j].resize(ndiv);
+			P[i][j].resize(ndiv);
+		}
+	}
 }
 
 void Cell::gaslaw(){
@@ -50,6 +63,16 @@ void Cell::update(){
 	}
 }
 
+void Cell::calcvar3D(flow3D v_n, flow3D v_o, flow3D fl){
+  for (int i = 0; i < ndiv; i++){
+    for(int j = 0; j < ndiv; j++){
+      for(int k = 0; k < ndiv; k++){
+        v_n[i][j][k] = v_o[i][j][k] - dt *  fl[i][j][k] / dx;
+      }
+    }
+  }
+}
+
 void Cell::initialize(){
 	double P_i, r_i;
 	if (thisIndex.x < dimX/2){
@@ -69,6 +92,32 @@ void Cell::initialize(){
 				val_old.v = 0.0;
 				val_old.w = 0.0;
 				val_old.E = gma*P_i/r_i;
+			}
+		}
+	}
+}
+
+Flux::Flux(){
+	flux_c.resize(ndiv);
+	cell_val.resize(ndiv);
+	P.resize(ndiv);
+	for (int i = 0; i < ndiv; i++){
+		flux_c[i].resize(ndiv);
+		cell_val[i].resize(ndiv);
+		P[i].resize(ndiv);
+		for (int j = 0; j < ndiv; j++){
+			flux_c[i][j].resize(ndiv);
+			cell_val[i][j].resize(ndiv);
+			P[i][j].resize(ndiv);
+		}
+	}
+	flux_f.resize(3);
+	for (int i = 0; i < 3; i++){
+		flux_f[i].resize(ndiv+1);
+		for (int j = 0; j <= ndiv; j++){
+			flux_f[i][j].resize(ndiv);
+			for (int k = 0; k < ndiv; k++){
+				flux_f[i][j][k].resize(ndiv);
 			}
 		}
 	}
@@ -181,7 +230,32 @@ void Flux::inviscidFlux(){
 	}
 }
 
-void Interface::inviscidFlux_i(){
+void Flux::fluxFacetoCell(){
+  for (int i = 0; i < ndiv; i++){
+    for (int j = 0; j < ndiv; j++){
+      for (int k = 0; k < ndiv; k++){
+        flux_c[i][j][k] = flux_f[0][i+1][j][k] - flux_f[0][i][j][k] + flux_f[1][j+1][k][i] - flux_f[1][j][i][k] + flux_f[2][k+1][i][j] - flux_f[2][k][i][j];
+      }
+    }
+  }
+}
+
+Interface::Interface(){
+	flux.resize(ndiv);
+	val_l.resize(ndiv);
+	val_r.resize(ndiv);
+	P_left.resize(ndiv);
+	P_right.resize(ndiv);
+	for (int i = 0; i < ndiv; i++){
+		flux[i].resize(ndiv);
+		val_l[i].resize(ndiv);
+		val_r[i].resize(ndiv);
+		P_left[i].resize(ndiv);
+		P_right[i].resize(ndiv);
+	}
+}
+
+void Interface::calc(){
 	double r_l, r_r, r_h, P_l, P_r;
   flow a_l, a_r;
   double c_l, c_r, c_h, chi, g, nx, ny, nz;
@@ -271,6 +345,24 @@ void Interface::inviscidFlux_i(){
 		}
 	}
 
+}
+
+void Interface::wall(flow2D f_n, flow2D f_o, double2D P_n, double2D P_o){
+	for (int i = 0; i < ndiv; i++){
+		for (int j = 0; j < ndiv; j++){
+			f_n[i][j] = f_o[i][j];
+			P_n[i][j] = P_o[i][j];
+			if (thisIndex.w == 0){
+				f_n[i][j].u = 0.0 - f_o[i][j].u;
+			}
+			else if (thisIndex.w == 1){
+				f_n[i][j].v = 0.0 - f_o[i][j].v;
+			}
+			else{
+				f_n[i][j].w = 0.0 - f_o[i][j].w;
+			}
+		}
+	}
 }
 
 #include "run.def.h"

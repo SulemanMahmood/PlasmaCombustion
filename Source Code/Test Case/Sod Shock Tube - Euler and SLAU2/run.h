@@ -13,6 +13,7 @@
 /*readonly*/ int dimZ;
 /*readonly*/ int t_steps;
 /*readonly*/ double dt;
+/*readonly*/ double dx;
 /*readonly*/ int ndiv;
 /*readonly*/ double gma;
 
@@ -31,6 +32,8 @@ class Cell: public CBase_Cell{
 		Cell();
 		void update();
 		void initialize();
+		void gaslaw();
+		void calcvar3D(flow3D,flow3D,flow3D);
 };
 
 class Flux: public CBase_Flux{
@@ -40,7 +43,9 @@ class Flux: public CBase_Flux{
 		double3D P;
 		int iter;
 	public:
+		Flux();
 		void inviscidFlux();
+		void fluxFacetoCell();
 };
 
 class Interface: public CBase_Interface{
@@ -48,7 +53,9 @@ class Interface: public CBase_Interface{
 		flow2D val_l, val_r, flux;
 		double2D P_left, P_right;
 	public:
-		void inviscidFlux_i();
+		Interface();
+		void calc();
+		void wall(flow2D,flow2D,double2D,double2D);
 };
 
 #endif
