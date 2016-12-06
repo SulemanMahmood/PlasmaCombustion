@@ -1,21 +1,25 @@
 #include "run.h"
 
 Main::Main(CkArgMsg* msg){
+	int dimX=100;
+	int dimY=100;
+	int dimZ=100;
   delete msg;
   mainProxy = thisProxy;
   cellProxy = CProxy_Cell::ckNew(dimX,dimY,dimZ);
-  interfaceProxyface = CProxy_Intflux::ckNew(3,dimX+1,dimY,dimZ);
+  interfaceProxy = CProxy_intFlux::ckNew(3, dimX+1, dimY, dimZ);
   fluxProxy = CProxy_Flux::ckNew(dimX,dimY,dimZ);
   cellProxy.run();
 	fluxProxy.run_flux();
 	interfaceProxy.run_interface();
 }
 
-Main::void done(){
+void Main::done(){
   CkExit();
 }
 
-void Cell::Cell(){
+Cell::Cell(){
+	__sdag_init();
 	initialize();
 }
 
@@ -37,9 +41,6 @@ void Cell::initialize(){
 					}
 				}
 			}
-	}
-	else{
-
 	}
 }
 
@@ -74,7 +75,7 @@ void Cell::WriteOutput(){
 				int ySize = val[i][j][k].Y.size();
 				for (int x = 0; x < ySize; x++ ){
 					fprintf(OutFile, "%lf",val[i][j][k].Y[x]);
-					if (x == (ySize - 1){		// its the last iteration
+					if (x == (ySize - 1)){		// its the last iteration
 						fprintf(OutFile, "]\n");
 					}
 					else{		// put a , if it isn't last
@@ -84,6 +85,10 @@ void Cell::WriteOutput(){
       }
     }
   }
+}
+
+Flux::Flux(){
+	__sdag_init();
 }
 
 void Flux::inviscidFlux(flow3D fl[], flow3D a){
@@ -205,6 +210,10 @@ void Flux::fluxFacetoCell(){
   }
 }
 
+intFlux::intFlux(){
+	__sdag_init();
+}
+
 void intFlux::wall(){
 	for (int i = 0; i < numdiv; i++){
 		for (int j = 0; j < numdiv; j++){
@@ -318,6 +327,6 @@ void intFlux::inviscidFlux(){
       }
     }
   //}
-}
+//}
 
 #include"main.def.h"

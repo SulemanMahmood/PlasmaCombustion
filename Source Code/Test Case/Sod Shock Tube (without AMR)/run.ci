@@ -1,8 +1,10 @@
 mainmodule main{
+	#include "vecdef.h"
+	
 	readonly CProxy_Main mainProxy;
 	readonly CProxy_Cell cellProxy;
 	readonly CProxy_Flux fluxProxy;
-  	readonly CProxy_intflux interfaceProxy;
+  	readonly CProxy_intFlux interfaceProxy;
 	readonly int t_steps;
 
 	mainchare Main{
@@ -90,6 +92,7 @@ mainmodule main{
 	};
 
 	array[3D] Flux{
+		entry Flux();
 		entry void calc_flux(int tag, flow3D m);
 		entry void flux_comm(int tag, flow3D m1);
 		entry void run_flux(){
@@ -195,7 +198,8 @@ mainmodule main{
 		};
 	};
 
-	array[4D] intFlux{ // ppp: declaration of intFlux in .C ???
+	array[4D] intFlux{ 
+		entry intFlux();
 		entry void interflux_comm(int tag, flow3D m);
 		entry void run_interface(){
 		for (iter = 0; iter < t_steps; iter++){
