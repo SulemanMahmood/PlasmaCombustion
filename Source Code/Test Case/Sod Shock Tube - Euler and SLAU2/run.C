@@ -86,12 +86,12 @@ void Cell::initialize(){
 	for (int i = 0; i < ndiv; i++){
 		for (int j = 0; j < ndiv; j++){
 			for (int k = 0; k < ndiv; k++){
-				P = P_i;
-				val_old.r = r_i;
-				val_old.u = 0.0;
-				val_old.v = 0.0;
-				val_old.w = 0.0;
-				val_old.E = gma*P_i/r_i;
+				P[i][j][j] = P_i;
+				val_old[i][j][k].r = r_i;
+				val_old[i][j][k].u = 0.0;
+				val_old[i][j][k].v = 0.0;
+				val_old[i][j][k].w = 0.0;
+				val_old[i][j][k].E = gma*P_i/r_i;
 			}
 		}
 	}
@@ -143,7 +143,7 @@ void Flux::inviscidFlux(){
           v_r = a_r.v/r_r;
           w_r = a_r.w/r_r;
           if (n == 0){
-            a_l = a[i-1][j][k];
+            a_l = cell_val[i-1][j][k];
             r_l = a_l.r;
             P_l = P[i-1][j][k];
             u_l = a_l.u/r_l;
@@ -154,7 +154,7 @@ void Flux::inviscidFlux(){
             nz = 0.0;
           }
           else if (n == 1){
-            a_l = a[k][i-1][j];
+            a_l = cell_val[k][i-1][j];
             r_l = a_l.r;
             P_l = P[k][i-1][j];
             u_l = a_l.u/r_l;
@@ -165,7 +165,7 @@ void Flux::inviscidFlux(){
             nz = 0.0;
           }
           else {
-            a_l = a[j][k][i-1];
+            a_l = cell_val[j][k][i-1];
             r_l = a_l.r;
             P_l = P[j][k][i-1];
             u_l = a_l.u/r_l;
