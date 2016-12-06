@@ -1,6 +1,7 @@
 #ifndef RUN_H
 #define RUN_H
 
+#include <vector>
 #include "utility.h"
 #include "run.decl.h"
 

@@ -1,8 +1,6 @@
 #ifndef UTILITY_H
 #define UTILITY_H
 
-#include <vector>
-
 struct flow{
   double r, u, v, w, E;
 
