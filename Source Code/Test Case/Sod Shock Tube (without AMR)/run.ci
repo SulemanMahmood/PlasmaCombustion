@@ -17,11 +17,11 @@ mainmodule main{
 
 	array[3D] Cell{
 		entry Cell();
-		entry void calc_val(flow3D);
+		entry void calc_val(int tag, Msg *m);
 		entry void run(){
 			for (iter = 0; iter < t_steps; iter++){
 				serial{
-					Msg *m =  new (numdiv * numdiv * numdiv) Msg();
+					Msg *m =  new (numdiv * numdiv * numdiv) Msg(); 
 					//memcpy(m->val,fval_old,numdiv*numdiv*numdiv*sizeof(flow));
 					for (int i = 0; i < numdiv; i++){
 						for (int j = 0; j < numdiv; j++){
@@ -170,7 +170,7 @@ mainmodule main{
 						serial{
 							inviscidFlux(flux_f,cell_val);
 						}
-						when flux_comm[0](int tag, Msg *m1)serial{
+						when flux_comm[0](int tag, Msg *m1) serial{
 							for (int i = 0; i < numdiv; i++){
 								for (int j = 0; j < numdiv; j++){
 									flux_f[0][0][i][j] = m1->val[numdiv*i+j];
@@ -178,7 +178,7 @@ mainmodule main{
 							}
 							delete m1;
 						}
-						when flux_comm[1](int tag, Msg *m1){
+						when flux_comm[1](int tag, Msg *m1) serial{
 							for (int i = 0; i < numdiv; i++){
 								for (int j = 0; j < numdiv; j++){
 									flux_f[0][numdiv][i][j] = m1->val[numdiv*i+j];
@@ -186,7 +186,7 @@ mainmodule main{
 							}
 							delete m1;
 						}
-						when flux_comm[2](int tag, Msg *m1){
+						when flux_comm[2](int tag, Msg *m1) serial{
 							for (int i = 0; i < numdiv; i++){
 								for (int j = 0; j < numdiv; j++){
 									flux_f[1][0][i][j] = m1->val[numdiv*i+j];
@@ -194,7 +194,7 @@ mainmodule main{
 							}
 							delete m1;
 						}
-						when flux_comm[3](int tag, Msg *m1){
+						when flux_comm[3](int tag, Msg *m1) serial{
 							for (int i = 0; i < numdiv; i++){
 								for (int j = 0; j < numdiv; j++){
 									flux_f[1][numdiv][i][j] = m1->val[numdiv*i+j];
@@ -202,7 +202,7 @@ mainmodule main{
 							}
 							delete m1;
 						}
-						when flux_comm[4](int tag, Msg *m1){
+						when flux_comm[4](int tag, Msg *m1) serial{
 							for (int i = 0; i < numdiv; i++){
 								for (int j = 0; j < numdiv; j++){
 									flux_f[2][0][i][j] = m1->val[numdiv*i+j];
@@ -210,7 +210,7 @@ mainmodule main{
 							}
 							delete m1;
 						}
-						when flux_comm[5](int tag, Msg *m1){
+						when flux_comm[5](int tag, Msg *m1) serial{
 							for (int i = 0; i < numdiv; i++){
 								for (int j = 0; j < numdiv; j++){
 									flux_f[2][numdiv][i][j] = m1->val[numdiv*i+j];
@@ -241,7 +241,7 @@ mainmodule main{
 		for (iter = 0; iter < t_steps; iter++){
 			for (it = 0; it < 4; it++){
 				if (thisIndex.x == 0){
-					when interflux_comm[0](int tag, Msg *m){
+					when interflux_comm[0](int tag, Msg *m) serial{
 						wall();
 						for (int i = 0; i < numdiv; i++){
 							m->val[i] = flux[i];
@@ -258,7 +258,7 @@ mainmodule main{
 					}
 				}
 				else if (thisIndex.x == numdiv){
-					when interflux_comm[1](int tag, Msg *m){
+					when interflux_comm[1](int tag, Msg *m) serial{
 						wall();
 						for (int i = 0; i < numdiv; i++){
 							m->val[i] = flux[i];
@@ -276,7 +276,7 @@ mainmodule main{
 				}
 				else{
 					overlap{
-						when interflux_comm[0](int tag, Msg *m){
+						when interflux_comm[0](int tag, Msg *m) serial{
 							for (int i = 0; i < numdiv; i++){
 								for (int j = 0; j < numdiv; j++){
 									a_r[i][j] = m->val[i*numdiv+j];
@@ -284,7 +284,7 @@ mainmodule main{
 							}
 							delete m;
 						}
-						when interflux_comm[1](int tag, Msg *m){
+						when interflux_comm[1](int tag, Msg *m) serial{
 							for (int i = 0; i < numdiv; i++){
 								for (int j = 0; j < numdiv; j++){
 									a_l[i][j] = m->val[i*numdiv+j];

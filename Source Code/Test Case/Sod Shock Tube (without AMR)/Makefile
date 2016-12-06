@@ -6,7 +6,7 @@ all: run
 run: $(OBJS)
 	$(CHARMC) -O3 -language -charm++ -o run $(OBJS)
 
-run.decl.h: run.ci
+main.decl.h: run.ci
 	$(CHARMC) run.ci
 
 clean:
