@@ -2,7 +2,7 @@
 #include "run.h"
 
 Main::Main(CkArgMsg* m){
-	delete msg;
+	delete m;
 	dimX = 100;
 	dimY = 5;
 	dimZ = 5;
@@ -57,7 +57,7 @@ void Cell::update(){
 	for (int i = 0; i < ndiv; i++){
 		for (int j = 0; j < ndiv; j++){
 			for (int k = 0; k < ndiv; k++){
-				val_old[i][j][k] = val_new[i][j][k]
+				val_old[i][j][k] = val_new[i][j][k];
 			}
 		}
 	}
@@ -176,8 +176,8 @@ void Flux::inviscidFlux(){
             nz = 1.0;
           }
           r_h = (r_l + r_r)/2.0;
-          c_l = sqrt(gam*P_l/r_l);
-          c_r = sqrt(gam*P_r/r_r);
+          c_l = sqrt(gma*P_l/r_l);
+          c_r = sqrt(gma*P_r/r_r);
           c_h = (c_l + c_r)/2.0;
           V = sqrt((u_l*u_l + v_l*v_l + w_l*w_l + u_r*u_r + v_r*v_r + w_r*w_r)/2.0);
           V_l = u_l*nx + v_l*ny + w_l*nz;
@@ -294,8 +294,8 @@ void Interface::calc(){
 				nz = 1.0;
 			}
 			r_h = (r_l + r_r)/2.0;
-			c_l = sqrt(gam*P_l/r_l);
-			c_r = sqrt(gam*P_r/r_r);
+			c_l = sqrt(gma*P_l/r_l);
+			c_r = sqrt(gma*P_r/r_r);
 			c_h = (c_l + c_r)/2.0;
 			V = sqrt((u_l*u_l + v_l*v_l + w_l*w_l + u_r*u_r + v_r*v_r + w_r*w_r)/2.0);
 			V_l = u_l*nx + v_l*ny + w_l*nz;

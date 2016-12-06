@@ -175,6 +175,7 @@ typedef std::vector<std::vector<double>> double2D;
 typedef std::vector<std::vector<flow>> flow2D;
 typedef std::vector<std::vector<std::vector<double>>> double3D;
 typedef std::vector<std::vector<std::vector<flow>>> flow3D;
+typedef std::vector<std::vector<std::vector<std::vector<flow>>>> flow4D;
 
 template<typename T>
 T copy3D(T lhs, T rhs, int dim){
