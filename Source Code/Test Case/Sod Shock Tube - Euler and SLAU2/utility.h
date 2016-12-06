@@ -6,6 +6,14 @@
 struct flow{
   double r, u, v, w, E;
 
+	void pup(PUP::er &p){
+		p|r;
+		p|u;
+		p|v;
+		p|w;
+		p|E;
+	}
+
 	flow& operator=(const flow& k) {
 		this->r = k.r;
 		this->u = k.u;
