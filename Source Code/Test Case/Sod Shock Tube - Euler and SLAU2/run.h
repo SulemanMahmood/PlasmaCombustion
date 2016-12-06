@@ -78,7 +78,7 @@ class Interface: public CBase_Interface{
 		Interface();
 		Interface(CkMigrateMessage* m){}
 		void pup(PUP::er &p){
-			CBase_Cell::pup(p);
+			CBase_Interface::pup(p);
 			__sdag_pup(p);
 			p|val_l;
 			p|val_r;
