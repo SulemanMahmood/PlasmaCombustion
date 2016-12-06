@@ -41,6 +41,7 @@ class Cell: public CBase_Cell{
 
   public:
 		Cell();
+    Cell(CkMigrateMessage* m);
     void gaslaw(flow3D);
     void solve();
 		void initialize();
@@ -56,6 +57,7 @@ class Flux: public CBase_Flux{
 		int numdiv, iter;
 	public:
 		Flux();
+    Flux(CkMigrateMessage* m);
 		void inviscidFlux(flow3D fl[], flow3D a);
 		void fluxFacetoCell();
 };
@@ -66,6 +68,7 @@ class intFlux: public CBase_intFlux{
 
 	public:
 		intFlux();
+    intFlux(CkMigrateMessage* m);
 		void wall();
 		void inviscidFlux();
 };

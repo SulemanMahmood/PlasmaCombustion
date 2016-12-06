@@ -23,6 +23,8 @@ Cell::Cell(){
 	initialize();
 }
 
+Cell::Cell(CkMigrateMessage* m) {}
+
 void Cell::initialize(){
 		for (int i = 0; i < numdiv; i ++){
 			for (int j = 0; j < numdiv; j++){
@@ -90,6 +92,8 @@ void Cell::WriteOutput(){
 Flux::Flux(){
 	__sdag_init();
 }
+
+Flux::Flux(CkMigrateMessage* m) {}
 
 void Flux::inviscidFlux(flow3D fl[], flow3D a){
   double r_l, r_r, r_h, P_l, P_r, g_mix_r, g_mix_l, C_p;
@@ -213,6 +217,8 @@ void Flux::fluxFacetoCell(){
 intFlux::intFlux(){
 	__sdag_init();
 }
+
+intFlux::intFlux(CkMigrateMessage* m) {}
 
 void intFlux::wall(){
 	for (int i = 0; i < numdiv; i++){
