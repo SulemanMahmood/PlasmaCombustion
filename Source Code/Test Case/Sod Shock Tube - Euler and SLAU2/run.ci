@@ -1,0 +1,175 @@
+mainmodule run{
+	#include "utility.h"
+	readonly CProxy_Main mainProxy;
+	readonly CProxy_Cell cellProxy;
+	readonly CProxy_Flux fluxProxy;
+	readonly CProxy_Interface interfaceProxy;
+	readonly int dimX;
+	readonly int dimY;
+	readonly int dimZ;
+	readonly int t_steps;
+	readonly double dt;
+	readonly int ndiv;
+	readonly double gma;
+
+	mainchare Main{
+		entry Main(CkArgMsg* m);
+		entry [reductiontarget] void done();
+	};
+
+	array [3D] Cell{
+		entry Cell();
+		entry void ftoc(int tag, flow3D c_f);
+		entry void solve_c(){
+			for (iter = 0; iter < t_steps; iter++){
+				serial "send_to_flux_from_cell"{
+					fluxProxy(thisIndex.x,thisIndex.y,thisIndex.z).ctof(iter,val_old,P);
+				}
+				when ftoc[iter](int tag, flow3D c_f) serial "receive_from_flux_to_cell"{
+					calcvar3D(val_new,val_old,c_f);
+					gaslaw();
+				}
+			}
+		};
+	};
+
+	array [3D] Flux{
+		entry Flux();
+		entry void solve_f(){
+			for (iter = 0; iter < t_steps; iter++){
+				when [iter]ctof(int tag, flow3D val_c, double3D Pt){
+					copy3D(Pt,P);
+
+					//interfaceProxy(0,thisIndex.x,)
+				}
+				overlap{
+					serial "flux_calc"{
+						inviscidFlux();
+					}
+					when
+				}
+			}
+		};
+
+	array [4D] Interface{
+		entry Interface();
+		entry void solve_i(){
+			for (iter = 0; iter < t_steps; iter++){
+				if (thisIndex.w == 0){
+					if (thisIndex.x == 0){
+						when ftoi[0](int tag, flow2D f, double2D P) serial{
+							copy2D(val_r,f);
+							copy2D(P_right,P);
+							wall(val_l,val_r,P_left,P_right);
+							calc();
+							fluxProxy(thisIndex.x,thisIndex.y,thisIndex.z).itof(0,flux);
+						}
+					}
+					else if (thisIndex.x == dimX){
+						when ftoi[1](int tag, flow2D f, double2D P) serial{
+							copy2D(val_l,f);
+							copy2D(P_left,P);
+							wall(val_r,val_l,P_right,P_left);
+							calc();
+							fluxProxy(thisIndex.x-1,thisIndex.y,thisIndex.z).itof(1,flux);
+						}
+					}
+					else{
+						overlap{
+							when ftoi[0](int tag, flow2D f, double2D P) serial{
+								copy2D(val_r,f);
+								copy2D(P_right,P);
+							}
+							when ftoi[1](int tag, flow2D f, double2D P) serial{
+								copy2D(val_l,f);
+								copy2D(P_left,P);
+							}
+						}
+						serial{
+							calc();
+							fluxProxy(thisIndex.x,thisIndex.y,thisIndex.z).itof(0,flux);
+							fluxProxy(thisIndex.x-1,thisIndex.y,thisIndex.z).itof(1,flux);
+						}
+					}
+				}
+				else if (thisIndex.w == 1){
+					if (thisIndex.x == 0){
+						when ftoi[2](int tag, flow2D f, double2D P) serial{
+							copy2D(val_r,f);
+							copy2D(P_right,P);
+							wall(val_l,val_r,P_left,P_right);
+							calc();
+							fluxProxy(thisIndex.z,thisIndex.x,thisIndex.y).itof(2,flux);
+						}
+					}
+					else if (thisIndex.x == dimY){
+						when ftoi[3](int tag, flow2D f, double2D P) serial{
+							copy2D(val_l,f);
+							copy2D(P_left,P);
+							wall(val_r,val_l,P_right,P_left);
+							calc();
+							fluxProxy(thisIndex.z,thisIndex.x-1,thisIndex.y).itof(3,flux);
+						}
+					}
+					else{
+						overlap{
+							when ftoi[2](int tag, flow2D f, double2D P) serial{
+								copy2D(val_r,f);
+								copy2D(P_right,P);
+							}
+							when ftoi[3](int tag, flow2D f, double2D P) serial{
+								copy2D(val_l,f);
+								copy2D(P_left,P);
+							}
+						}
+						serial{
+							calc();
+							fluxProxy(thisIndex.z,thisIndex.x,thisIndex.y).itof(2,flux);
+							fluxProxy(thisIndex.z,thisIndex.x-1,thisIndex.y).itof(3,flux);
+						}
+					}
+				}
+				else{
+					if (thisIndex.x == 0){
+						when ftoi[4](int tag, flow2D f, double2D P) serial{
+							copy2D(val_r,f);
+							copy2D(P_right,P);
+							wall(val_l,val_r,P_left,P_right);
+							calc();
+							fluxProxy(thisIndex.y,thisIndex.z,thisIndex.x).itof(4,flux);
+						}
+					}
+					else if (thisIndex.x == dimZ){
+						when ftoi[5](int tag, flow2D f, double2D P) serial{
+							copy2D(val_l,f);
+							copy2D(P_left,P);
+							wall(val_r,val_l,P_right,P_left);
+							calc();
+							fluxProxy(thisIndex.y,thisIndex.z,thisIndex.x-1).itof(5,flux);
+						}
+					}
+					else{
+						overlap{
+							when ftoi[4](int tag, flow2D f, double2D P) serial{
+								copy2D(val_r,f);
+								copy2D(P_right,P);
+							}
+							when ftoi[5](int tag, flow2D f, double2D P) serial{
+								copy2D(val_l,f);
+								copy2D(P_left,P);
+							}
+						}
+						serial{
+							calc();
+							fluxProxy(thisIndex.y,thisIndex.z,thisIndex.x).itof(4,flux);
+							fluxProxy(thisIndex.y,thisIndex.z,thisIndex.x-1).itof(5,flux);
+						}
+					}
+				}
+			}
+		};
+	};
+
+	};
+
+};
