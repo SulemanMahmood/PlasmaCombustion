@@ -21,7 +21,7 @@ mainmodule main{
 		entry void run(){
 			for (iter = 0; iter < t_steps; iter++){
 				serial{
-					Msg *m =  new (numdiv * numdiv * numdiv) Msg(); 
+					Msg *m =  new (numdiv * numdiv * numdiv) Msg();
 					//memcpy(m->val,fval_old,numdiv*numdiv*numdiv*sizeof(flow));
 					for (int i = 0; i < numdiv; i++){
 						for (int j = 0; j < numdiv; j++){
@@ -94,7 +94,7 @@ mainmodule main{
 					}
 					fluxProxy(thisIndex.x,thisIndex.y,thisIndex.z).calc_flux(iter*4+3,m);
 				}
-				when calc_val[iter*4+3](int tag, Msg *m)) serial{
+				when calc_val[iter*4+3](int tag, Msg *m) serial{
 					for (int i = 0; i < numdiv; i++){
 						for (int j = 0; j < numdiv; j++){
 							for (int k = 0; k < numdiv; k++){
@@ -170,7 +170,7 @@ mainmodule main{
 						serial{
 							inviscidFlux(flux_f,cell_val);
 						}
-						when flux_comm[0](int tag, Msg *m1){
+						when flux_comm[0](int tag, Msg *m1)serial{
 							for (int i = 0; i < numdiv; i++){
 								for (int j = 0; j < numdiv; j++){
 									flux_f[0][0][i][j] = m1->val[numdiv*i+j];
