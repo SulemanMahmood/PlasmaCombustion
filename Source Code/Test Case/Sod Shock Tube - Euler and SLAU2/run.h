@@ -1,6 +1,7 @@
 #ifndef RUN_H
 #define RUN_H
 
+#include <vector>
 #include "utility.h"
 #include "run.decl.h"
 
@@ -25,6 +26,7 @@ class Main: public CBase_Main{
 
 class Cell: public CBase_Cell{
 	private:
+		Cell_SDAG_CODE
 		flow3D val_new, val_old;
 		double3D P;
 		int iter;
@@ -39,6 +41,7 @@ class Cell: public CBase_Cell{
 
 class Flux: public CBase_Flux{
 	private:
+		Flux_SDAG_CODE
 		flow3D flux_c, cell_val;
 		flow4D flux_f;
 		double3D P;
@@ -52,6 +55,7 @@ class Flux: public CBase_Flux{
 
 class Interface: public CBase_Interface{
 	private:
+		Interface_SDAG_CODE
 		flow2D val_l, val_r, flux;
 		double2D P_left, P_right;
 	public:
