@@ -349,7 +349,7 @@ void Interface::calc(){
 
 }
 
-void Interface::wall(flow2D f_n, flow2D f_o, double2D P_n, double2D P_o){
+void Interface::wall(flow2D &f_n, flow2D f_o, double2D &P_n, double2D P_o){
 	for (int i = 0; i < ndiv; i++){
 		for (int j = 0; j < ndiv; j++){
 			f_n[i][j] = f_o[i][j];
