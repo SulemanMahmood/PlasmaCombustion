@@ -19,7 +19,7 @@ mainmodule run{
 
 	array [3D] Cell{
 		entry Cell();
-		entry void ftoc(int tag, flow3D c_f);
+		entry void ftoc(flow3D c_f);
 		entry void solve_c(){
 			for (iter = 0; iter < t_steps; iter++){
 				serial "send_to_flux_from_cell"{
@@ -35,6 +35,8 @@ mainmodule run{
 
 	array [3D] Flux{
 		entry Flux();
+		entry void itof(int tag, flow2D f);
+		entry void ctof(flow3D val_c, double3D Pt);
 		entry void solve_f(){
 				when ctof(flow3D val_c, double3D Pt)serial{
 					copy3D(P,Pt);
@@ -45,14 +47,14 @@ mainmodule run{
 						for (int j = 0; j < ndiv; j++){
 							v1[i][j] = cell_val[0][i][j];
 							v2[i][j] = cell_val[ndiv-1][i][j];
-							v3[i][j] = cell_val[i][0][j];
-							v4[i][j] = cell_val[i][ndiv-1][j];
+							v3[i][j] = cell_val[j][0][i];
+							v4[i][j] = cell_val[j][ndiv-1][i];
 							v5[i][j] = cell_val[i][j][0];
 							v6[i][j] = cell_val[i][j][ndiv-1];
 							P1[i][j] = P[0][i][j];
 							P2[i][j] = P[ndiv-1][i][j];
-							P3[i][j] = P[i][0][j];
-							P4[i][j] = P[i][ndiv-1][j];
+							P3[i][j] = P[j][0][i];
+							P4[i][j] = P[j][ndiv-1][i];
 							P5[i][j] = P[i][j][0];
 							P6[i][j] = P[i][j][ndiv-1];
 						}
@@ -68,12 +70,55 @@ mainmodule run{
 					serial "flux_calc"{
 						inviscidFlux();
 					}
-					when itof[0](int tag, flow2D )
+					when itof[0](int tag, flow2D f){
+						for (int i = 0; i < ndiv; i++){
+							for (int j = 0; j < ndiv; j++){
+								flux_f[0][0][i][j] = f[i][j];
+							}
+						}
+					}
+					when itof[1](int tag, flow2D f){
+						for (int i = 0; i < ndiv; i++){
+							for (int j = 0; j < ndiv; j++){
+								flux_f[0][ndiv][i][j] = f[i][j];
+							}
+						}
+					}
+					when itof[2](int tag, flow2D f){
+						for (int i = 0; i < ndiv; i++){
+							for (int j = 0; j < ndiv; j++){
+								flux_f[1][0][i][j] = f[i][j];
+							}
+						}
+					}
+					when itof[3](int tag, flow2D f){
+						for (int i = 0; i < ndiv; i++){
+							for (int j = 0; j < ndiv; j++){
+								flux_f[1][ndiv][i][j] = f[i][j];
+							}
+						}
+					}
+					when itof[4](int tag, flow2D f){
+						for (int i = 0; i < ndiv; i++){
+							for (int j = 0; j < ndiv; j++){
+								flux_f[2][0][i][j] = f[i][j];
+							}
+						}
+					}
+					when itof[5](int tag, flow2D f){
+						for (int i = 0; i < ndiv; i++){
+							for (int j = 0; j < ndiv; j++){
+								flux_f[2][ndiv][i][j] = f[i][j];
+							}
+						}
+					}
 				}
 		};
+	};
 
 	array [4D] Interface{
 		entry Interface();
+		entry void ftoi(int tag, flow2D f, double2D P);
 		entry void solve_i(){
 			for (iter = 0; iter < t_steps; iter++){
 				if (thisIndex.w == 0){
@@ -189,8 +234,6 @@ mainmodule run{
 				}
 			}
 		};
-	};
-
 	};
 
 };
