@@ -152,12 +152,10 @@ mainmodule run{
 		};
 	};
 
-	array [4D] Interface{
-		entry Interface();
+	array [3D] InterfaceX{
+		entry InterfaceX();
 		entry void ftoi(int tag, flow2D f, double2D P);
 		entry void solve_i(){
-			//for (iter = 0; iter < t_steps; iter++){
-				if (thisIndex.w == 0){
 					if (thisIndex.x == 0){
 						when ftoi[0](int tag, flow2D f, double2D P) serial{
 							copy2D(val_r,f,ndiv);
@@ -194,23 +192,29 @@ mainmodule run{
 						}
 					}
 				}
-				else if (thisIndex.w == 1){
-					if (thisIndex.x == 0){
+		};
+	};
+
+	array [3D] InterfaceY{
+		entry InterfaceY();
+		entry void ftoi(int tag, flow2D f, double2D P);
+		entry void solve_i(){
+					if (thisIndex.y == 0){
 						when ftoi[2](int tag, flow2D f, double2D P) serial{
 							copy2D(val_r,f,ndiv);
 							copy2D(P_right,P,ndiv);
 							wall(val_l,val_r,P_left,P_right);
 							calc();
-							fluxProxy(thisIndex.z,thisIndex.x,thisIndex.y).itof(2,flux);
+							fluxProxy(thisIndex.x,thisIndex.y,thisIndex.z).itof(2,flux);
 						}
 					}
-					else if (thisIndex.x == dimY){
+					else if (thisIndex.y == dimY){
 						when ftoi[3](int tag, flow2D f, double2D P) serial{
 							copy2D(val_l,f,ndiv);
 							copy2D(P_left,P,ndiv);
 							wall(val_r,val_l,P_right,P_left);
 							calc();
-							fluxProxy(thisIndex.z,thisIndex.x-1,thisIndex.y).itof(3,flux);
+							fluxProxy(thisIndex.x,thisIndex.y-1,thisIndex.z).itof(3,flux);
 						}
 					}
 					else{
@@ -226,28 +230,34 @@ mainmodule run{
 						}
 						serial{
 							calc();
-							fluxProxy(thisIndex.z,thisIndex.x,thisIndex.y).itof(2,flux);
-							fluxProxy(thisIndex.z,thisIndex.x-1,thisIndex.y).itof(3,flux);
+							fluxProxy(thisIndex.x,thisIndex.y,thisIndex.z).itof(2,flux);
+							fluxProxy(thisIndex.x,thisIndex.y-1,thisIndex.z).itof(3,flux);
 						}
 					}
 				}
-				else{
-					if (thisIndex.x == 0){
+		};
+	};
+
+	array [3D] InterfaceZ{
+		entry InterfaceZ();
+		entry void ftoi(int tag, flow2D f, double2D P);
+		entry void solve_i(){
+					if (thisIndex.z == 0){
 						when ftoi[4](int tag, flow2D f, double2D P) serial{
 							copy2D(val_r,f,ndiv);
 							copy2D(P_right,P,ndiv);
 							wall(val_l,val_r,P_left,P_right);
 							calc();
-							fluxProxy(thisIndex.y,thisIndex.z,thisIndex.x).itof(4,flux);
+							fluxProxy(thisIndex.x,thisIndex.y,thisIndex.z).itof(4,flux);
 						}
 					}
-					else if (thisIndex.x == dimZ){
+					else if (thisIndex.z == dimZ){
 						when ftoi[5](int tag, flow2D f, double2D P) serial{
 							copy2D(val_l,f,ndiv);
 							copy2D(P_left,P,ndiv);
 							wall(val_r,val_l,P_right,P_left);
 							calc();
-							fluxProxy(thisIndex.y,thisIndex.z,thisIndex.x-1).itof(5,flux);
+							fluxProxy(thisIndex.x,thisIndex.y,thisIndex.z-1).itof(5,flux);
 						}
 					}
 					else{
@@ -263,12 +273,11 @@ mainmodule run{
 						}
 						serial{
 							calc();
-							fluxProxy(thisIndex.y,thisIndex.z,thisIndex.x).itof(4,flux);
-							fluxProxy(thisIndex.y,thisIndex.z,thisIndex.x-1).itof(5,flux);
+							fluxProxy(thisIndex.x,thisIndex.y,thisIndex.z).itof(4,flux);
+							fluxProxy(thisIndex.x,thisIndex.y,thisIndex.z-1).itof(5,flux);
 						}
 					}
 				}
-			//}
 		};
 	};
 
