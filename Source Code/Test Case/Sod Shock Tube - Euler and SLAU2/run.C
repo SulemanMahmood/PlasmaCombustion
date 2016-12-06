@@ -18,7 +18,8 @@ Main::Main(CkArgMsg* m){
 	fluxProxy = CProxy_Flux::ckNew(dimX,dimY,dimZ);
 	int fdimX = dimX + 1;
 	int dimW = 3;
-	interfaceProxy = CProxy_Interface::ckNew(dimW,fdimX,dimY,dimZ);
+	CkArrayOptions opts(dimW,fdimX,dimY,dimZ);
+	interfaceProxy = CProxy_Interface::ckNew(opts);
 	cellProxy.solve_c();
 	fluxProxy.solve_f();
 	interfaceProxy.solve_i();

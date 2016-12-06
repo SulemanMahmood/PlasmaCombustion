@@ -87,7 +87,7 @@ class Interface: public CBase_Interface{
 			p|flux;
 		}
 		void calc();
-		void wall(flow2D,flow2D,double2D,double2D);
+		void wall(flow2D&,flow2D,double2D&,double2D);
 };
 
 #endif
