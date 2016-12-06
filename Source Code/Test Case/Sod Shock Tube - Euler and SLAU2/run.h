@@ -44,7 +44,7 @@ class Flux: public CBase_Flux{
 		flow3D flux_c, cell_val;
 		flow4D flux_f;
 		double3D P;
-		int iter;
+		//int iter;
 
 		Flux();
 		Flux(CkMigrateMessage* m){}

@@ -156,7 +156,7 @@ mainmodule run{
 		entry Interface();
 		entry void ftoi(int tag, flow2D f, double2D P);
 		entry void solve_i(){
-			for (iter = 0; iter < t_steps; iter++){
+			//for (iter = 0; iter < t_steps; iter++){
 				if (thisIndex.w == 0){
 					if (thisIndex.x == 0){
 						when ftoi[0](int tag, flow2D f, double2D P) serial{
@@ -268,7 +268,7 @@ mainmodule run{
 						}
 					}
 				}
-			}
+			//}
 		};
 	};
 
