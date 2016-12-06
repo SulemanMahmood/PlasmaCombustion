@@ -23,9 +23,9 @@ mainmodule run{
 		entry void solve_c(){
 			for (iter = 0; iter < t_steps; iter++){
 				serial "send_to_flux_from_cell"{
-					fluxProxy(thisIndex.x,thisIndex.y,thisIndex.z).ctof(iter,val_old,P);
+					fluxProxy(thisIndex.x,thisIndex.y,thisIndex.z).ctof(val_old,P);
 				}
-				when ftoc[iter](int tag, flow3D c_f) serial "receive_from_flux_to_cell"{
+				when ftoc(flow3D c_f) serial "receive_from_flux_to_cell"{
 					calcvar3D(val_new,val_old,c_f);
 					gaslaw();
 				}
@@ -36,21 +36,40 @@ mainmodule run{
 	array [3D] Flux{
 		entry Flux();
 		entry void solve_f(){
-			for (iter = 0; iter < t_steps; iter++){
-				when [iter]ctof(int tag, flow3D val_c, double3D Pt){
+				when ctof(flow3D val_c, double3D Pt)serial{
 					copy3D(P,Pt);
 					copy3D(cell_val,val_c);
 					flow2D v1, v2, v3, v4, v5, v6;
 					double2D P1, P2, P3, P4, P5, P6;
-					//interfaceProxy(0,thisIndex.x,)
+					for (int i = 0; i < ndiv; i++){
+						for (int j = 0; j < ndiv; j++){
+							v1[i][j] = cell_val[0][i][j];
+							v2[i][j] = cell_val[ndiv-1][i][j];
+							v3[i][j] = cell_val[i][0][j];
+							v4[i][j] = cell_val[i][ndiv-1][j];
+							v5[i][j] = cell_val[i][j][0];
+							v6[i][j] = cell_val[i][j][ndiv-1];
+							P1[i][j] = P[0][i][j];
+							P2[i][j] = P[ndiv-1][i][j];
+							P3[i][j] = P[i][0][j];
+							P4[i][j] = P[i][ndiv-1][j];
+							P5[i][j] = P[i][j][0];
+							P6[i][j] = P[i][j][ndiv-1];
+						}
+					}
+					interfaceProxy(0,thisIndex.x,thisIndex.y,thisIndex.z).ftoi(0,v1,P1);
+					interfaceProxy(0,thisIndex.x+1,thisIndex.y,thisIndex.z).ftoi(1,v2,P2);
+					interfaceProxy(0,thisIndex.y,thisIndex.z,thisIndex.x).ftoi(2,v3,P3);
+					interfaceProxy(0,thisIndex.y+1,thisIndex.z,thisIndex.x).ftoi(3,v4,P4);
+					interfaceProxy(0,thisIndex.z,thisIndex.x,thisIndex.y).ftoi(4,v5,P5);
+					interfaceProxy(0,thisIndex.z+1,thisIndex.x,thisIndex.y).ftoi(5,v6,P6);
 				}
 				overlap{
 					serial "flux_calc"{
 						inviscidFlux();
 					}
-					when
+					when itof[0](int tag, flow2D )
 				}
-			}
 		};
 
 	array [4D] Interface{

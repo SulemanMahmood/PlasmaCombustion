@@ -31,9 +31,9 @@ Cell::Cell(){
 }
 
 void Cell::gaslaw(){
-  for (int i = 0; i < numdiv; i++){
-    for (int j = 0; j < numdiv; j++){
-      for (int k = 0; k < numdiv; k++){
+  for (int i = 0; i < ndiv; i++){
+    for (int j = 0; j < ndiv; j++){
+      for (int k = 0; k < ndiv; k++){
         P[i][j][k] = (gma-1)*val_new[i][j][k].r*(val_new[i][j][k].E - 0.5*(val_new[i][j][k].u*val_new[i][j][k].u + val_new[i][j][k].v*val_new[i][j][k].v + val_new[i][j][k].w*val_new[i][j][k].w));
       }
     }
