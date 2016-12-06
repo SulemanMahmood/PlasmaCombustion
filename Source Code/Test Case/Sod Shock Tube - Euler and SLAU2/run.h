@@ -1,7 +1,6 @@
 #ifndef RUN_H
 #define RUN_H
 
-#include <vector>
 #include "utility.h"
 #include "run.decl.h"
 
@@ -31,6 +30,7 @@ class Cell: public CBase_Cell{
 		int iter;
 	public:
 		Cell();
+		Cell(CkMigrateMessage* m){}
 		void update();
 		void initialize();
 		void gaslaw();
@@ -45,6 +45,7 @@ class Flux: public CBase_Flux{
 		int iter;
 	public:
 		Flux();
+		Flux(CkMigrateMessage* m){}
 		void inviscidFlux();
 		void fluxFacetoCell();
 };
@@ -55,6 +56,7 @@ class Interface: public CBase_Interface{
 		double2D P_left, P_right;
 	public:
 		Interface();
+		Interface(CkMigrateMessage* m){}
 		void calc();
 		void wall(flow2D,flow2D,double2D,double2D);
 };
