@@ -29,7 +29,6 @@ void Main::done(){
 }
 
 Cell::Cell(){
-	initialize();
 	val_new.resize(ndiv);
 	val_old.resize(ndiv);
 	P.resize(ndiv);
@@ -43,13 +42,40 @@ Cell::Cell(){
 			P[i][j].resize(ndiv);
 		}
 	}
+    initialize();
+}
+
+void Cell::initialize(){
+    double P_i, r_i;
+    if (thisIndex.x < dimX/2){
+        P_i = 1.0;
+        r_i = 1.0;
+    }
+    else{
+        P_i = 0.1;
+        r_i = 0.125;
+    }
+    for (int i = 0; i < ndiv; i++){
+        for (int j = 0; j < ndiv; j++){
+            for (int k = 0; k < ndiv; k++){
+                P[i][j][k] = P_i; // Yu: changed from P(i, j, j) to P(i, j, k)
+                val_old[i][j][k].r = r_i;
+                val_old[i][j][k].u = 0.0;
+                val_old[i][j][k].v = 0.0;
+                val_old[i][j][k].w = 0.0;
+                val_old[i][j][k].E = gma*P_i/r_i;
+            }
+        }
+    }
 }
 
 void Cell::gaslaw(){
   for (int i = 0; i < ndiv; i++){
     for (int j = 0; j < ndiv; j++){
       for (int k = 0; k < ndiv; k++){
-        P[i][j][k] = (gma-1)*val_new[i][j][k].r*(val_new[i][j][k].E - 0.5*(val_new[i][j][k].u*val_new[i][j][k].u + val_new[i][j][k].v*val_new[i][j][k].v + val_new[i][j][k].w*val_new[i][j][k].w));
+        P[i][j][k] = (gma-1)*val_new[i][j][k].r*
+          (val_new[i][j][k].E -
+            0.5 * (val_new[i][j][k].u*val_new[i][j][k].u + val_new[i][j][k].v*val_new[i][j][k].v + val_new[i][j][k].w*val_new[i][j][k].w));
       }
     }
   }
@@ -75,29 +101,7 @@ void Cell::calcvar3D(flow3D v_n, flow3D v_o, flow3D fl){
   }
 }
 
-void Cell::initialize(){
-	double P_i, r_i;
-	if (thisIndex.x < dimX/2){
-		P_i = 1.0;
-		r_i = 1.0;
-	}
-	else{
-		P_i = 0.1;
-		r_i = 0.125;
-	}
-	for (int i = 0; i < ndiv; i++){
-		for (int j = 0; j < ndiv; j++){
-			for (int k = 0; k < ndiv; k++){
-				P[i][j][j] = P_i;
-				val_old[i][j][k].r = r_i;
-				val_old[i][j][k].u = 0.0;
-				val_old[i][j][k].v = 0.0;
-				val_old[i][j][k].w = 0.0;
-				val_old[i][j][k].E = gma*P_i/r_i;
-			}
-		}
-	}
-}
+
 
 Flux::Flux(){
 	flux_c.resize(ndiv);

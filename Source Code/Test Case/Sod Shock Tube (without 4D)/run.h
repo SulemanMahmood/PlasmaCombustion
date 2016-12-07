@@ -31,8 +31,11 @@ class Cell: public CBase_Cell{
 		double3D P;
 		int iter;
 
+    // Cell functions
 		Cell();
+    
 		Cell(CkMigrateMessage* m){}
+    
 		void pup(PUP::er &p){
 			CBase_Cell::pup(p);
 			__sdag_pup(p);
