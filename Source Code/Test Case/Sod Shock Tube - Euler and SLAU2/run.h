@@ -74,6 +74,7 @@ class Interface: public CBase_Interface{
 		Interface_SDAG_CODE
 		flow2D val_l, val_r, flux;
 		double2D P_left, P_right;
+		int iter;
 
 		Interface();
 		Interface(CkMigrateMessage* m){}
