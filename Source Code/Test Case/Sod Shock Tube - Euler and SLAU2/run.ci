@@ -42,113 +42,113 @@ mainmodule run{
 	array [3D] Flux{
 		entry Flux();
 		entry void itof(int tag, flow2D f);
-		entry void ctof(flow3D val_c, double3D Pt);
-		entry void solve_f(){
-				when ctof(flow3D val_c, double3D Pt)serial{
-					copy3D(P,Pt,ndiv);
-					copy3D(cell_val,val_c,ndiv);
-					flow2D v1, v2, v3, v4, v5, v6;
-					double2D P1, P2, P3, P4, P5, P6;
-					v1.resize(ndiv);
-					v2.resize(ndiv);
-					v3.resize(ndiv);
-					v4.resize(ndiv);
-					v5.resize(ndiv);
-					v6.resize(ndiv);
-					P1.resize(ndiv);
-					P2.resize(ndiv);
-					P3.resize(ndiv);
-					P4.resize(ndiv);
-					P5.resize(ndiv);
-					P6.resize(ndiv);
-					for (int i = 0; i < ndiv; i++){
-						v1[i].resize(ndiv);
-						v2[i].resize(ndiv);
-						v3[i].resize(ndiv);
-						v4[i].resize(ndiv);
-						v5[i].resize(ndiv);
-						v6[i].resize(ndiv);
-						P1[i].resize(ndiv);
-						P2[i].resize(ndiv);
-						P3[i].resize(ndiv);
-						P4[i].resize(ndiv);
-						P5[i].resize(ndiv);
-						P6[i].resize(ndiv);
+		
+		entry void ctof(flow3D val_c, double3D Pt){
+			serial{
+				copy3D(P,Pt,ndiv);
+				copy3D(cell_val,val_c,ndiv);
+				flow2D v1, v2, v3, v4, v5, v6;
+				double2D P1, P2, P3, P4, P5, P6;
+				v1.resize(ndiv);
+				v2.resize(ndiv);
+				v3.resize(ndiv);
+				v4.resize(ndiv);
+				v5.resize(ndiv);
+				v6.resize(ndiv);
+				P1.resize(ndiv);
+				P2.resize(ndiv);
+				P3.resize(ndiv);
+				P4.resize(ndiv);
+				P5.resize(ndiv);
+				P6.resize(ndiv);
+				for (int i = 0; i < ndiv; i++){
+					v1[i].resize(ndiv);
+					v2[i].resize(ndiv);
+					v3[i].resize(ndiv);
+					v4[i].resize(ndiv);
+					v5[i].resize(ndiv);
+					v6[i].resize(ndiv);
+					P1[i].resize(ndiv);
+					P2[i].resize(ndiv);
+					P3[i].resize(ndiv);
+					P4[i].resize(ndiv);
+					P5[i].resize(ndiv);
+					P6[i].resize(ndiv);
+				}
+				for (int i = 0; i < ndiv; i++){
+					for (int j = 0; j < ndiv; j++){
+						v1[i][j] = cell_val[0][i][j];
+						v2[i][j] = cell_val[ndiv-1][i][j];
+						v3[i][j] = cell_val[j][0][i];
+						v4[i][j] = cell_val[j][ndiv-1][i];
+						v5[i][j] = cell_val[i][j][0];
+						v6[i][j] = cell_val[i][j][ndiv-1];
+						P1[i][j] = P[0][i][j];
+						P2[i][j] = P[ndiv-1][i][j];
+						P3[i][j] = P[j][0][i];
+						P4[i][j] = P[j][ndiv-1][i];
+						P5[i][j] = P[i][j][0];
+						P6[i][j] = P[i][j][ndiv-1];
 					}
+				}
+				interfaceProxy(0,thisIndex.x,thisIndex.y,thisIndex.z).ftoi(0,v1,P1);
+				interfaceProxy(0,thisIndex.x+1,thisIndex.y,thisIndex.z).ftoi(1,v2,P2);
+				interfaceProxy(1,thisIndex.y,thisIndex.z,thisIndex.x).ftoi(2,v3,P3);
+				interfaceProxy(1,thisIndex.y+1,thisIndex.z,thisIndex.x).ftoi(3,v4,P4);
+				interfaceProxy(2,thisIndex.z,thisIndex.x,thisIndex.y).ftoi(4,v5,P5);
+				interfaceProxy(2,thisIndex.z+1,thisIndex.x,thisIndex.y).ftoi(5,v6,P6);
+			}
+			overlap{
+				serial "flux_calc"{
+					inviscidFlux();
+				}
+				when itof[0](int tag, flow2D f)serial{
 					for (int i = 0; i < ndiv; i++){
 						for (int j = 0; j < ndiv; j++){
-							v1[i][j] = cell_val[0][i][j];
-							v2[i][j] = cell_val[ndiv-1][i][j];
-							v3[i][j] = cell_val[j][0][i];
-							v4[i][j] = cell_val[j][ndiv-1][i];
-							v5[i][j] = cell_val[i][j][0];
-							v6[i][j] = cell_val[i][j][ndiv-1];
-							P1[i][j] = P[0][i][j];
-							P2[i][j] = P[ndiv-1][i][j];
-							P3[i][j] = P[j][0][i];
-							P4[i][j] = P[j][ndiv-1][i];
-							P5[i][j] = P[i][j][0];
-							P6[i][j] = P[i][j][ndiv-1];
-						}
-					}
-					interfaceProxy(0,thisIndex.x,thisIndex.y,thisIndex.z).ftoi(0,v1,P1);
-					interfaceProxy(0,thisIndex.x+1,thisIndex.y,thisIndex.z).ftoi(1,v2,P2);
-					interfaceProxy(1,thisIndex.y,thisIndex.z,thisIndex.x).ftoi(2,v3,P3);
-					interfaceProxy(1,thisIndex.y+1,thisIndex.z,thisIndex.x).ftoi(3,v4,P4);
-					interfaceProxy(2,thisIndex.z,thisIndex.x,thisIndex.y).ftoi(4,v5,P5);
-					interfaceProxy(2,thisIndex.z+1,thisIndex.x,thisIndex.y).ftoi(5,v6,P6);
-				}
-				overlap{
-					serial "flux_calc"{
-						inviscidFlux();
-					}
-					when itof[0](int tag, flow2D f)serial{
-						for (int i = 0; i < ndiv; i++){
-							for (int j = 0; j < ndiv; j++){
-								flux_f[0][0][i][j] = f[i][j];
-							}
-						}
-					}
-					when itof[1](int tag, flow2D f)serial{
-						for (int i = 0; i < ndiv; i++){
-							for (int j = 0; j < ndiv; j++){
-								flux_f[0][ndiv][i][j] = f[i][j];
-							}
-						}
-					}
-					when itof[2](int tag, flow2D f)serial{
-						for (int i = 0; i < ndiv; i++){
-							for (int j = 0; j < ndiv; j++){
-								flux_f[1][0][i][j] = f[i][j];
-							}
-						}
-					}
-					when itof[3](int tag, flow2D f)serial{
-						for (int i = 0; i < ndiv; i++){
-							for (int j = 0; j < ndiv; j++){
-								flux_f[1][ndiv][i][j] = f[i][j];
-							}
-						}
-					}
-					when itof[4](int tag, flow2D f)serial{
-						for (int i = 0; i < ndiv; i++){
-							for (int j = 0; j < ndiv; j++){
-								flux_f[2][0][i][j] = f[i][j];
-							}
-						}
-					}
-					when itof[5](int tag, flow2D f)serial{
-						for (int i = 0; i < ndiv; i++){
-							for (int j = 0; j < ndiv; j++){
-								flux_f[2][ndiv][i][j] = f[i][j];
-							}
+							flux_f[0][0][i][j] = f[i][j];
 						}
 					}
 				}
-				serial{
-					fluxFacetoCell();
-					cellProxy(thisIndex.x,thisIndex.y,thisIndex.z).ftoc(flux_c);
+				when itof[1](int tag, flow2D f)serial{
+					for (int i = 0; i < ndiv; i++){
+						for (int j = 0; j < ndiv; j++){
+							flux_f[0][ndiv][i][j] = f[i][j];
+						}
+					}
 				}
+				when itof[2](int tag, flow2D f)serial{
+					for (int i = 0; i < ndiv; i++){
+						for (int j = 0; j < ndiv; j++){
+							flux_f[1][0][i][j] = f[i][j];
+						}
+					}
+				}
+				when itof[3](int tag, flow2D f)serial{
+					for (int i = 0; i < ndiv; i++){
+						for (int j = 0; j < ndiv; j++){
+							flux_f[1][ndiv][i][j] = f[i][j];
+						}
+					}
+				}
+				when itof[4](int tag, flow2D f)serial{
+					for (int i = 0; i < ndiv; i++){
+						for (int j = 0; j < ndiv; j++){
+							flux_f[2][0][i][j] = f[i][j];
+						}
+					}
+				}
+				when itof[5](int tag, flow2D f)serial{
+					for (int i = 0; i < ndiv; i++){
+						for (int j = 0; j < ndiv; j++){
+							flux_f[2][ndiv][i][j] = f[i][j];
+						}
+					}
+				}
+			}
+			serial{
+				fluxFacetoCell();
+				cellProxy(thisIndex.x,thisIndex.y,thisIndex.z).ftoc(flux_c);
+			}
 		};
 	};
 
