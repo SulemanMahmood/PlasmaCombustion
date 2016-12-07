@@ -16,6 +16,7 @@ mainmodule run{
 	mainchare Main{
 		entry Main(CkArgMsg* m);
 		entry [reductiontarget] void done();
+    entry [reductiontarget] void InterfaceIsUp();
 	};
 
 	array [3D] Cell{
@@ -91,6 +92,7 @@ mainmodule run{
 						P6[i][j] = P[i][j][ndiv-1];
 					}
 				}
+				
 				interfaceProxy(0,thisIndex.x,thisIndex.y,thisIndex.z).ftoi(0,v1,P1);
 				interfaceProxy(0,thisIndex.x+1,thisIndex.y,thisIndex.z).ftoi(1,v2,P2);
 				interfaceProxy(1,thisIndex.y,thisIndex.z,thisIndex.x).ftoi(2,v3,P3);
@@ -156,7 +158,12 @@ mainmodule run{
 		entry Interface();
 		entry void ftoi(int tag, flow2D f, double2D P);
 		entry void solve_i(){
-			//for (iter = 0; iter < t_steps; iter++){
+			// Tell main that Interface is active and waiting
+			serial{
+				CkCallback cb(CkReductionTarget(Main,done),mainProxy);
+				contribute(cb);
+			}
+			for (iter = 0; iter < t_steps; iter++){
 				if (thisIndex.w == 0){
 					if (thisIndex.x == 0){
 						when ftoi[0](int tag, flow2D f, double2D P) serial{
@@ -268,7 +275,7 @@ mainmodule run{
 						}
 					}
 				}
-			//}
+			}
 		};
 	};
 

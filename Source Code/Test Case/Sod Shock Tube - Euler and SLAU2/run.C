@@ -20,8 +20,12 @@ Main::Main(CkArgMsg* m){
 	int dimW = 3;
 	CkArrayOptions opts(dimW,fdimX,dimY,dimZ);
 	interfaceProxy = CProxy_Interface::ckNew(opts);
-	cellProxy.solve_c();
 	interfaceProxy.solve_i();
+}
+
+void Main::InterfaceIsUp(){
+	CkPrintf("interface is up \n");
+	cellProxy.solve_c();
 }
 
 void Main::done(){
