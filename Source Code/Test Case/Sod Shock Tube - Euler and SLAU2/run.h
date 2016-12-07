@@ -22,6 +22,7 @@ class Main: public CBase_Main{
 	public:
 		Main(CkArgMsg*);
 		void done();
+		void InterfaceIsUp();
 };
 
 class Cell: public CBase_Cell{
