@@ -37,7 +37,7 @@ class Cell: public CBase_Cell{
 		Cell(CkMigrateMessage* m){}
     
 		void pup(PUP::er &p){
-			CBase_Cell::pup(p);
+			CBase_Cell::pup(p); // Yu: how to write pup, __sdag_pup???, user_defined struct???
 			__sdag_pup(p);
 			p|val_new;
 			p|val_old;
@@ -47,7 +47,7 @@ class Cell: public CBase_Cell{
 		void update();
 		void initialize();
 		void gaslaw();
-		void calcvar3D(flow3D,flow3D,flow3D);
+		void calcvar3D(flow3D&,flow3D,flow3D);
 };
 
 class Flux: public CBase_Flux{
@@ -90,7 +90,7 @@ class Interface: public CBase_Interface{
 			p|flux;
 		}
 		void calc();
-		void wall(flow2D,flow2D,double2D,double2D);
+		void wall(flow2D& f_n, const flow2D& f_o, double2D& P_n, const double2D& P_o);
 };
 
 #endif

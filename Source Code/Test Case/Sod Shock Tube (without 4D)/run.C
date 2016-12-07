@@ -81,7 +81,7 @@ void Cell::gaslaw(){
   }
 }
 
-void Cell::update(){
+void Cell::update(){ // Yu: assign old to new???
 	for (int i = 0; i < ndiv; i++){
 		for (int j = 0; j < ndiv; j++){
 			for (int k = 0; k < ndiv; k++){
@@ -91,7 +91,7 @@ void Cell::update(){
 	}
 }
 
-void Cell::calcvar3D(flow3D v_n, flow3D v_o, flow3D fl){
+void Cell::calcvar3D(flow3D& v_n, flow3D v_o, flow3D fl){
   for (int i = 0; i < ndiv; i++){
     for(int j = 0; j < ndiv; j++){
       for(int k = 0; k < ndiv; k++){
@@ -353,7 +353,7 @@ void Interface::calc(){
 
 }
 
-void Interface::wall(flow2D f_n, flow2D f_o, double2D P_n, double2D P_o){
+void Interface::wall(flow2D& f_n, const flow2D& f_o, double2D& P_n, const double2D& P_o){ // Yu : added & to f_n and P_n to make a change
 	for (int i = 0; i < ndiv; i++){
 		for (int j = 0; j < ndiv; j++){
 			f_n[i][j] = f_o[i][j];
