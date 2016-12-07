@@ -11,7 +11,7 @@ Main::Main(CkArgMsg* m){
 	dx = double(1)/(dimX*ndiv);
 	double end_time = 0.2;
 	double Co = 0.1;
-	double dt = Co*dx;
+	dt = Co*dx;
 	t_steps = int(end_time/dt);
 	mainProxy = thisProxy;
 	cellProxy = CProxy_Cell::ckNew(dimX,dimY,dimZ);

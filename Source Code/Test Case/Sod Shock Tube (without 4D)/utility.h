@@ -189,7 +189,7 @@ typedef std::vector<std::vector<std::vector<flow>>> flow3D;
 typedef std::vector<std::vector<std::vector<std::vector<flow>>>> flow4D;
 
 template<typename T>
-T copy3D(T lhs, T rhs, int dim){
+void copy3D(T& lhs, T rhs, int dim){
   for(int i = 0; i < dim; i++){
     for(int j = 0; j < dim; j++){
       for(int k = 0; k < dim; k++){
@@ -200,7 +200,7 @@ T copy3D(T lhs, T rhs, int dim){
 }
 
 template<typename T>
-T copy2D(T lhs, T rhs, int dim){
+void copy2D(T& lhs, T rhs, int dim){
   for(int i = 0; i < dim; i++){
     for(int j = 0; j < dim; j++){
       lhs[i][j] = rhs[i][j];
