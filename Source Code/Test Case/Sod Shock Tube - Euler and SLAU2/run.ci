@@ -160,7 +160,7 @@ mainmodule run{
 		entry void solve_i(){
 			// Tell main that Interface is active and waiting
 			serial{
-				CkCallback cb(CkReductionTarget(Main,done),mainProxy);
+				CkCallback cb(CkReductionTarget(Main,InterfaceIsUp),mainProxy);
 				contribute(cb);
 			}
 			for (iter = 0; iter < t_steps; iter++){
