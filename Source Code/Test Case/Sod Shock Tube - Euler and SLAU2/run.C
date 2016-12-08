@@ -3,9 +3,9 @@
 
 Main::Main(CkArgMsg* m){
 	delete m;
-	dimX = 100;
-	dimY = 5;
-	dimZ = 5;
+	dimX = 5;
+	dimY = 2;
+	dimZ = 2;
 	ndiv = 10;
 	gma = 1.4;
 	dx = double(1)/(dimX*ndiv);
@@ -16,10 +16,9 @@ Main::Main(CkArgMsg* m){
 	mainProxy = thisProxy;
 	cellProxy = CProxy_Cell::ckNew(dimX,dimY,dimZ);
 	fluxProxy = CProxy_Flux::ckNew(dimX,dimY,dimZ);
-	int fdimX = dimX + 1;
 	int dimW = 3;
 	CkArrayOptions opts(CkArrayIndex4D(0,0,0,0),
-											CkArrayIndex4D(dimW,fdimX,dimY,dimZ),
+											CkArrayIndex4D(dimW,dimX+1,dimX+1,dimX+1),
 											CkArrayIndex4D(1,1,1,1));
 	interfaceProxy = CProxy_Interface::ckNew(opts);
 	interfaceProxy.solve_i();

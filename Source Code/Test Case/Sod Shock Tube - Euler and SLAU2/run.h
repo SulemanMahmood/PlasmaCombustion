@@ -4,6 +4,7 @@
 #include "pup_stl.h"
 #include "utility.h"
 #include "run.decl.h"
+#include <stdlib.h>
 
 /*readonly*/ CProxy_Main mainProxy;
 /*readonly*/ CProxy_Cell cellProxy;
