@@ -1,8 +1,0 @@
-                      Input
-`````````````````````````````````````````````````````````````````
-Reaction mechansim file = methane_air.txt
-Transport file = methane_air.txt
-Electron Temperature (in eV) = 100
-Gas Temperature (in K) = 300
-End time (in seconds) = 1
-Time step (in seconds) = 0.000000001
