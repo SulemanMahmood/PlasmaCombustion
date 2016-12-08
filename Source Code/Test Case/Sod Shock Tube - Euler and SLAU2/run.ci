@@ -25,6 +25,7 @@ mainmodule run{
 		entry void solve_c(){
 			for (iter = 0; iter < t_steps; iter++){
 				serial "send_to_flux_from_cell"{
+					CkPrintf("New iteration starting %d \n", iter);
 					fluxProxy(thisIndex.x,thisIndex.y,thisIndex.z).ctof(val_old,P);
 				}
 				when ftoc(flow3D c_f) serial "receive_from_flux_to_cell"{
@@ -160,6 +161,7 @@ mainmodule run{
 		entry void solve_i(){
 			// Tell main that Interface is active and waiting
 			serial{
+			//	CkPrintf("Reducing to check if its working \n");
 				CkCallback cb(CkReductionTarget(Main,InterfaceIsUp),mainProxy);
 				contribute(cb);
 			}

@@ -18,7 +18,9 @@ Main::Main(CkArgMsg* m){
 	fluxProxy = CProxy_Flux::ckNew(dimX,dimY,dimZ);
 	int fdimX = dimX + 1;
 	int dimW = 3;
-	CkArrayOptions opts(dimW,fdimX,dimY,dimZ);
+	CkArrayOptions opts(CkArrayIndex4D(0,0,0,0),
+											CkArrayIndex4D(dimW,fdimX,dimY,dimZ),
+											CkArrayIndex4D(1,1,1,1));
 	interfaceProxy = CProxy_Interface::ckNew(opts);
 	interfaceProxy.solve_i();
 }
@@ -247,6 +249,7 @@ void Flux::fluxFacetoCell(){
 }
 
 Interface::Interface(){
+//	CkPrintf("Interface being created with index (%d,%d,%d,%d) \n", thisIndex.w, thisIndex.x, thisIndex.y, thisIndex.z  );
 	flux.resize(ndiv);
 	val_l.resize(ndiv);
 	val_r.resize(ndiv);
