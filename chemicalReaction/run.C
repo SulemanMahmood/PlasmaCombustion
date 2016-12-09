@@ -30,6 +30,7 @@ void calc_temp(double1D);
 
 int main(){
   read_file();
+	printf("Input read Complete \n");
   solve_rxn();
   return 0;
 }
@@ -45,6 +46,7 @@ void read_file(){
 	std::string a1, a2, a3, a4, a5, a6, p1, p2 , p3, p4, p5, asname;
 	//double as;
   myfile.open("methane_air_plasma_without_3rdbody.txt");
+	printf("File is open\n");
 	getline(myfile,line);
 	while(!myfile.eof()){
 		getline(myfile,line);
@@ -52,11 +54,16 @@ void read_file(){
 		iss1 >> size;
 		getline(myfile,line);
 		getline(myfile,line);
+		printf("Starting for loop within while\n");
+		species.resize(size);
+		Cp.resize(size);
+		E.resize(size);
 		for (int i = 0; i < size; i++){
 			getline(myfile,line);
 			std::istringstream iss2(line);
 			iss2 >> temp >> species[i] >> Cp[i] >> E[i];
 		}
+		printf("For Loop is done open\n");
 		getline(myfile,line);
 		getline(myfile,line);
 		getline(myfile,line);
