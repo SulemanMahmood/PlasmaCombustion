@@ -46,7 +46,7 @@ class Cell: public CBase_Cell{
 		void update();
 		void initialize();
 		void gaslaw();
-		void calcvar3D(flow3D,flow3D,flow3D);
+		void calcvar3D(flow3D&,flow3D,flow3D);
 };
 
 class Flux: public CBase_Flux{

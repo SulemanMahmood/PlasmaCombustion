@@ -70,7 +70,7 @@ void Cell::update(){
 	}
 }
 
-void Cell::calcvar3D(flow3D v_n, flow3D v_o, flow3D fl){
+void Cell::calcvar3D(flow3D &v_n, flow3D v_o, flow3D fl){
   for (int i = 0; i < ndiv; i++){
     for(int j = 0; j < ndiv; j++){
       for(int k = 0; k < ndiv; k++){
@@ -98,7 +98,7 @@ void Cell::initialize(){
 				val_old[i][j][k].u = 0.0;
 				val_old[i][j][k].v = 0.0;
 				val_old[i][j][k].w = 0.0;
-				val_old[i][j][k].E = gma*P_i/r_i;
+				val_old[i][j][k].E = P_i/(r_i*(gma-1));
 			}
 		}
 	}
