@@ -1,6 +1,0 @@
-module mesh{
-  array[3D] Mesh{
-    entry createmesh();
-    entry adjustmesh();
-  };
-};

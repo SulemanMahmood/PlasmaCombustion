@@ -1,7 +1,0 @@
-module interfaceflux{
-  chare intflux{
-    void interfaceflux(){
-
-    }
-  };
-};
