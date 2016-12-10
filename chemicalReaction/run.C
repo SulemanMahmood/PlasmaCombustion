@@ -85,7 +85,7 @@ void read_file(){
 					}
 				}
 			}
-			if (numreact == 2){
+			else if (numreact == 2){
 				iss >> a1 >> a2 >> a3 >> a4;
 				for (int j = 0; j < size; j++){
 					if (a1 == species[j]){
@@ -170,38 +170,15 @@ void read_file(){
 			data[2] = double(0) - data[2];
 			data[0] = double(0) - data[0];
 			data[4] = double(0) - data[4];
-			//std::cout << data[0] << "\t" << data[1] << "\t" << data[2] << "\t" << data[3] << "\n";
-			//std::cout << K[react1].size() << "\n";
 			if (numreact == 1){
 				data.push_back(react1);
 				K[react1].push_back(data);
-				/*K[react1].push_back(double1D(double1D()));
-				K[react1][K[react1].size()-1].push_back(data[0]);
-				K[react1][K[react1].size()-1].push_back(data[1]);
-				K[react1][K[react1].size()-1].push_back(data[2]);
-				K[react1][K[react1].size()-1].push_back(data[3]);
-				K[react1][K[react1].size()-1].push_back(data[4]);*/
 			}
 			else if (numreact == 2){
 				data.push_back(react1);
 				data.push_back(react2);
 				K[react1].push_back(data);
 				K[react2].push_back(data);
-				/*K[react1].push_back(double1D(double1D()));
-				K[react1][K[react1].size()-1].push_back(data[0]);
-				K[react1][K[react1].size()-1].push_back(data[1]);
-				K[react1][K[react1].size()-1].push_back(data[2]);
-				K[react1][K[react1].size()-1].push_back(data[3]);
-				K[react1][K[react1].size()-1].push_back(data[4]);
-				K[react1][K[react1].size()-1].push_back(data[5]);
-				K[react2].push_back(double1D(double1D()));
-				K[react2][K[react2].size()-1].push_back(data[0]);
-				K[react2][K[react2].size()-1].push_back(data[1]);
-				K[react2][K[react2].size()-1].push_back(data[2]);
-				K[react2][K[react2].size()-1].push_back(data[3]);
-				K[react2][K[react2].size()-1].push_back(data[4]);
-				K[react2][K[react2].size()-1].push_back(data[5]);*/
-				//std::cout << "Reaction constants : " << i << "\n";
 			}
 			else{
 				data.push_back(react1);
@@ -210,144 +187,24 @@ void read_file(){
 				K[react1].push_back(data);
 				K[react2].push_back(data);
 				K[react3].push_back(data);
-				/*K[react1].push_back(double1D(double1D()));
-				K[react1][K[react1].size()-1].push_back(data[0]);
-				K[react1][K[react1].size()-1].push_back(data[1]);
-				K[react1][K[react1].size()-1].push_back(data[2]);
-				K[react1][K[react1].size()-1].push_back(data[3]);
-				K[react1][K[react1].size()-1].push_back(data[4]);
-				K[react1][K[react1].size()-1].push_back(data[5]);
-				K[react1][K[react1].size()-1].push_back(data[6]);
-				K[react2].push_back(double1D(double1D()));
-				K[react2][K[react2].size()-1].push_back(data[0]);
-				K[react2][K[react2].size()-1].push_back(data[1]);
-				K[react2][K[react2].size()-1].push_back(data[2]);
-				K[react2][K[react2].size()-1].push_back(data[3]);
-				K[react2][K[react2].size()-1].push_back(data[4]);
-				K[react2][K[react2].size()-1].push_back(data[5]);
-				K[react2][K[react2].size()-1].push_back(data[6]);
-				K[react3].push_back(double1D(double1D()));
-				K[react3][K[react3].size()-1].push_back(data[0]);
-				K[react3][K[react3].size()-1].push_back(data[1]);
-				K[react3][K[react3].size()-1].push_back(data[2]);
-				K[react3][K[react3].size()-1].push_back(data[3]);
-				K[react3][K[react3].size()-1].push_back(data[4]);
-				K[react3][K[react3].size()-1].push_back(data[5]);
-				K[react3][K[react3].size()-1].push_back(data[6]);*/
 			}
-			//std::cout << K[react1].size() << "\n";
-			//std::cout << K[react1][K[react1].size()-1][0] << "\n";
 			data[0] = double(0) - data[0];
 			if (numproduct == 1){
 				K[prod1].push_back(data);
-				/*K[prod1].push_back(double1D(double1D()));
-				if (numreact == 1){
-					K[prod1][K[prod1].size()-1].push_back(data[0]);
-					K[prod1][K[prod1].size()-1].push_back(data[1]);
-					K[prod1][K[prod1].size()-1].push_back(data[2]);
-					K[prod1][K[prod1].size()-1].push_back(data[3]);
-					K[prod1][K[prod1].size()-1].push_back(data[4]);
-				}
-				else if (numreact == 2){
-					K[prod1][K[prod1].size()-1].push_back(data[0]);
-					K[prod1][K[prod1].size()-1].push_back(data[1]);
-					K[prod1][K[prod1].size()-1].push_back(data[2]);
-					K[prod1][K[prod1].size()-1].push_back(data[3]);
-					K[prod1][K[prod1].size()-1].push_back(data[4]);
-					K[prod1][K[prod1].size()-1].push_back(data[5]);
-				}
-				else{
-					K[prod1][K[prod1].size()-1].push_back(data[0]);
-					K[prod1][K[prod1].size()-1].push_back(data[1]);
-					K[prod1][K[prod1].size()-1].push_back(data[2]);
-					K[prod1][K[prod1].size()-1].push_back(data[3]);
-					K[prod1][K[prod1].size()-1].push_back(data[4]);
-					K[prod1][K[prod1].size()-1].push_back(data[5]);
-					K[prod1][K[prod1].size()-1].push_back(data[6]);
-				}*/
 			}
 			else if (numproduct == 2){
 				K[prod1].push_back(data);
 				K[prod2].push_back(data);
-				/*K[prod1].push_back(double1D(double1D()));
-				K[prod1][K[prod1].size()-1].push_back(data[0]);
-				K[prod1][K[prod1].size()-1].push_back(data[1]);
-				K[prod1][K[prod1].size()-1].push_back(data[2]);
-				K[prod1][K[prod1].size()-1].push_back(data[3]);
-				K[prod1][K[prod1].size()-1].push_back(data[4]);
-				K[prod2].push_back(double1D(double1D()));
-				K[prod2][K[prod2].size()-1].push_back(data[0]);
-				K[prod2][K[prod2].size()-1].push_back(data[1]);
-				K[prod2][K[prod2].size()-1].push_back(data[2]);
-				K[prod2][K[prod2].size()-1].push_back(data[3]);
-				K[prod2][K[prod2].size()-1].push_back(data[4]);
-				if (numreact == 2){
-					K[prod1][K[prod1].size()-1].push_back(data[5]);
-					K[prod2][K[prod2].size()-1].push_back(data[5]);
-				}
-				else if (numreact == 3){
-					K[prod1][K[prod1].size()-1].push_back(data[6]);
-					K[prod2][K[prod2].size()-1].push_back(data[6]);
-				}*/
 			}
 			else{
 				K[prod1].push_back(data);
 				K[prod2].push_back(data);
 				K[prod3].push_back(data);
-				/*K[prod1].push_back(double1D(double1D()));
-				K[prod1][K[prod1].size()-1].push_back(data[0]);
-				K[prod1][K[prod1].size()-1].push_back(data[1]);
-				K[prod1][K[prod1].size()-1].push_back(data[2]);
-				K[prod1][K[prod1].size()-1].push_back(data[3]);
-				K[prod1][K[prod1].size()-1].push_back(data[4]);
-				K[prod2].push_back(double1D(double1D()));
-				K[prod2][K[prod2].size()-1].push_back(data[0]);
-				K[prod2][K[prod2].size()-1].push_back(data[1]);
-				K[prod2][K[prod2].size()-1].push_back(data[2]);
-				K[prod2][K[prod2].size()-1].push_back(data[3]);
-				K[prod2][K[prod2].size()-1].push_back(data[4]);
-				K[prod3].push_back(double1D(double1D()));
-				K[prod3][K[prod3].size()-1].push_back(data[0]);
-				K[prod3][K[prod3].size()-1].push_back(data[1]);
-				K[prod3][K[prod3].size()-1].push_back(data[2]);
-				K[prod3][K[prod3].size()-1].push_back(data[3]);
-				K[prod3][K[prod3].size()-1].push_back(data[4]);
-				if (numreact == 2){
-					K[prod1][K[prod1].size()-1].push_back(data[5]);
-					K[prod2][K[prod2].size()-1].push_back(data[5]);
-					K[prod3][K[prod3].size()-1].push_back(data[5]);
-				}
-				else if (numreact == 3){
-					K[prod1][K[prod1].size()-1].push_back(data[6]);
-					K[prod2][K[prod2].size()-1].push_back(data[6]);
-					K[prod3][K[prod3].size()-1].push_back(data[6]);
-				}*/
 			}
-			//std::cout << K[prod1][K[prod1].size()-1][K[prod1][K[prod1].size()-1].size()-1] << "\n";
-			/*if (temp == 1){
-				iss >> numsec;
-				secspecies.clear();
-				sec.clear();
-				for (int j = 0; j < numsec; j++){
-					iss >> asname >> as;
-					secspecies.push_back(asname);
-					sec.push_back(as);
-				}
-			}*/
 		}
-	//}
   myfile.close();
 	std::ofstream myfile1;
 	myfile1.open("Output.txt");
-	/*for (unsigned int i = 0; i < K.size(); i++){
-		for (unsigned int j = 0; j < K[i].size(); j++){
-			for (unsigned int k = 0; k < K[i][j].size(); k++){
-				std::cout << K[i][j][k] << " ";
-			}
-			std::cout << "                       ";
-		}
-		std::cout << "\n";
-	}*/
 	myfile1 << "Electron temperature : " << Te/double(11604) << " eV \n";
 	myfile1 << "Time (s)" << "\t" << "Gas Temperature (K)";
 	for (int i = 0; i < size; i++){
@@ -432,15 +289,9 @@ void write_file(int it){
   std::ofstream myfile;
   std::stringstream stream;
   myfile.open("Output.txt", std::ofstream::app);
-  //stream << std::scientific << std::setprecision(1) << double((it+1)*dt);
-  //myfile << stream.str();
-	//stream << std::scientific << std::setprecision(1) << Tg;
-  //myfile << "\t" << stream.str();
-	myfile << double((it+1)*dt) << "\t" << Tg;
+	myfile << std::scientific << std::setprecision(1) << double((it+1)*dt) << "\t" << Tg;
   for (int i = 0; i < size; i++){
-		//stream << std::scientific << std::setprecision(1) << sp[i];
-    //myfile << "\t" << stream.str();
-		myfile << "\t" << sp[i];
+		myfile << "\t" << std::scientific << std::setprecision(1) << sp[i];
   }
   myfile << "\n";
   myfile.close();
