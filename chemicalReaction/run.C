@@ -7,12 +7,14 @@
 
 //std::string species_info = ;
 double Te = 5.0*11604.0; //in K
-double Tg = 300.0; // in K
-double end_time = 1.0e-9; // in s
-double dt = 1.0e-14; // in s
+double Tg = 2000.0; // in K
+double end_time = 1.0e3; // in s
+double dt = 1.0e-2; // in s
 int iter = int(end_time/dt);
 double R = 8.314; // Gas constat in J/mol.K
 double Av = 6.022e23; // Avogadro's number
+double n = 2.5e19; // Number density of air
+double eq = 1; // Equivalence Ratio
 
 double3D K;
 int size;
@@ -20,7 +22,7 @@ string1D species;
 double1D sp;
 double1D E;
 double1D Cp;
-int wf = 1; // Frequency of writing output to file
+int wf = 1000; // Frequency of writing output to file
 
 void read_file();
 void solve_rxn();
@@ -110,8 +112,8 @@ void read_file(){
 					}
 				}
 			}
-            
-            
+
+
 			if (numproduct == 1){
 				iss >> p1;
 				for (int j = 0; j < size; j++){
@@ -207,24 +209,26 @@ void read_file(){
   myfile.close();
 	std::ofstream myfile1;
 	myfile1.open("Output.csv");
-	myfile1 << "Electron temperature : " << Te/double(11604) << " eV \n";
-	myfile1 << "Time (s)" << "\t" << "Gas Temperature (K)";
+	//myfile1 << "Electron temperature : " << Te/double(11604) << " eV \n";
+	myfile1 << "t (s)" << "," << "T_g (K)";
 	for (int i = 0; i < size; i++){
-		myfile1 << "\t" << species[i];
+		myfile1 << "," << species[i];
 	}
 	myfile1 << "\n";
 	myfile1.close();
-    
+
 }
 
 void initialize(){
 	for (int i = 0; i < size; i++){
 		sp[i] = 0.0;
 	}
-	sp[21] = 1.0e13;
-	sp[10] = 4.0e-8*Av;
-	sp[3] = 2.0*sp[10];
-	sp[19] = 4.0*sp[3];
+	//sp[21] = 1.0e13;
+	sp[3] = 0.2095*n;
+	sp[19] = 0.7809*n;
+	sp[20] = 0.0093*n;
+	sp[12] = 0.0003*n;
+	sp[10] = eq*2.0*sp[3];
 }
 
 void solve_rxn(){
@@ -262,7 +266,7 @@ void calc_change(double1D& t_k, double1D& t_s){
   for (unsigned int x = 0; x < K.size(); x++){
     t_k[x] = 0.0;
     for (unsigned int y = 0; y < K[x].size(); y++){
-      temp = K[x][y][0]*pow(300.0/Tg,K[x][y][1])*exp(K[x][y][2]/(R*Tg))*pow(300.0/Te,K[x][y][3])*exp(K[x][y][4]/(R*Te));
+      temp = K[x][y][0]*pow(Tg,K[x][y][1])*exp(K[x][y][2]/(R*Tg))*pow(300.0/Te,K[x][y][3])*exp(K[x][y][4]/(R*Te));
 			//std::cout << temp << "\t";
       for (unsigned int z = 5; z < K[x][y].size(); z++){
         temp *= t_s[int(K[x][y][z])];
@@ -292,9 +296,9 @@ void write_file(int it){
   std::ofstream myfile;
   std::stringstream stream;
   myfile.open("Output.csv", std::ofstream::app);
-	myfile << std::scientific << std::setprecision(1) << double((it+1)*dt) << "\t" << Tg;
+	myfile << std::scientific << std::setprecision(5) << double((it+1)*dt) << "," << Tg;
   for (int i = 0; i < size; i++){
-		myfile << "\t" << std::scientific << std::setprecision(1) << sp[i];
+		myfile << "," << std::scientific << std::setprecision(5) << sp[i];
   }
   myfile << "\n";
   myfile.close();
