@@ -12,6 +12,10 @@ mainmodule run{
 	readonly double dx;
 	readonly int ndiv;
 	readonly double gma;
+  
+  readonly string1D species;
+  readonly double1D Cp, Eb;
+  readonly double3D K;
 
 	mainchare Main{
 		entry Main(CkArgMsg* m);
