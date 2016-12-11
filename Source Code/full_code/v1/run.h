@@ -18,12 +18,17 @@
 /*readonly*/ double dx;
 /*readonly*/ int ndiv;
 /*readonly*/ double gma;
+/*readonly*/ string1D species;
+/*readonly*/ double1D Cp, Eb;
+/*readonly*/ double3D K;
 
 class Main: public CBase_Main{
 	public:
 		Main(CkArgMsg*);
 		void done();
 		void InterfaceIsUp();
+  private:
+    void read_file();
 };
 
 class Cell: public CBase_Cell{

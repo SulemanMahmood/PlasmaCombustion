@@ -18,7 +18,7 @@ double3D K;
 int size;
 string1D species;
 double1D sp;
-double1D E;
+double1D Eb;
 double1D Cp;
 int wf = 1000; // Frequency of writing output to file
 
@@ -55,7 +55,7 @@ void read_file(){
 		std::cout << "Number of species : " << size << "\n";
 		species.resize(size);
 		Cp.resize(size);
-		E.resize(size);
+		Eb.resize(size);
 		sp.resize(size);
 		K.resize(size);
 		getline(myfile,line);
@@ -63,7 +63,7 @@ void read_file(){
 		for (int i = 0; i < size; i++){
 			getline(myfile,line);
 			std::istringstream iss2(line);
-			iss2 >> temp >> species[i] >> Cp[i] >> E[i];
+			iss2 >> temp >> species[i] >> Cp[i] >> Eb[i];
 		}
 		std::cout << "Thermodynamics reading complete \n";
 		getline(myfile,line);
@@ -280,7 +280,7 @@ void calc_temp(double1D& k){
 	double n = 0.0;
 	double nCp = 0.0;
 	for (int i = 0; i < size; i++){
-		dnE += (k[i]*E[i]);
+		dnE += (k[i]*Eb[i]);
 		n += sp[i];
 		nCp += (sp[i]*Cp[i]);
 	}

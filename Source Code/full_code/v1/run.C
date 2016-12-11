@@ -13,6 +13,10 @@ Main::Main(CkArgMsg* m){
 	double Co = 0.1;
 	double dt = Co*dx;
 	t_steps = int(end_time/dt);
+  
+  // call read_file();
+  
+  
 	mainProxy = thisProxy;
 	cellProxy = CProxy_Cell::ckNew(dimX,dimY,dimZ);
 	fluxProxy = CProxy_Flux::ckNew(dimX,dimY,dimZ);
@@ -31,6 +35,10 @@ void Main::InterfaceIsUp(){
 
 void Main::done(){
 	CkExit();
+}
+
+void Main::read_file(){
+  
 }
 
 Cell::Cell(){
