@@ -8,8 +8,8 @@
 //std::string species_info = ;
 double Te = 5.0*11604.0; //in K
 double Tg = 300.0; // in K
-double end_time = 1.0e-3; // in s
-double dt = 1.0e-9; // in s
+double end_time = 1.0e-9; // in s
+double dt = 1.0e-14; // in s
 int iter = int(end_time/dt);
 double R = 8.314; // Gas constat in J/mol.K
 double Av = 6.022e23; // Avogadro's number
@@ -20,13 +20,13 @@ string1D species;
 double1D sp;
 double1D E;
 double1D Cp;
-int wf = 1000; // Frequency of writing output to file
+int wf = 1; // Frequency of writing output to file
 
 void read_file();
 void solve_rxn();
-void calc_change(double1D, double1D);
+void calc_change(double1D&, double1D&);
 void write_file(int);
-void calc_temp(double1D);
+void calc_temp(double1D&);
 void initialize();
 
 int main(){
@@ -36,7 +36,7 @@ int main(){
 }
 
 void read_file(){
-	double react1, react2, react3, prod1, prod2, prod3;
+	int react1, react2, react3, prod1, prod2, prod3;
   std::ifstream myfile;
 	std::string line;
 	int temp, numreact, numproduct, t;
@@ -110,6 +110,8 @@ void read_file(){
 					}
 				}
 			}
+            
+            
 			if (numproduct == 1){
 				iss >> p1;
 				for (int j = 0; j < size; j++){
@@ -212,14 +214,15 @@ void read_file(){
 	}
 	myfile1 << "\n";
 	myfile1.close();
+    
 }
 
 void initialize(){
 	for (int i = 0; i < size; i++){
 		sp[i] = 0.0;
 	}
-	sp[21] = 1.0e15;
-	sp[10] = 1.0e-6*Av;
+	sp[21] = 1.0e13;
+	sp[10] = 4.0e-8*Av;
 	sp[3] = 2.0*sp[10];
 	sp[19] = 4.0*sp[3];
 }
@@ -254,7 +257,7 @@ void solve_rxn(){
   }
 }
 
-void calc_change(double1D t_k, double1D t_s){
+void calc_change(double1D& t_k, double1D& t_s){
 	double temp;
   for (unsigned int x = 0; x < K.size(); x++){
     t_k[x] = 0.0;
@@ -262,7 +265,7 @@ void calc_change(double1D t_k, double1D t_s){
       temp = K[x][y][0]*pow(300.0/Tg,K[x][y][1])*exp(K[x][y][2]/(R*Tg))*pow(300.0/Te,K[x][y][3])*exp(K[x][y][4]/(R*Te));
 			//std::cout << temp << "\t";
       for (unsigned int z = 5; z < K[x][y].size(); z++){
-        temp *= t_s[K[x][y][z]];
+        temp *= t_s[int(K[x][y][z])];
       }
 			//std::cout << temp << "\t";
       t_k[x] += temp;
@@ -272,7 +275,7 @@ void calc_change(double1D t_k, double1D t_s){
   }
 }
 
-void calc_temp(double1D k){
+void calc_temp(double1D& k){
 	double dnE = 0.0;
 	double n = 0.0;
 	double nCp = 0.0;
@@ -282,7 +285,7 @@ void calc_temp(double1D k){
 		nCp += (sp[i]*Cp[i]);
 	}
 	//std::cout << dnE*n/nCp*dt << "\n";
-	Tg += (dnE*n/nCp*dt);
+	Tg -= (dnE*n/nCp*dt*dt);
 }
 
 void write_file(int it){
