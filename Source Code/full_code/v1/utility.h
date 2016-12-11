@@ -208,4 +208,36 @@ void copy2D(T &lhs, T rhs, int dim){
   }
 }
 
+
+// following are from the utility file originally for chemical reaction part. 
+typedef std::vector<double> double1D;
+typedef std::vector<std::string> string1D;
+
+double1D operator*(const double1D &lhs, const double &rhs){
+    double1D temp;
+    temp.resize(lhs.size());
+    for (unsigned int i = 0; i < lhs.size(); i++){
+        temp[i] = lhs[i]*rhs;
+    }
+    return temp;
+}
+
+double1D operator/(const double1D &lhs, const double &rhs){
+    double1D temp;
+    temp.resize(lhs.size());
+    for (unsigned int i = 0; i < lhs.size(); i++){
+        temp[i] = lhs[i]/rhs;
+    }
+    return temp;
+}
+
+double1D operator+(const double1D &lhs, const double1D &rhs){
+    double1D temp;
+    temp.resize(lhs.size());
+    for (unsigned int i = 0; i < lhs.size(); i++){
+        temp[i] = lhs[i] + rhs[i];
+    }
+    return temp;
+}
+
 #endif
