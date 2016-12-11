@@ -206,7 +206,7 @@ void read_file(){
 		}
   myfile.close();
 	std::ofstream myfile1;
-	myfile1.open("Output.txt");
+	myfile1.open("Output.csv");
 	myfile1 << "Electron temperature : " << Te/double(11604) << " eV \n";
 	myfile1 << "Time (s)" << "\t" << "Gas Temperature (K)";
 	for (int i = 0; i < size; i++){
@@ -291,7 +291,7 @@ void calc_temp(double1D& k){
 void write_file(int it){
   std::ofstream myfile;
   std::stringstream stream;
-  myfile.open("Output.txt", std::ofstream::app);
+  myfile.open("Output.csv", std::ofstream::app);
 	myfile << std::scientific << std::setprecision(1) << double((it+1)*dt) << "\t" << Tg;
   for (int i = 0; i < size; i++){
 		myfile << "\t" << std::scientific << std::setprecision(1) << sp[i];
