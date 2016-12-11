@@ -8,8 +8,8 @@
 //std::string species_info = ;
 double Te = 5.0*11604.0; //in K
 double Tg = 300.0; // in K
-double end_time = 1.0e-9; // in s
-double dt = 1.0e-14; // in s
+double end_time = 1.0e-7; // in s
+double dt = 1.0e-15; // in s
 int iter = int(end_time/dt);
 double R = 8.314; // Gas constat in J/mol.K
 double Av = 6.022e23; // Avogadro's number
@@ -20,7 +20,7 @@ string1D species;
 double1D sp;
 double1D E;
 double1D Cp;
-int wf = 1; // Frequency of writing output to file
+int wf = 1000; // Frequency of writing output to file
 
 void read_file();
 void solve_rxn();
@@ -221,7 +221,7 @@ void initialize(){
 	for (int i = 0; i < size; i++){
 		sp[i] = 0.0;
 	}
-	sp[21] = 1.0e13;
+	sp[21] = 0.0;
 	sp[10] = 4.0e-8*Av;
 	sp[3] = 2.0*sp[10];
 	sp[19] = 4.0*sp[3];
