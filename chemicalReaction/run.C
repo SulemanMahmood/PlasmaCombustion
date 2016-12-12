@@ -270,15 +270,11 @@ void calc_change(double1D& t_k, double1D& t_s){
     t_k[x] = 0.0;
     for (unsigned int y = 0; y < K[x].size(); y++){
       temp = K[x][y][0]*pow(Tg,K[x][y][1])*exp(K[x][y][2]/(R*Tg))*pow(300.0/Te,K[x][y][3])*exp(K[x][y][4]/(R*Te));
-			//std::cout << temp << "\t";
       for (unsigned int z = 5; z < K[x][y].size(); z++){
         temp *= t_s[int(K[x][y][z])];
       }
-			//std::cout << temp << "\t";
       t_k[x] += temp;
     }
-		//std::cout << "\n";
-		//std::cout << t_k[x];
   }
 }
 
