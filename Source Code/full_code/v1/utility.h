@@ -209,7 +209,8 @@ void copy2D(T &lhs, T rhs, int dim){
 }
 
 
-// following are from the utility file originally for chemical reaction part. 
+// following are from the utility file originally for chemical reaction part.
+typedef std::vector<std::vector<int> > int2D;
 typedef std::vector<double> double1D;
 typedef std::vector<std::string> string1D;
 
