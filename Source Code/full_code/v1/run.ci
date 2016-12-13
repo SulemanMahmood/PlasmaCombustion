@@ -12,10 +12,32 @@ mainmodule run{
 	readonly double dx;
 	readonly int ndiv;
 	readonly double gma;
-  
-  readonly string1D species;
-  readonly double1D Cp, Eb;
-  readonly double3D K;
+
+	readonly double Te;
+	readonly double Tg;
+	readonly double end_time_chem;
+	readonly double dt_chem;
+	readonly int iter_chem;
+	readonly double R;
+	readonly double Av;
+	readonly double n;
+	readonly double eq;
+
+	readonly double1D H_f;
+	readonly double2D K;
+	readonly int2D rs;
+	readonly double1D adv;
+	readonly int2D p_rxn;
+	readonly double2D r_p;
+	readonly double2D add_info;
+	readonly int2D tb_sp;
+	readonly int size;
+	readonly int rxn_size;
+	readonly double1D sp;
+	readonly int wf;
+	readonly string1D species;
+	readonly double1D Cp;
+
 
 	mainchare Main{
 		entry Main(CkArgMsg* m);
