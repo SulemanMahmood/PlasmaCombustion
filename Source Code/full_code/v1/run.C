@@ -19,16 +19,17 @@ Main::Main(CkArgMsg* m){
 	t_steps = int(end_time/dt);
     
     // initialize readonly variables for chemical reactions
-    double Te = 5.0*11604.0; //in K
-    double Tg = 300.0; // in K
-    double end_time_chem = 1.0e-8; // in s
-    double dt_chem = 1.0e-15; // in s
-    int iter_chem = int(end_time/dt);
-    double R = 8.314; // Gas constat in J/mol.K
-    double Av = 6.022e23; // Avogadro's number
-    double n = 2.5e19; // Number density of air
-    double eq = 0.1; // Equivalence Ratio
-    int wf = 10000; // Frequency of writing output to file
+    Te = 5.0*11604.0; //in K
+    Tg = 300.0; // in K
+    end_time_chem = 1.0e-10; // in s, -8 originally
+    dt_chem = 1.0e-15; // in s, 1.0e-15 originally
+    iter_chem = int(end_time_chem / dt_chem);
+    //CkPrintf("iter_chem = %d\n", iter_chem);
+    R = 8.314; // Gas constat in J/mol.K
+    Av = 6.022e23; // Avogadro's number
+    n = 2.5e19; // Number density of air
+    eq = 0.1; // Equivalence Ratio
+    wf = 10000; // Frequency of writing output to file
 
   // call read_file();
     read_file();
@@ -65,7 +66,7 @@ void Main::read_file(){
     std::string a1, a2, a3, a4, a5, a6, p1, p2 , p3, p4, p5, asname;
     //double as;
     myfile.open("methane_air_plasma.txt");
-    std::cout << "Reading file \n";
+    //std::cout << "Reading file \n";
     getline(myfile,line);
     getline(myfile,line);
     std::istringstream iss1(line);
@@ -98,7 +99,7 @@ void Main::read_file(){
     tb_sp.resize(rxn_size);
     H_f.resize(rxn_size);
     for (int i = 0; i < rxn_size; i++){
-        std::cout << "Reading reaction " << i+1 << "\n";
+        //std::cout << "Reading reaction " << i+1 << "\n";
         getline(myfile,line);
         std::istringstream iss(line);
         iss >> temp >> numreact >> numproduct;
@@ -349,6 +350,113 @@ void Cell::initialize(){
 	}
 }
 
+void Cell::initialize_chem(){
+    for (int i = 0; i < size; i++){
+        sp[i] = 0.0;
+    }
+    sp[21] = 1.0e13;
+    sp[3] = 0.2095*n;
+    sp[19] = 0.7809*n;
+    sp[20] = 0.0093*n;
+    sp[12] = 0.0003*n;
+    sp[10] = eq*2.0*sp[3];
+}
+
+void Cell::solve_rxn(){
+    double1D sp1, sp_temp;
+    double1D k, k1, k2, k3, k4;
+    sp1.resize(size);
+    sp_temp.resize(size);
+    k1.resize(size);
+    k2.resize(size);
+    k3.resize(size);
+    k4.resize(size);
+    initialize_chem();
+    write_file(-1);
+    //CkPrintf("iter_chem = %d\n", iter_chem);
+    for (int i = 0; i < iter_chem; i++){
+        calc_change(k1,sp);
+        sp_temp = sp + k1*(dt_chem/double(2));
+        calc_change(k2,sp_temp);
+        sp_temp = sp + k2*(dt_chem/double(2));
+        calc_change(k3,sp_temp);
+        sp_temp = sp + k3 * dt_chem;
+        calc_change(k4,sp_temp);
+        k = k1/double(6) + k2/double(3) + k3/double(3) + k4/double(6);
+        sp = sp + k * dt_chem;
+        calc_temp(k);
+        //std::cout << "Iteration : " << i << "\n";
+        CkPrintf("Iteration : %d\n", i);
+        if (i%wf == (wf-1)){
+            write_file(i);
+        }
+    }
+}
+
+void Cell::calc_change(double1D& t_k, double1D& t_s){
+    double k_o, k_f, k_inf, Pr, tb_mp, conc;
+    for (int i = 0; i < rxn_size; i++){
+        k_o = K[i][0]*pow(Tg,K[i][1])*exp(K[i][2]/(R*Tg))*pow(300.0/Te,K[i][3])*exp(K[i][4]/(R*Te));
+        tb_mp = 0.0;
+        for (unsigned int j = 0; j < tb_sp[i].size(); j++){
+            tb_mp += add_info[i][j+4]*t_s[tb_sp[i][j]];
+        }
+        if (add_info[i][0] == double(1)){
+            k_inf = add_info[i][1]*pow(Tg,add_info[i][2])*exp(add_info[i][3]/(R*Tg));
+            Pr = k_o*tb_mp/k_inf;
+            k_f = k_inf * Pr/(1.0 + Pr);
+        }
+        else{
+            k_f = k_o;
+        }
+        conc = 1.0;
+        for (unsigned int j = 0; j < rs[i].size(); j++){
+            conc *= t_s[rs[i][j]];
+        }
+        if (tb_sp[i].size() == 0){
+            tb_mp = 1.0;
+        }
+        adv[i] = k_f * conc * tb_mp;
+    }
+    for (int i = 0; i < size; i++){
+        t_k[i] = 0.0;
+        for (unsigned int j = 0; j < p_rxn[i].size(); j++){
+            t_k[i] += (r_p[i][j]*adv[p_rxn[i][j]]);
+        }
+    }
+}
+
+void Cell::calc_temp(double1D& k){
+    double dnH = 0.0;
+    double n_total = 0.0;
+    double Cp_mix = 0.0;
+    for (int i = 0; i < size; i++){
+        dnH += (k[i]*H_f[i]);
+        n_total += sp[i];
+        Cp_mix += (sp[i]*Cp[i]);
+    }
+    Cp_mix /= n_total;
+    //std::cout << dnH/Cp_mix*dt*dt << "\n";
+    Tg += (dnH/Cp_mix*dt*dt_chem);
+}
+
+void Cell::write_file(int it){
+    std::ofstream myfile;
+    std::stringstream stream;
+    myfile.open("Output.csv", std::ofstream::app);
+    myfile << std::scientific << std::setprecision(5) << double((it+1)*dt) << "," << Tg;
+    for (int i = 0; i < size; i++){
+        myfile << "," << std::scientific << std::setprecision(5) << sp[i];
+    }
+    myfile << "\n";
+    myfile.close();
+}
+
+
+//////////////////////////////////////////////////////////////////////////
+// Flux [3D] Chare Array Functions
+//////////////////////////////////////////////////////////////////////////
+
 Flux::Flux(){
 	flux_c.resize(ndiv);
 	cell_val.resize(ndiv);
@@ -491,6 +599,11 @@ void Flux::fluxFacetoCell(){
     }
   }
 }
+
+
+////////////////////////////////////////////////////////////////////
+// Interface [4D] Chare Array Functions
+////////////////////////////////////////////////////////////////////
 
 Interface::Interface(){
 //	CkPrintf("Interface being created with index (%d,%d,%d,%d) \n", thisIndex.w, thisIndex.x, thisIndex.y, thisIndex.z  );

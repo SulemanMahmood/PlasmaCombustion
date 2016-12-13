@@ -80,6 +80,13 @@ class Cell: public CBase_Cell{
 		void initialize();
 		void gaslaw();
 		void calcvar3D(flow3D&,flow3D,flow3D);
+    
+        // functions for calculating chemical reactions
+        void solve_rxn();
+        void calc_change(double1D&, double1D&);
+        void write_file(int);
+        void calc_temp(double1D&);
+        void initialize_chem();
 };
 
 class Flux: public CBase_Flux{
