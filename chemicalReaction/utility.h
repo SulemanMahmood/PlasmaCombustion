@@ -4,6 +4,7 @@
 #include <vector>
 #include <string>
 
+typedef std::vector<std::vector<int> > int2D;
 typedef std::vector<double> double1D;
 typedef std::vector<std::vector<double> > double2D;
 typedef std::vector<std::vector<std::vector<double> > > double3D;
