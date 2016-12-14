@@ -50,6 +50,9 @@ mainmodule run{
 		entry void ftoc(flow3D c_f);
 		entry void solve_c(){
 			for (iter = 0; iter < t_steps; iter++){
+				serial {
+					CkPrintf("iterInCell: %d\n", iter);
+				}
 				serial "send_to_flux_from_cell"{
 					fluxProxy(thisIndex.x,thisIndex.y,thisIndex.z).ctof(val_old,P);
 				}

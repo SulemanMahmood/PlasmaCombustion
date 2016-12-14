@@ -1,0 +1,2 @@
+dimX = 5, dimY = 2, dimZ = 2, t_steps = 50, iter_chem = 1000
+++local, +p4, 

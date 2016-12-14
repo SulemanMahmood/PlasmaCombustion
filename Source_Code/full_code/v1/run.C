@@ -13,15 +13,16 @@ Main::Main(CkArgMsg* m){
 	ndiv = 10;
 	gma = 1.4;
 	dx = double(1)/(dimX*ndiv);
-	double end_time = 0.2;
+	double end_time = 0.1;
 	double Co = 0.1;
 	double dt = Co*dx;
 	t_steps = int(end_time/dt);
+    CkPrintf("t_steps: %d\n", t_steps);
     
     // initialize readonly variables for chemical reactions
     Te = 5.0*11604.0; //in K
     Tg = 300.0; // in K
-    end_time_chem = 1.0e-10; // in s, -8 originally
+    end_time_chem = 1.0e-11; // in s, -8 originally
     dt_chem = 1.0e-15; // in s, 1.0e-15 originally
     iter_chem = int(end_time_chem / dt_chem);
     //CkPrintf("iter_chem = %d\n", iter_chem);
@@ -372,7 +373,7 @@ void Cell::solve_rxn(){
     k3.resize(size);
     k4.resize(size);
     initialize_chem();
-    write_file(-1);
+    //write_file(-1);
     //CkPrintf("iter_chem = %d\n", iter_chem);
     for (int i = 0; i < iter_chem; i++){
         calc_change(k1,sp);
@@ -386,9 +387,9 @@ void Cell::solve_rxn(){
         sp = sp + k * dt_chem;
         calc_temp(k);
         //std::cout << "Iteration : " << i << "\n";
-        CkPrintf("Iteration : %d\n", i);
+        //CkPrintf("Iteration : %d\n", i);
         if (i%wf == (wf-1)){
-            write_file(i);
+            //write_file(i);
         }
     }
 }
