@@ -328,38 +328,32 @@ void Cell::calcvar3D(flow3D &v_n, flow3D v_o, flow3D fl){
 }
 
 void Cell::initialize(){
-	double P_i, r_i;
-	if (thisIndex.x < dimX/2){
-		P_i = 1.0;
-		r_i = 1.0;
-	}
-	else{
-		P_i = 0.1;
-		r_i = 0.125;
-	}
 	for (int i = 0; i < ndiv; i++){
 		for (int j = 0; j < ndiv; j++){
 			for (int k = 0; k < ndiv; k++){
 				P[i][j][j] = P_i;
 				val_old[i][j][k].r = r_i;
-				val_old[i][j][k].u = 0.0;
-				val_old[i][j][k].v = 0.0;
-				val_old[i][j][k].w = 0.0;
-				val_old[i][j][k].E = P_i/(r_i*(gma-1));
+				val_old[i][j][k].u = u_i;
+				val_old[i][j][k].v = v_i;
+				val_old[i][j][k].w = w_i;
+				val_old[i][j][k].E = E_i;
+				for (int l = 0; l < val_old[i][j][k].Y.size(); l++){
+					for (int i = 0; i < size; i++){
+			        sp[i] = 0.0;
+			    }
+			    val_old[i][j][k].E[21] = 1.0e13/Av;
+			    val_old[i][j][k].Y[3] = 0.2095*conc_i;
+			    val_old[i][j][k].Y[3] = 0.2095*conc_i;
+			    val_old[i][j][k].Y[3] = 0.2095*conc_i;
+			    val_old[i][j][k].Y[3] = 0.2095*conc_i;
+				}
 			}
 		}
 	}
 }
 
 void Cell::initialize_chem(){
-    for (int i = 0; i < size; i++){
-        sp[i] = 0.0;
-    }
-    sp[21] = 1.0e13;
-    sp[3] = 0.2095*n;
-    sp[19] = 0.7809*n;
-    sp[20] = 0.0093*n;
-    sp[12] = 0.0003*n;
+
     sp[10] = eq*2.0*sp[3];
 }
 
@@ -386,12 +380,6 @@ void Cell::solve_rxn(){
         k = k1/double(6) + k2/double(3) + k3/double(3) + k4/double(6);
 				ds = ds + k;
         sp = sp + k * dt_chem;
-        //calc_temp(k);
-        //std::cout << "Iteration : " << i << "\n";
-        //CkPrintf("Iteration : %d\n", i);
-        //if (i%wf == (wf-1)){
-            //write_file(i);
-        //}
     }
 }
 

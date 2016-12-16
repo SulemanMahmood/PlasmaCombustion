@@ -39,14 +39,12 @@
 /*readonly*/ double1D H_f; // Enthalpy of rxn;
 /*readonly*/ double2D K; // rxn rate constant for each rxn
 /*readonly*/ int2D rs; // reactant species for each rxn
-/*readonly*/ double1D adv; // advancement for each reaction
 /*readonly*/ int2D p_rxn; // participating rxn for each species
 /*readonly*/ double2D r_p; // reactants or products
 /*readonly*/ double2D add_info; // Third body efficiencies and pressure dependence
 /*readonly*/ int2D tb_sp; // Third body
 /*readonly*/ int size; // Number of species
 /*readonly*/ int rxn_size; // Species rxns
-/*readonly*/ double1D sp; // species concentration
 /*readonly*/ int wf; // Frequency of writing output to file
 /*readonly*/ string1D species;
 /*readonly*/ double1D Cp;
@@ -81,6 +79,7 @@ class Cell: public CBase_Cell{
 		flow3D val_new, val_old, S;
 		double3D P;
 		int iter;
+		double1D adv;
 
 		Cell();
 		Cell(CkMigrateMessage* m){}
