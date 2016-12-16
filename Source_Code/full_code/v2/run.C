@@ -338,15 +338,12 @@ void Cell::initialize(){
 				val_old[i][j][k].w = w_i;
 				val_old[i][j][k].E = E_i;
 				for (int l = 0; l < val_old[i][j][k].Y.size(); l++){
-					for (int i = 0; i < size; i++){
-			        sp[i] = 0.0;
-			    }
-			    val_old[i][j][k].E[21] = 1.0e13/Av;
-			    val_old[i][j][k].Y[3] = 0.2095*conc_i;
-			    val_old[i][j][k].Y[3] = 0.2095*conc_i;
-			    val_old[i][j][k].Y[3] = 0.2095*conc_i;
-			    val_old[i][j][k].Y[3] = 0.2095*conc_i;
+					val_old[i][j][k].Y[l] = 0.0;
 				}
+				val_old[i][j][k].Y[0] = 0.2095*conc_i;
+				val_old[i][j][k].Y[1] = 0.70*conc_i;
+				val_old[i][j][k].Y[2] = 0.2095*conc_i;
+				val_old[i][j][k].Y[3] = 0.2095*conc_i;
 			}
 		}
 	}
@@ -743,7 +740,7 @@ void Interface::inlet(flow2D &f_n, flow2D f_o, double2D &P_n, double2D P_o){
 				f_n[i][j].w = 0.0;
 				f_n[i][j].E = P_n[i][j]/(f_n[i][j].r*(gma-1)) + 0.5*V*V;
 			}
-			for (int k = 4; k < f_o.Y.size(); k++){
+			for (int k = 4; k < f_o[i][j].Y.size(); k++){
 				f_n[i][j].Y[k] = 0.0;
 			}
 			f_n[i][j].Y[0] = 0.2095*conc_i;
@@ -759,7 +756,7 @@ void Interface::outlet(flow2D &f_n, flow2D f_o, double2D &P_n, double2D P_o){
 		for (int j = 0; j < ndiv; j++){
 			f_n[i][j] = f_o[i][j];
 			P_n[i][j] = P_o[i][j];
-			M = sqrt(f_o[i][j].u*f_o[i][j].u + f_o[i][j].v*f_o[i][j].v + f_o[i][j].w*f_o[i][j].w)*f_o[i][j].r/(gma*P_o[i][j]);
+			double M = sqrt(f_o[i][j].u*f_o[i][j].u + f_o[i][j].v*f_o[i][j].v + f_o[i][j].w*f_o[i][j].w)*f_o[i][j].r/(gma*P_o[i][j]);
 			if (M >= 1.0){
 				P_n[i][j] = P_o[i][j];
 				f_n[i][j].E = P_n[i][j]/(f_n[i][j].r*(gma-1)) + 0.5*(f_n[i][j].u*f_n[i][j].u + f_n[i][j].v*f_n[i][j].v + f_n[i][j].w*f_n[i][j].w);
@@ -789,7 +786,7 @@ void Interface::fuelinlet(flow2D &f_n, flow2D f_o, double2D &P_n, double2D P_o){
 				f_n[i][j].w = 0.0;
 				f_n[i][j].E = P_n[i][j]/(f_n[i][j].r*(gma-1)) + 0.5*V*V;
 			}
-			for (int k = 0; k < f_o.Y.size(); k++){
+			for (int k = 0; k < f_o[i][j].Y.size(); k++){
 				f_n[i][j].Y[k] = 0.0;
 			}
 			f_n[i][j].Y[4] = conc_f;
