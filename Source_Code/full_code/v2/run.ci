@@ -70,15 +70,13 @@ mainmodule run{
 				serial "send_to_flux_from_cell"{
 					fluxProxy(thisIndex.x,thisIndex.y,thisIndex.z).ctof(val_old,P);
 				}
-				overlap{
-					serial "chemical_reaction" {
-						solve_rxn();
-					}
-					when ftoc(flow3D c_f) serial "receive_from_flux_to_cell"{
-						calcvar3D(val_new,val_old,c_f);
-						gaslaw();
-						copy3D(val_old,val_new,ndiv);
-					}
+				serial "chemical_reaction" {
+					solve_rxn();
+				}
+				when ftoc(flow3D c_f) serial "receive_from_flux_to_cell"{
+					calcvar3D(val_new,val_old,c_f);
+					gaslaw();
+					copy3D(val_old,val_new,ndiv);
 				}
 			}
 			serial{

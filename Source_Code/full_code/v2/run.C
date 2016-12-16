@@ -404,16 +404,22 @@ void Cell::solve_rxn(){
     //write_file(-1);
     //CkPrintf("iter_chem = %d\n", iter_chem);
     for (int i = 0; i < iter_chem; i++){
-        calc_change(k1,sp);
-        sp_temp = sp + k1*(dt_chem/double(2));
-        calc_change(k2,sp_temp);
-        sp_temp = sp + k2*(dt_chem/double(2));
-        calc_change(k3,sp_temp);
-        sp_temp = sp + k3 * dt_chem;
-        calc_change(k4,sp_temp);
-        k = k1/double(6) + k2/double(3) + k3/double(3) + k4/double(6);
-				ds = ds + k;
-        sp = sp + k * dt_chem;
+			for (int x = 0; x < ndiv; x++){
+				for (int y = 0; y < ndiv; y++){
+					for (int z = 0; z < ndiv; z++){
+						calc_change(k1[x][y][z],sp[x][y][z]);
+						sp_temp[x][y][z] = sp[x][y][z] + k1[x][y][z]*(dt_chem/double(2));
+						calc_change(k2[x][y][z],sp_temp[x][y][z]);
+						sp_temp[x][y][z] = sp[x][y][z] + k2[x][y][z]*(dt_chem/double(2));
+						calc_change(k3[x][y][z],sp_temp[x][y][z]);
+						sp_temp[x][y][z] = sp[x][y][z] + k3[x][y][z] * dt_chem;
+						calc_change(k4[x][y][z],sp_temp[x][y][z]);
+						k[x][y][z] = k1[x][y][z]/double(6) + k2[x][y][z]/double(3) + k3[x][y][z]/double(3) + k4[x][y][z]/double(6);
+						ds[x][y][z] = ds[x][y][z] + k[x][y][z];
+						sp[x][y][z] = sp[x][y][z] + k[x][y][z] * dt_chem;
+					}
+				}
+			}
     }
 }
 
