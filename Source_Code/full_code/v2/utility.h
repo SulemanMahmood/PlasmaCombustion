@@ -6,6 +6,7 @@
 
 struct flow{
   double r, u, v, w, E;
+	double1D Y;
 
 	void pup(PUP::er &p){
 		p|r;
@@ -16,6 +17,9 @@ struct flow{
 	}
 
 	flow& operator=(const flow& k) {
+		for (int i = 0; i < Y.size(); i++){
+	    this->Y[i] = k.Y[i];
+	  }
 		this->r = k.r;
 		this->u = k.u;
 		this->v = k.v;
@@ -25,6 +29,9 @@ struct flow{
 	}
 
 	flow& operator+=(flow& rhs) {
+		for (int i = 0; i < Y.size(); i++){
+	    lhs->Y[i] += k.Y[i];
+	  }
 		this->r += rhs.r;
 		this->u += rhs.u;
 		this->v += rhs.v;

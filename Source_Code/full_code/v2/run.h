@@ -147,6 +147,9 @@ class Interface: public CBase_Interface{
 		}
 		void calc();
 		void wall(flow2D&,flow2D,double2D&,double2D);
+		void inlet(flow2D &f_n, flow2D f_o, double2D &P_n, double2D P_o);
+   	void outlet(flow2D &f_n, flow2D f_o, double2D &P_n, double2D P_o);
+   	void fuelinlet(flow2D &f_n, flow2D f_o, double2D &P_n, double2D P_o);
 };
 
 #endif
