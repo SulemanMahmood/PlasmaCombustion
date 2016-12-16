@@ -51,6 +51,22 @@
 /*readonly*/ string1D species;
 /*readonly*/ double1D Cp;
 
+/*readonly*/ double P_i;
+/*readonly*/ double r_i;
+/*readonly*/ double u_i;
+/*readonly*/ double v_i;
+/*readonly*/ double w_i;
+/*readonly*/ double E_i;
+/*readonly*/ double Pt;
+/*readonly*/ double rt;
+/*readonly*/ double P_f;
+/*readonly*/ double r_f;
+/*readonly*/ double u_f;
+/*readonly*/ double v_f;
+/*readonly*/ double E_f;
+/*readonly*/ double Pt_f;
+/*readonly*/ double rt_f;
+
 class Main: public CBase_Main{
 	public:
 		Main(CkArgMsg*);
