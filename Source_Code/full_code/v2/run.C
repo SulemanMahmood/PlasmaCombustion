@@ -444,7 +444,7 @@ void Cell::calc_change(double1D& t_k, double1D& t_s){
     }
 }
 
-void Cell::calc_temp(double1D& k){
+/*void Cell::calc_temp(double1D& k){
     double dnH = 0.0;
     double n_total = 0.0;
     double Cp_mix = 0.0;
@@ -468,7 +468,7 @@ void Cell::write_file(int it){
     }
     myfile << "\n";
     myfile.close();
-}
+}*/
 
 
 //////////////////////////////////////////////////////////////////////////
