@@ -350,8 +350,15 @@ void Cell::initialize(){
 }
 
 void Cell::initialize_chem(){
-
-    sp[10] = eq*2.0*sp[3];
+	for (int i = 0; i < ndiv; i++){
+    for(int j = 0; j < ndiv; j++){
+      for(int k = 0; k < ndiv; k++){
+				for(int l = 0; l < val_old[i][j][k].Y.size(); l++){
+	        sp[i][j][k][l] = val_old[i][j][k].Y[l];
+	      }
+      }
+    }
+  }
 }
 
 void Cell::solve_rxn(){
