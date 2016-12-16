@@ -27,7 +27,6 @@
 
 // readonly variables for chemical reactions
 /*readonly*/ double Te; //in K
-/*readonly*/ double Tg; // in K
 /*readonly*/ double end_time_chem; // in s
 /*readonly*/ double dt_chem; // in s
 /*readonly*/ int iter_chem;
@@ -48,6 +47,7 @@
 /*readonly*/ int wf; // Frequency of writing output to file
 /*readonly*/ string1D species;
 /*readonly*/ double1D Cp;
+/*readonly*/ double1D S_f;
 
 /*readonly*/ double P_i;
 /*readonly*/ double r_i;
@@ -81,6 +81,7 @@ class Cell: public CBase_Cell{
 		int iter;
 		double4D adv;
 		double4D sp;
+		double3D Tg;
 
 		Cell();
 		Cell(CkMigrateMessage* m){}
@@ -94,6 +95,7 @@ class Cell: public CBase_Cell{
 			p|S;
 			p|adv;
 			p|sp;
+			p|Tg;
 		}
 		void update();
 		void initialize();

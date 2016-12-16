@@ -30,7 +30,6 @@ mainmodule run{
 	readonly double rt_f;
 
 	readonly double Te;
-	readonly double Tg;
 	readonly double end_time_chem;
 	readonly double dt_chem;
 	readonly int iter_chem;
@@ -51,6 +50,7 @@ mainmodule run{
 	readonly int wf;
 	readonly string1D species;
 	readonly double1D Cp;
+	readonly double1D S_f;
 
 
 	mainchare Main{

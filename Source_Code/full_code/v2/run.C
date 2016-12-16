@@ -21,7 +21,7 @@ Main::Main(CkArgMsg* m){
 
     // initialize readonly variables for chemical reactions
     Te = 5.0*11604.0; //in K
-    Tg = 300.0; // in K
+    //Tg = 300.0; // in K
     end_time_chem = dt; // in s, -8 originally
     dt_chem = 1.0e-15; // in s, 1.0e-15 originally
     iter_chem = int(end_time_chem / dt_chem);
@@ -284,14 +284,20 @@ Cell::Cell(){
 	val_new.resize(ndiv);
 	val_old.resize(ndiv);
 	P.resize(ndiv);
+	adv.resize(ndiv);
 	for (int i = 0; i < ndiv; i++){
 		val_new[i].resize(ndiv);
 		val_old[i].resize(ndiv);
 		P[i].resize(ndiv);
+		adv[i].resize(ndiv);
 		for (int j = 0; j < ndiv; j++){
 			val_new[i][j].resize(ndiv);
 			val_old[i][j].resize(ndiv);
 			P[i][j].resize(ndiv);
+			adv[i][j].resize(ndiv);
+			for (int k = 0; k < ndiv; k++){
+				adv[i][j][k].resize(size);
+			}
 		}
 	}
 	initialize();
@@ -411,37 +417,43 @@ void Cell::solve_rxn(){
     }
 }
 
-void Cell::calc_change(double1D& t_k, double1D& t_s){
+void Cell::calc_change(double4D& t_k, double4D& t_s){
     double k_o, k_f, k_inf, Pr, tb_mp, conc;
-    for (int i = 0; i < rxn_size; i++){
-        k_o = K[i][0]*pow(Tg,K[i][1])*exp(K[i][2]/(R*Tg))*pow(300.0/Te,K[i][3])*exp(K[i][4]/(R*Te));
-        tb_mp = 0.0;
-        for (unsigned int j = 0; j < tb_sp[i].size(); j++){
-            tb_mp += add_info[i][j+4]*t_s[tb_sp[i][j]];
-        }
-        if (add_info[i][0] == double(1)){
-            k_inf = add_info[i][1]*pow(Tg,add_info[i][2])*exp(add_info[i][3]/(R*Tg));
-            Pr = k_o*tb_mp/k_inf;
-            k_f = k_inf * Pr/(1.0 + Pr);
-        }
-        else{
-            k_f = k_o;
-        }
-        conc = 1.0;
-        for (unsigned int j = 0; j < rs[i].size(); j++){
-            conc *= t_s[rs[i][j]];
-        }
-        if (tb_sp[i].size() == 0){
-            tb_mp = 1.0;
-        }
-        adv[i] = k_f * conc * tb_mp;
-    }
-    for (int i = 0; i < size; i++){
-        t_k[i] = 0.0;
-        for (unsigned int j = 0; j < p_rxn[i].size(); j++){
-            t_k[i] += (r_p[i][j]*adv[p_rxn[i][j]]);
-        }
-    }
+		for (int x = 0; x < ndiv; x++){
+			for (int y = 0; y < ndiv; y++){
+				for (int z = 0; z < ndiv; z++){
+					for (int i = 0; i < rxn_size; i++){
+			        k_o = K[i][0]*pow(Tg[x][y][z],K[i][1])*exp(K[i][2]/(R*Tg[x][y][z]))*pow(300.0/Te,K[i][3])*exp(K[i][4]/(R*Te));
+			        tb_mp = 0.0;
+			        for (unsigned int j = 0; j < tb_sp[i].size(); j++){
+			            tb_mp += add_info[i][j+4]*t_s[x][y][z][tb_sp[i][j]];
+			        }
+			        if (add_info[i][0] == double(1)){
+			            k_inf = add_info[i][1]*pow(Tg[x][y][z],add_info[i][2])*exp(add_info[i][3]/(R*Tg[x][y][z]));
+			            Pr = k_o*tb_mp/k_inf;
+			            k_f = k_inf * Pr/(1.0 + Pr);
+			        }
+			        else{
+			            k_f = k_o;
+			        }
+			        conc = 1.0;
+			        for (unsigned int j = 0; j < rs[i].size(); j++){
+			            conc *= t_s[x][y][z][rs[i][j]];
+			        }
+			        if (tb_sp[i].size() == 0){
+			            tb_mp = 1.0;
+			        }
+			        adv[x][y][z][i] = k_f * conc * tb_mp;
+			    }
+			    for (int i = 0; i < size; i++){
+			        t_k[x][y][z][i] = 0.0;
+			        for (unsigned int j = 0; j < p_rxn[i].size(); j++){
+			            t_k[x][y][z][i] += (r_p[i][j]*adv[x][y][z][p_rxn[i][j]]);
+			        }
+			    }
+				}
+			}
+		}
 }
 
 /*void Cell::calc_temp(double1D& k){
