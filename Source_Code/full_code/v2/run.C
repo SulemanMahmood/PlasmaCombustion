@@ -321,7 +321,7 @@ void Cell::calcvar3D(flow3D &v_n, flow3D v_o, flow3D fl){
   for (int i = 0; i < ndiv; i++){
     for(int j = 0; j < ndiv; j++){
       for(int k = 0; k < ndiv; k++){
-        v_n[i][j][k] = v_o[i][j][k] - dt*fl[i][j][k]/dx + S*dt;
+        v_n[i][j][k] = v_o[i][j][k] - dt*fl[i][j][k]/dx + S[i][j][k]*dt;
       }
     }
   }
@@ -384,13 +384,14 @@ void Cell::solve_rxn(){
         sp_temp = sp + k3 * dt_chem;
         calc_change(k4,sp_temp);
         k = k1/double(6) + k2/double(3) + k3/double(3) + k4/double(6);
+				ds = ds + k;
         sp = sp + k * dt_chem;
-        calc_temp(k);
+        //calc_temp(k);
         //std::cout << "Iteration : " << i << "\n";
         //CkPrintf("Iteration : %d\n", i);
-        if (i%wf == (wf-1)){
+        //if (i%wf == (wf-1)){
             //write_file(i);
-        }
+        //}
     }
 }
 
