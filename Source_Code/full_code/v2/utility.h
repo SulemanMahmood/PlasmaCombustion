@@ -6,10 +6,7 @@
 
 typedef std::vector<double> double1D;
 typedef std::vector<std::vector<double>> double2D;
-typedef std::vector<std::vector<flow>> flow2D;
 typedef std::vector<std::vector<std::vector<double>>> double3D;
-typedef std::vector<std::vector<std::vector<flow>>> flow3D;
-typedef std::vector<std::vector<std::vector<std::vector<flow>>>> flow4D;
 
 struct flow{
   double r, u, v, w, E;
@@ -85,6 +82,10 @@ struct flow{
 	}
 
 };
+
+typedef std::vector<std::vector<flow>> flow2D;
+typedef std::vector<std::vector<std::vector<flow>>> flow3D;
+typedef std::vector<std::vector<std::vector<std::vector<flow>>>> flow4D;
 
 flow operator+(const flow& lhs, const flow& rhs) {
   flow temp;
