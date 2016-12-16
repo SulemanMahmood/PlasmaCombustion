@@ -14,10 +14,11 @@ struct flow{
 		p|v;
 		p|w;
 		p|E;
+		p|Y;
 	}
 
 	flow& operator=(const flow& k) {
-		for (int i = 0; i < Y.size(); i++){
+		for (int i = 0; i < k.Y.size(); i++){
 	    this->Y[i] = k.Y[i];
 	  }
 		this->r = k.r;
@@ -29,8 +30,8 @@ struct flow{
 	}
 
 	flow& operator+=(flow& rhs) {
-		for (int i = 0; i < Y.size(); i++){
-	    lhs->Y[i] += k.Y[i];
+		for (int i = 0; i < rhs.Y.size(); i++){
+	    this->Y[i] += rhs.Y[i];
 	  }
 		this->r += rhs.r;
 		this->u += rhs.u;
@@ -41,6 +42,9 @@ struct flow{
 	}
 
 	flow& operator-=(const flow& rhs) {
+		for (int i = 0; i < rhs.Y.size(); i++){
+	    this->Y[i] -= rhs.Y[i];
+	  }
 		this->r -= rhs.r;
 		this->u -= rhs.u;
 		this->v -= rhs.v;
@@ -50,6 +54,9 @@ struct flow{
 	}
 
 	flow& operator*=(const flow& rhs) {
+		for (int i = 0; i < rhs.Y.size(); i++){
+	    this->Y[i] *= rhs.Y[i];
+	  }
 		this->r *= rhs.r;
 		this->u *= rhs.u;
 		this->v *= rhs.v;
@@ -59,6 +66,9 @@ struct flow{
 	}
 
 	flow& operator/=(const flow& rhs) {
+		for (int i = 0; i < rhs.Y.size(); i++){
+	    this->Y[i] /= rhs.Y[i];
+	  }
 		this->r /= rhs.r;
 		this->u /= rhs.u;
 		this->v /= rhs.v;
@@ -71,6 +81,9 @@ struct flow{
 
 flow operator+(const flow& lhs, const flow& rhs) {
   flow temp;
+	for (int i = 0; i < rhs.Y.size(); i++){
+    temp.Y[i] = lhs.Y[i] + rhs.Y[i];
+  }
   temp.r = lhs.r + rhs.r;
   temp.u = lhs.u + rhs.u;
   temp.v = lhs.v + rhs.v;
@@ -81,6 +94,9 @@ flow operator+(const flow& lhs, const flow& rhs) {
 
 flow operator+(const flow& lhs, const double& k) {
   flow temp;
+	for (int i = 0; i < lhs.Y.size(); i++){
+    temp.Y[i] = lhs.Y[i] + k;
+  }
   temp.r = lhs.r + k;
   temp.u = lhs.u + k;
   temp.v = lhs.v + k;
@@ -91,6 +107,9 @@ flow operator+(const flow& lhs, const double& k) {
 
 flow operator+(const double& k, const flow& rhs) {
   flow temp;
+	for (int i = 0; i < rhs.Y.size(); i++){
+    temp.Y[i] = rhs.Y[i] + k;
+  }
   temp.r = rhs.r + k;
   temp.u = rhs.u + k;
   temp.v = rhs.v + k;
