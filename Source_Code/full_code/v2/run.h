@@ -79,7 +79,8 @@ class Cell: public CBase_Cell{
 		flow3D val_new, val_old, S;
 		double3D P;
 		int iter;
-		double1D adv;
+		double4D adv;
+		double4D sp;
 
 		Cell();
 		Cell(CkMigrateMessage* m){}
@@ -90,6 +91,9 @@ class Cell: public CBase_Cell{
 			p|val_old;
 			p|P;
 			p|iter;
+			p|S;
+			p|adv;
+			p|sp;
 		}
 		void update();
 		void initialize();

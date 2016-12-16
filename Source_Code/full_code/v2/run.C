@@ -341,9 +341,9 @@ void Cell::initialize(){
 					val_old[i][j][k].Y[l] = 0.0;
 				}
 				val_old[i][j][k].Y[0] = 0.2095*conc_i;
-				val_old[i][j][k].Y[1] = 0.70*conc_i;
-				val_old[i][j][k].Y[2] = 0.2095*conc_i;
-				val_old[i][j][k].Y[3] = 0.2095*conc_i;
+				val_old[i][j][k].Y[1] = *conc_i;
+				val_old[i][j][k].Y[2] = *conc_i;
+				val_old[i][j][k].Y[3] = *conc_i;
 			}
 		}
 	}
@@ -355,14 +355,38 @@ void Cell::initialize_chem(){
 }
 
 void Cell::solve_rxn(){
-    double1D sp1, sp_temp;
-    double1D k, k1, k2, k3, k4;
-    sp1.resize(size);
-    sp_temp.resize(size);
-    k1.resize(size);
-    k2.resize(size);
-    k3.resize(size);
-    k4.resize(size);
+    double4D sp1, sp_temp;
+    double4D k, k1, k2, k3, k4;
+		sp1.resize(ndiv);
+		sp_temp.resize(ndiv);
+		k1.resize(ndiv);
+		k2.resize(ndiv);
+		k3.resize(ndiv);
+		k4.resize(ndiv);
+		for (int i = 0; i < ndiv; i++){
+			sp1[i].resize(ndiv);
+			sp_temp[i].resize(ndiv);
+			k1[i].resize(ndiv);
+			k2[i].resize(ndiv);
+			k3[i].resize(ndiv);
+			k4[i].resize(ndiv);
+	    for (int j = 0; j < ndiv; j++){
+				sp1[i][j].resize(ndiv);
+				sp_temp[i][j].resize(ndiv);
+				k1[i][j].resize(ndiv);
+				k2[i][j].resize(ndiv);
+				k3[i][j].resize(ndiv);
+				k4[i][j].resize(ndiv);
+	      for (int k = 0; k < ndiv; k++){
+					sp1[i][j][k].resize(size);
+			    sp_temp[i][j][k].resize(size);
+			    k1[i][j][k].resize(size);
+			    k2[i][j][k].resize(size);
+			    k3[i][j][k].resize(size);
+			    k4[i][j][k].resize(size);
+	      }
+	    }
+	  }
     initialize_chem();
     //write_file(-1);
     //CkPrintf("iter_chem = %d\n", iter_chem);
