@@ -736,7 +736,7 @@ void Interface::wall(flow2D &f_n, flow2D f_o, double2D &P_n, double2D P_o){
 void Interface::inlet(flow2D &f_n, flow2D f_o, double2D &P_n, double2D P_o){
 	for (int i = 0; i < ndiv; i++){
 		for (int j = 0; j < ndiv; j++){
-			M = sqrt(f_o[i][j].u*f_o[i][j].u + f_o[i][j].v*f_o[i][j].v + f_o[i][j].w*f_o[i][j].w)*f_o[i][j].r/(gma*P_o[i][j]);
+			double M = sqrt(f_o[i][j].u*f_o[i][j].u + f_o[i][j].v*f_o[i][j].v + f_o[i][j].w*f_o[i][j].w)*f_o[i][j].r/(gma*P_o[i][j]);
 			if (M >= 1.0){
 				P_n[i][j] = P_i;
 				f_n[i][j].r = r_i;
@@ -783,7 +783,7 @@ void Interface::outlet(flow2D &f_n, flow2D f_o, double2D &P_n, double2D P_o){
 void Interface::fuelinlet(flow2D &f_n, flow2D f_o, double2D &P_n, double2D P_o){
 	for (int i = 0; i < ndiv; i++){
 		for (int j = 0; j < ndiv; j++){
-			M = sqrt(f_o[i][j].u*f_o[i][j].u + f_o[i][j].v*f_o[i][j].v + f_o[i][j].w*f_o[i][j].w)*f_o[i][j].r/(gma*P_o[i][j]);
+			double M = sqrt(f_o[i][j].u*f_o[i][j].u + f_o[i][j].v*f_o[i][j].v + f_o[i][j].w*f_o[i][j].w)*f_o[i][j].r/(gma*P_o[i][j]);
 			if (M >= 1.0){
 				P_n[i][j] = P_f;
 				f_n[i][j].r = r_f;
@@ -794,7 +794,7 @@ void Interface::fuelinlet(flow2D &f_n, flow2D f_o, double2D &P_n, double2D P_o){
 			}
 			else{
 				P_n[i][j] = P_o[i][j];
-				double V = sqrt((pow(Pt_f/P_n[i][j],(gma-1)/gma-1)*2.0*gma*P_n[i][j]/((gma-1)*f_o[i][j].r));
+				double V = sqrt((pow(Pt_f/P_n[i][j],(gma-1)/gma)-1)*2.0*gma*P_n[i][j]/((gma-1)*f_o[i][j].r));
 				f_n[i][j].r = rt_f/pow((1+(gma-1)/2*M*M),1/(gma-1));
 				f_n[i][j].u = V;
 				f_n[i][j].v = 0.0;
