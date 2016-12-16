@@ -4,6 +4,13 @@
 #include "pup_stl.h"
 #include <vector>
 
+typedef std::vector<double> double1D;
+typedef std::vector<std::vector<double>> double2D;
+typedef std::vector<std::vector<flow>> flow2D;
+typedef std::vector<std::vector<std::vector<double>>> double3D;
+typedef std::vector<std::vector<std::vector<flow>>> flow3D;
+typedef std::vector<std::vector<std::vector<std::vector<flow>>>> flow4D;
+
 struct flow{
   double r, u, v, w, E;
 	double1D Y;
@@ -207,12 +214,6 @@ flow operator/(const double& k, const flow& rhs) {
   temp.E = k / rhs.E;
   return temp;
 }
-
-typedef std::vector<std::vector<double>> double2D;
-typedef std::vector<std::vector<flow>> flow2D;
-typedef std::vector<std::vector<std::vector<double>>> double3D;
-typedef std::vector<std::vector<std::vector<flow>>> flow3D;
-typedef std::vector<std::vector<std::vector<std::vector<flow>>>> flow4D;
 
 template<typename T>
 void copy3D(T &lhs, T rhs, int dim){
