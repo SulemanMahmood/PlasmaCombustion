@@ -22,7 +22,7 @@ Main::Main(CkArgMsg* m){
     // initialize readonly variables for chemical reactions
     Te = 5.0*11604.0; //in K
     Tg = 300.0; // in K
-    end_time_chem = 1.0e-11; // in s, -8 originally
+    end_time_chem = dt; // in s, -8 originally
     dt_chem = 1.0e-15; // in s, 1.0e-15 originally
     iter_chem = int(end_time_chem / dt_chem);
     //CkPrintf("iter_chem = %d\n", iter_chem);
@@ -341,9 +341,9 @@ void Cell::initialize(){
 					val_old[i][j][k].Y[l] = 0.0;
 				}
 				val_old[i][j][k].Y[0] = 0.2095*conc_i;
-				val_old[i][j][k].Y[1] = *conc_i;
-				val_old[i][j][k].Y[2] = *conc_i;
-				val_old[i][j][k].Y[3] = *conc_i;
+				val_old[i][j][k].Y[1] = 0.7809*conc_i;
+				val_old[i][j][k].Y[2] = 0.0093*conc_i;
+				val_old[i][j][k].Y[3] = 0.0003*conc_i;
 			}
 		}
 	}
