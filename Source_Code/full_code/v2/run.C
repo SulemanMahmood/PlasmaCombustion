@@ -392,7 +392,8 @@ void Cell::solve_rxn(){
 		k2.resize(ndiv);
 		k3.resize(ndiv);
 		k4.resize(ndiv);
-		double dnH, n_total, Cp_mix;
+		double dnH, n_total;
+        double3D Cp_mix; // v2
 		for (int i = 0; i < ndiv; i++){
 			sp1[i].resize(ndiv);
 			sp_temp[i].resize(ndiv);
