@@ -28,6 +28,8 @@ mainmodule run{
 	readonly double E_f;
 	readonly double Pt_f;
 	readonly double rt_f;
+	readonly double conc_i;
+	readonly double conc_f;
 
 	readonly double Te;
 	readonly double end_time_chem;

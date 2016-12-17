@@ -64,6 +64,8 @@
 /*readonly*/ double E_f;
 /*readonly*/ double Pt_f;
 /*readonly*/ double rt_f;
+/*readonly*/ double conc_i;
+/*readonly*/ double conc_f;
 
 class Main: public CBase_Main{
 	public:

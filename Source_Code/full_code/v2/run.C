@@ -22,6 +22,8 @@ Main::Main(CkArgMsg* m){
     // initialize readonly variables for chemical reactions
     Te = 5.0*11604.0; //in K
     //Tg = 300.0; // in K
+		conc_i = 41.5;
+		conc_f = 41.5;
     end_time_chem = dt; // in s, -8 originally
     dt_chem = 1.0e-15; // in s, 1.0e-15 originally
     iter_chem = int(end_time_chem / dt_chem);
@@ -55,226 +57,229 @@ void Main::done(){
 	CkExit();
 }
 
-void Main::read_file(){
-    std::ifstream myfile;
-    std::string line;
-    int temp, numreact, numproduct, temp1;
-    double temp2, l1, l2, l3;
-    std::string name;
-    string1D secspecies;
-    double1D sec, data, secmp;
-    //data.resize(5);
-    std::string a1, a2, a3, a4, a5, a6, p1, p2 , p3, p4, p5, asname;
-    //double as;
-    myfile.open("methane_air_plasma.txt");
-    //std::cout << "Reading file \n";
-    getline(myfile,line);
-    getline(myfile,line);
-    std::istringstream iss1(line);
-    iss1 >> size;
-    std::cout << "Number of species : " << size << "\n";
-    species.resize(size);
-    Cp.resize(size);
-    sp.resize(size);
-    p_rxn.resize(size);
-    r_p.resize(size);
-    H_f.resize(size);
-    getline(myfile,line);
-    getline(myfile,line);
-    for (int i = 0; i < size; i++){
-        getline(myfile,line);
-        std::istringstream iss2(line);
-        iss2 >> temp >> species[i] >> Cp[i] >> H_f[i];
-    }
-    std::cout << "Thermodynamics reading complete \n";
-    getline(myfile,line);
-    getline(myfile,line);
-    getline(myfile,line);
-    std::istringstream iss(line);
-    iss >> rxn_size;
-    std::cout << "Number of reactions : " << rxn_size << "\n";
-    K.resize(rxn_size);
-    rs.resize(rxn_size);
-    adv.resize(rxn_size);
-    add_info.resize(rxn_size);
-    tb_sp.resize(rxn_size);
-    H_f.resize(rxn_size);
-    for (int i = 0; i < rxn_size; i++){
-        //std::cout << "Reading reaction " << i+1 << "\n";
-        getline(myfile,line);
-        std::istringstream iss(line);
-        iss >> temp >> numreact >> numproduct;
-        temp = 0;
-        if (numreact == 1){
-            iss >> a1 >> a2;
-            for (int j = 0; j < size; j++){
-                if (a1 == species[j]){
-                    rs[i].push_back(j);
-                    r_p[j].push_back(-1.0);
-                    p_rxn[j].push_back(i);
-                }
-            }
-        }
-        else if (numreact == 2){
-            iss >> a1 >> a2 >> a3 >> a4;
-            if (a3 == "M"){
-                temp = 1;
-            }
-            for (int j = 0; j < size; j++){
-                if (a1 == species[j]){
-                    rs[i].push_back(j);
-                    r_p[j].push_back(-1.0);
-                    p_rxn[j].push_back(i);
-                }
-                if (a3 == species[j]){
-                    rs[i].push_back(j);
-                    r_p[j].push_back(-1.0);
-                    p_rxn[j].push_back(i);
-                }
-            }
-        }
-        else{
-            iss >> a1 >> a2 >> a3 >> a4 >> a5 >> a6;
-            if (a5 == "(M)"){
-                temp = 2;
-            }
-            if (a5 == "M"){
-                temp = 1;
-            }
-            for (int j = 0; j < size; j++){
-                if (a1 == species[j]){
-                    rs[i].push_back(j);
-                    r_p[j].push_back(-1.0);
-                    p_rxn[j].push_back(i);
-                }
-                if (a3 == species[j]){
-                    rs[i].push_back(j);
-                    r_p[j].push_back(-1.0);
-                    p_rxn[j].push_back(i);
-                }
-                if (a5 == species[j]){
-                    rs[i].push_back(j);
-                    r_p[j].push_back(-1.0);
-                    p_rxn[j].push_back(i);
-                }
-            }
-        }
-        if (numproduct == 1){
-            iss >> p1;
-            for (int j = 0; j < size; j++){
-                if (p1 == species[j]){
-                    r_p[j].push_back(1.0);
-                    p_rxn[j].push_back(i);
-                }
-            }
-        }
-        else if (numproduct == 2){
-            iss >> p1 >> p2 >> p3;
-            for (int j = 0; j < size; j++){
-                if (p1 == species[j]){
-                    r_p[j].push_back(1.0);
-                    p_rxn[j].push_back(i);
-                }
-                if (p3 == species[j]){
-                    r_p[j].push_back(1.0);
-                    p_rxn[j].push_back(i);
-                }
-            }
-        }
-        else{
-            iss >> p1 >> p2 >> p3 >> p4 >> p5;
-            for (int j = 0; j < size; j++){
-                if (p1 == species[j]){
-                    r_p[j].push_back(1.0);
-                    p_rxn[j].push_back(i);
-                }
-                if (p3 == species[j]){
-                    r_p[j].push_back(1.0);
-                    p_rxn[j].push_back(i);
-                }
-                if (p5 == species[j]){
-                    r_p[j].push_back(1.0);
-                    p_rxn[j].push_back(i);
-                }
-            }
-        }
-        data.resize(5);
-        secspecies.resize(0);
-        secmp.resize(0);
-        iss >> data[0] >> data[1] >> data[2] >> data[3] >> data[4];
-        data[2] = double(0) - data[2];
-        data[4] = double(0) - data[4];
-        K[i].push_back(data[0]);
-        K[i].push_back(data[1]);
-        K[i].push_back(data[2]);
-        K[i].push_back(data[3]);
-        K[i].push_back(data[4]);
-        if (temp == 2){
-            tb_sp[i].resize(size);
-            add_info[i].resize(size+4);
-            iss >> l1 >> l2 >> l3;
-            add_info[i][0] = 1.0;
-            add_info[i][1] = l1;
-            add_info[i][2] = l2;
-            add_info[i][3] = l3;
-            iss >> temp1;
-            for (int j = 0; j < temp1; j++){
-                add_info[i][j+4] = 1.0;
-                iss >> name >> temp2;
-                secspecies.push_back(name);
-                secmp.push_back(temp2);
-            }
-            for (int j = 0; j < size; j++){
-                for (unsigned int k = 0; k < secspecies.size(); k++){
-                    if (secspecies[k] == species[j]){
-                        add_info[i][j+4] = secmp[k];
-                    }
-                }
-            }
-        }
-        if (temp == 1){
-            tb_sp[i].resize(size);
-            add_info[i].resize(size+4);
-            add_info[i][0] = 0.0;
-            add_info[i][1] = 0.0;
-            add_info[i][2] = 0.0;
-            add_info[i][3] = 0.0;
-            iss >> temp1;
-            for (int j = 0; j < temp1; j++){
-                add_info[i][j+4] = 1.0;
-                iss >> name >> temp2;
-                secspecies.push_back(name);
-                secmp.push_back(temp2);
-            }
-            for (int j = 0; j < size; j++){
-                for (unsigned int k = 0; k < secspecies.size(); k++){
-                    if (secspecies[k] == species[j]){
-                        add_info[i][j+4] = secmp[k];
-                    }
-                }
-            }
-        }
-        else{
-            add_info[i].push_back(0.0);
-            add_info[i].push_back(0.0);
-            add_info[i].push_back(0.0);
-            add_info[i].push_back(0.0);
-        }
-        data.clear();
-        secspecies.clear();
-        secmp.clear();
-    }
-    myfile.close();
-
-    std::ofstream myfile1;
-    myfile1.open("Output.csv");
-    myfile1 << "t (s)" << "," << "T_g (K)";
-    for (int i = 0; i < size; i++){
-        myfile1 << "," << species[i];
-    }
-    myfile1 << "\n";
-    myfile1.close();
-} // end read_file()
+void Main:void read_file(){
+  std::ifstream myfile;
+	std::string line;
+	int temp, numreact, numproduct, temp1;
+	double temp2, l1, l2, l3;
+	std::string name;
+	string1D secspecies;
+	double1D sec, data, secmp;
+	//data.resize(5);
+	std::string a1, a2, a3, a4, a5, a6, p1, p2 , p3, p4, p5, asname;
+	//double as;
+  myfile.open("rxn.txt");
+	std::cout << "Reading file \n";
+	getline(myfile,line);
+	getline(myfile,line);
+	std::istringstream iss1(line);
+	iss1 >> size;
+	std::cout << "Number of species : " << size << "\n";
+	species.resize(size);
+	Cp.resize(size);
+	sp.resize(size);
+	p_rxn.resize(size);
+	r_p.resize(size);
+	H_f.resize(size);
+	S_f.resize(size);
+	getline(myfile,line);
+	getline(myfile,line);
+	for (int i = 0; i < size; i++){
+		getline(myfile,line);
+		std::istringstream iss2(line);
+		iss2 >> temp >> species[i] >> Cp[i] >> H_f[i] >> S_f[i];
+	}
+	std::cout << "Thermodynamics reading complete \n";
+	getline(myfile,line);
+	getline(myfile,line);
+	getline(myfile,line);
+	std::istringstream iss(line);
+	iss >> rxn_size;
+	std::cout << "Number of reactions : " << rxn_size << "\n";
+	K.resize(rxn_size);
+	rs.resize(rxn_size);
+	ps.resize(rxn_size);
+	adv.resize(rxn_size);
+	add_info.resize(rxn_size);
+	tb_sp.resize(rxn_size);
+	H_f.resize(rxn_size);
+	for (int i = 0; i < rxn_size; i++){
+		std::cout << "Reading reaction " << i+1 << "\n";
+		getline(myfile,line);
+		std::istringstream iss(line);
+		iss >> temp >> numreact >> numproduct;
+		temp = 0;
+		if (numreact == 1){
+			iss >> a1 >> a2;
+			for (int j = 0; j < size; j++){
+				if (a1 == species[j]){
+					rs[i].push_back(j);
+					r_p[j].push_back(-1.0);
+					p_rxn[j].push_back(i);
+				}
+			}
+		}
+		else if (numreact == 2){
+			iss >> a1 >> a2 >> a3 >> a4;
+			if (a3 == "M"){
+				temp = 1;
+			}
+			for (int j = 0; j < size; j++){
+				if (a1 == species[j]){
+					rs[i].push_back(j);
+					r_p[j].push_back(-1.0);
+					p_rxn[j].push_back(i);
+				}
+				if (a3 == species[j]){
+					rs[i].push_back(j);
+					r_p[j].push_back(-1.0);
+					p_rxn[j].push_back(i);
+				}
+			}
+		}
+		else{
+			iss >> a1 >> a2 >> a3 >> a4 >> a5 >> a6;
+			if (a5 == "(M)"){
+				temp = 2;
+			}
+			if (a5 == "M"){
+				temp = 1;
+			}
+			for (int j = 0; j < size; j++){
+				if (a1 == species[j]){
+					rs[i].push_back(j);
+					r_p[j].push_back(-1.0);
+					p_rxn[j].push_back(i);
+				}
+				if (a3 == species[j]){
+					rs[i].push_back(j);
+					r_p[j].push_back(-1.0);
+					p_rxn[j].push_back(i);
+				}
+				if (a5 == species[j]){
+					rs[i].push_back(j);
+					r_p[j].push_back(-1.0);
+					p_rxn[j].push_back(i);
+				}
+			}
+		}
+		if (numproduct == 1){
+			iss >> p1;
+			for (int j = 0; j < size; j++){
+				if (p1 == species[j]){
+					ps[i].push_back(j);
+					r_p[j].push_back(1.0);
+					p_rxn[j].push_back(i);
+				}
+			}
+		}
+		else if (numproduct == 2){
+			iss >> p1 >> p2 >> p3;
+			for (int j = 0; j < size; j++){
+				if (p1 == species[j]){
+					ps[i].push_back(j);
+					r_p[j].push_back(1.0);
+					p_rxn[j].push_back(i);
+				}
+				if (p3 == species[j]){
+					ps[i].push_back(j);
+					r_p[j].push_back(1.0);
+					p_rxn[j].push_back(i);
+				}
+			}
+		}
+		else{
+			iss >> p1 >> p2 >> p3 >> p4 >> p5;
+			for (int j = 0; j < size; j++){
+				if (p1 == species[j]){
+					ps[i].push_back(j);
+					r_p[j].push_back(1.0);
+					p_rxn[j].push_back(i);
+				}
+				if (p3 == species[j]){
+					ps[i].push_back(j);
+					r_p[j].push_back(1.0);
+					p_rxn[j].push_back(i);
+				}
+				if (p5 == species[j]){
+					ps[i].push_back(j);
+					r_p[j].push_back(1.0);
+					p_rxn[j].push_back(i);
+				}
+			}
+		}
+		data.resize(5);
+		secspecies.resize(0);
+		secmp.resize(0);
+		iss >> data[0] >> data[1] >> data[2] >> data[3] >> data[4];
+		data[2] = double(0) - data[2];
+		data[4] = double(0) - data[4];
+		K[i].push_back(data[0]);
+		K[i].push_back(data[1]);
+		K[i].push_back(data[2]);
+		K[i].push_back(data[3]);
+		K[i].push_back(data[4]);
+		if (temp == 2){
+			tb_sp[i].resize(size);
+			add_info[i].resize(size+4);
+			iss >> l1 >> l2 >> l3;
+			add_info[i][0] = 1.0;
+			add_info[i][1] = l1;
+			add_info[i][2] = l2;
+			add_info[i][3] = l3;
+			iss >> temp1;
+			for (int j = 0; j < temp1; j++){
+				//add_info[i][j+4] = 0.0;
+				iss >> name >> temp2;
+				secspecies.push_back(name);
+				secmp.push_back(temp2);
+			}
+			for (int j = 0; j < size; j++){
+				add_info[i][j+4] = 0.0;
+				for (unsigned int k = 0; k < secspecies.size(); k++){
+					if (secspecies[k] == species[j]){
+						add_info[i][j+4] = secmp[k];
+					}
+				}
+			}
+			add_info[i][23] = 1.0;
+		}
+		if (temp == 1){
+			tb_sp[i].resize(size);
+			add_info[i].resize(size+4);
+			add_info[i][0] = 0.0;
+			add_info[i][1] = 0.0;
+			add_info[i][2] = 0.0;
+			add_info[i][3] = 0.0;
+			iss >> temp1;
+			for (int j = 0; j < temp1; j++){
+				//add_info[i][j+4] = 1.0;
+				iss >> name >> temp2;
+				secspecies.push_back(name);
+				secmp.push_back(temp2);
+			}
+			for (int j = 0; j < size; j++){
+				add_info[i][j+4] = 0.0;
+				for (unsigned int k = 0; k < secspecies.size(); k++){
+					if (secspecies[k] == species[j]){
+						add_info[i][j+4] = secmp[k];
+					}
+				}
+			}
+			add_info[i][23] = 1.0;
+		}
+		else{
+			add_info[i].push_back(0.0);
+			add_info[i].push_back(0.0);
+			add_info[i].push_back(0.0);
+			add_info[i].push_back(0.0);
+		}
+		data.clear();
+		secspecies.clear();
+		secmp.clear();
+	}
+  myfile.close();
+}
 
 //////////////////////////////////////////////////////////////////////
 // Cell [3D] Chare Array Functions
@@ -285,16 +290,19 @@ Cell::Cell(){
 	val_old.resize(ndiv);
 	P.resize(ndiv);
 	adv.resize(ndiv);
+	Tg.resize(ndiv);
 	for (int i = 0; i < ndiv; i++){
 		val_new[i].resize(ndiv);
 		val_old[i].resize(ndiv);
 		P[i].resize(ndiv);
 		adv[i].resize(ndiv);
+		Tg[i].resize(ndiv);
 		for (int j = 0; j < ndiv; j++){
 			val_new[i][j].resize(ndiv);
 			val_old[i][j].resize(ndiv);
 			P[i][j].resize(ndiv);
 			adv[i][j].resize(ndiv);
+			Tg[i][j].resize(ndiv);
 			for (int k = 0; k < ndiv; k++){
 				adv[i][j][k].resize(size);
 			}
@@ -376,6 +384,7 @@ void Cell::solve_rxn(){
 		k2.resize(ndiv);
 		k3.resize(ndiv);
 		k4.resize(ndiv);
+		double dnH, n_total, Cp_mix;
 		for (int i = 0; i < ndiv; i++){
 			sp1[i].resize(ndiv);
 			sp_temp[i].resize(ndiv);
@@ -421,6 +430,26 @@ void Cell::solve_rxn(){
 				}
 			}
     }
+		for (int x = 0; x < ndiv; x++){
+			for (int y = 0; y < ndiv; y++){
+				for (int z = 0; z < ndiv; z++){
+					for (int i = 0; i < sp[0][0][0].size(); i++){
+						S[x][y][z].Y[i] = ds[x][y][z][i];
+					}
+					dnH = 0.0;
+			    n_total = 0.0;
+			    //Cp_mix = 0.0;
+			    for (int i = 0; i < size; i++){
+			        dnH += (k[x][y][z][i]*H_f[i]);
+			        n_total += sp[x][y][z][i];
+			        Cp_mix[x][y][z] += (sp[x][y][z][i]*Cp[i]);
+			    }
+			    Cp_mix[x][y][z] /= n_total;
+					S[x][y][z].E = dnH;
+			    //Tg[x][y][z] += (dnH/Cp_mix*dt_chem);
+				}
+			}
+		}
 }
 
 void Cell::calc_change(double4D& t_k, double4D& t_s){
@@ -461,32 +490,6 @@ void Cell::calc_change(double4D& t_k, double4D& t_s){
 			}
 		}
 }
-
-/*void Cell::calc_temp(double1D& k){
-    double dnH = 0.0;
-    double n_total = 0.0;
-    double Cp_mix = 0.0;
-    for (int i = 0; i < size; i++){
-        dnH += (k[i]*H_f[i]);
-        n_total += sp[i];
-        Cp_mix += (sp[i]*Cp[i]);
-    }
-    Cp_mix /= n_total;
-    //std::cout << dnH/Cp_mix*dt*dt << "\n";
-    Tg += (dnH/Cp_mix*dt*dt_chem);
-}
-
-void Cell::write_file(int it){
-    std::ofstream myfile;
-    std::stringstream stream;
-    myfile.open("Output.csv", std::ofstream::app);
-    myfile << std::scientific << std::setprecision(5) << double((it+1)*dt) << "," << Tg;
-    for (int i = 0; i < size; i++){
-        myfile << "," << std::scientific << std::setprecision(5) << sp[i];
-    }
-    myfile << "\n";
-    myfile.close();
-}*/
 
 
 //////////////////////////////////////////////////////////////////////////
