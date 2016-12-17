@@ -84,7 +84,7 @@ class Cell: public CBase_Cell{
 		double4D adv;
 		double4D sp;
 		double3D Tg;
-    double3D ds;
+    double4D ds;
 
 		Cell();
 		Cell(CkMigrateMessage* m){}

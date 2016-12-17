@@ -369,7 +369,7 @@ void Cell::initialize(){
 }
 
 void Cell::initialize_chem(){
-    ds = std::vector<std::vector<std::vector<double>>>(ndiv, std::vector<std::vector<double>>(ndiv, std::vector<double>(ndiv, 0))); // v2
+    ds = std::vector<std::vector<std::vector<std::vector<double>>>>(ndiv, std::vector<std::vector<std::vector<double>>>(ndiv, std::vector<std::vector<double>>(ndiv, std::vector<double>(ndiv, 0)))); // v2
     
 	for (int i = 0; i < ndiv; i++){
     for(int j = 0; j < ndiv; j++){
