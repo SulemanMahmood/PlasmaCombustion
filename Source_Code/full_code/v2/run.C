@@ -57,7 +57,7 @@ void Main::done(){
 	CkExit();
 }
 
-void Main:void read_file(){
+void Main::read_file(){
   std::ifstream myfile;
 	std::string line;
 	int temp, numreact, numproduct, temp1;
@@ -77,7 +77,7 @@ void Main:void read_file(){
 	std::cout << "Number of species : " << size << "\n";
 	species.resize(size);
 	Cp.resize(size);
-	sp.resize(size);
+	//sp.resize(size);
 	p_rxn.resize(size);
 	r_p.resize(size);
 	H_f.resize(size);
@@ -98,8 +98,9 @@ void Main:void read_file(){
 	std::cout << "Number of reactions : " << rxn_size << "\n";
 	K.resize(rxn_size);
 	rs.resize(rxn_size);
+    double2D ps;//v2
 	ps.resize(rxn_size);
-	adv.resize(rxn_size);
+	//adv.resize(rxn_size); //v2
 	add_info.resize(rxn_size);
 	tb_sp.resize(rxn_size);
 	H_f.resize(rxn_size);
@@ -286,24 +287,28 @@ void Main:void read_file(){
 //////////////////////////////////////////////////////////////////////
 
 Cell::Cell(){
+    sp.resize(ndiv);//v2
 	val_new.resize(ndiv);
 	val_old.resize(ndiv);
 	P.resize(ndiv);
 	adv.resize(ndiv);
 	Tg.resize(ndiv);
 	for (int i = 0; i < ndiv; i++){
+        sp[i].resize(ndiv);//v2
 		val_new[i].resize(ndiv);
 		val_old[i].resize(ndiv);
 		P[i].resize(ndiv);
 		adv[i].resize(ndiv);
 		Tg[i].resize(ndiv);
 		for (int j = 0; j < ndiv; j++){
+            sp[i][j].resize(ndiv);//v2
 			val_new[i][j].resize(ndiv);
 			val_old[i][j].resize(ndiv);
 			P[i][j].resize(ndiv);
 			adv[i][j].resize(ndiv);
 			Tg[i][j].resize(ndiv);
 			for (int k = 0; k < ndiv; k++){
+                sp[i][j][k].resize(size);//v2
 				adv[i][j][k].resize(size);
 			}
 		}
@@ -364,9 +369,12 @@ void Cell::initialize(){
 }
 
 void Cell::initialize_chem(){
+    ds = std::vector<std::vector<std::vector<double>>>(ndiv, std::vector<std::vector<double>>(ndiv, std::vector<double>(ndiv, 0))); // v2
+    
 	for (int i = 0; i < ndiv; i++){
     for(int j = 0; j < ndiv; j++){
       for(int k = 0; k < ndiv; k++){
+          
 				for(int l = 0; l < val_old[i][j][k].Y.size(); l++){
 	        sp[i][j][k][l] = val_old[i][j][k].Y[l];
 	      }
