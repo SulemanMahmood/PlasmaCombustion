@@ -7,6 +7,7 @@
 typedef std::vector<double> double1D;
 typedef std::vector<std::vector<double>> double2D;
 typedef std::vector<std::vector<std::vector<double>>> double3D;
+typedef std::vector<std::vector<std::vector<std::vector<double>>>> double4D;
 
 struct flow{
   double r, u, v, w, E;
