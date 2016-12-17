@@ -110,7 +110,7 @@ class Cell: public CBase_Cell{
 
         // functions for calculating chemical reactions
         void solve_rxn();
-        void calc_change(double1D&, double1D&);
+        void calc_change(double4D&, double4D&);
         void write_file(int);
         void calc_temp(double1D&);
         void initialize_chem();
