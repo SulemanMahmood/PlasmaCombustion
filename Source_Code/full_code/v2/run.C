@@ -371,11 +371,11 @@ void Cell::initialize(){
 
 void Cell::initialize_chem(){
     ds = std::vector<std::vector<std::vector<std::vector<double>>>>(ndiv, std::vector<std::vector<std::vector<double>>>(ndiv, std::vector<std::vector<double>>(size, std::vector<double>(ndiv, 0)))); // v2
-    
+
 	for (int i = 0; i < ndiv; i++){
     for(int j = 0; j < ndiv; j++){
       for(int k = 0; k < ndiv; k++){
-          
+
 				for(int l = 0; l < val_old[i][j][k].Y.size(); l++){
 	        sp[i][j][k][l] = val_old[i][j][k].Y[l];
 	      }
@@ -423,43 +423,54 @@ void Cell::solve_rxn(){
     //write_file(-1);
     //CkPrintf("iter_chem = %d\n", iter_chem);
     for (int i = 0; i < iter_chem; i++){
+			calc_change(k1,sp);
 			for (int x = 0; x < ndiv; x++){
 				for (int y = 0; y < ndiv; y++){
 					for (int z = 0; z < ndiv; z++){
-						calc_change(k1[x][y][z],sp[x][y][z]);
 						sp_temp[x][y][z] = sp[x][y][z] + k1[x][y][z]*(dt_chem/double(2));
-						calc_change(k2[x][y][z],sp_temp[x][y][z]);
+					}
+				}
+			}
+			calc_change(k2,sp_temp);
+			for (int x = 0; x < ndiv; x++){
+				for (int y = 0; y < ndiv; y++){
+					for (int z = 0; z < ndiv; z++){
 						sp_temp[x][y][z] = sp[x][y][z] + k2[x][y][z]*(dt_chem/double(2));
-						calc_change(k3[x][y][z],sp_temp[x][y][z]);
+					}
+				}
+			}
+			calc_change(k3,sp_temp);
+			for (int x = 0; x < ndiv; x++){
+				for (int y = 0; y < ndiv; y++){
+					for (int z = 0; z < ndiv; z++){
 						sp_temp[x][y][z] = sp[x][y][z] + k3[x][y][z] * dt_chem;
-						calc_change(k4[x][y][z],sp_temp[x][y][z]);
+					}
+				}
+			}
+			calc_change(k4,sp_temp);
+			for (int x = 0; x < ndiv; x++){
+				for (int y = 0; y < ndiv; y++){
+					for (int z = 0; z < ndiv; z++){
 						k[x][y][z] = k1[x][y][z]/double(6) + k2[x][y][z]/double(3) + k3[x][y][z]/double(3) + k4[x][y][z]/double(6);
 						ds[x][y][z] = ds[x][y][z] + k[x][y][z];
 						sp[x][y][z] = sp[x][y][z] + k[x][y][z] * dt_chem;
+						for (int i = 0; i < sp[0][0][0].size(); i++){
+							S[x][y][z].Y[i] = ds[x][y][z][i];
+						}
+						dnH = 0.0;
+				    n_total = 0.0;
+				    //Cp_mix = 0.0;
+				    for (int i = 0; i < size; i++){
+				        dnH += (k[x][y][z][i]*H_f[i]);
+				        n_total += sp[x][y][z][i];
+				        Cp_mix[x][y][z] += (sp[x][y][z][i]*Cp[i]);
+				    }
+				    Cp_mix[x][y][z] /= n_total;
+						S[x][y][z].E = dnH;
 					}
 				}
 			}
     }
-		for (int x = 0; x < ndiv; x++){
-			for (int y = 0; y < ndiv; y++){
-				for (int z = 0; z < ndiv; z++){
-					for (int i = 0; i < sp[0][0][0].size(); i++){
-						S[x][y][z].Y[i] = ds[x][y][z][i];
-					}
-					dnH = 0.0;
-			    n_total = 0.0;
-			    //Cp_mix = 0.0;
-			    for (int i = 0; i < size; i++){
-			        dnH += (k[x][y][z][i]*H_f[i]);
-			        n_total += sp[x][y][z][i];
-			        Cp_mix[x][y][z] += (sp[x][y][z][i]*Cp[i]);
-			    }
-			    Cp_mix[x][y][z] /= n_total;
-					S[x][y][z].E = dnH;
-			    //Tg[x][y][z] += (dnH/Cp_mix*dt_chem);
-				}
-			}
-		}
 }
 
 void Cell::calc_change(double4D& t_k, double4D& t_s){
