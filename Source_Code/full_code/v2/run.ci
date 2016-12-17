@@ -53,6 +53,7 @@ mainmodule run{
 	readonly string1D species;
 	readonly double1D Cp;
 	readonly double1D S_f;
+	readonly w_f;
 
 
 	mainchare Main{

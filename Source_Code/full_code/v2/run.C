@@ -20,6 +20,7 @@ Main::Main(CkArgMsg* m){
     CkPrintf("t_steps: %d\n", t_steps);
 
     // initialize readonly variables for chemical reactions
+    w_f = 320;
     Te = 5.0*11604.0; //in K
     //Tg = 300.0; // in K
 		conc_i = 41.5;

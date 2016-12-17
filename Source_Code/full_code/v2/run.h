@@ -66,6 +66,8 @@
 /*readonly*/ double rt_f;
 /*readonly*/ double conc_i;
 /*readonly*/ double conc_f;
+/*readonly*/ double w_f;
+
 
 class Main: public CBase_Main{
 	public:
@@ -84,7 +86,7 @@ class Cell: public CBase_Cell{
 		double4D adv;
 		double4D sp;
 		double3D Tg;
-    double4D ds;
+    double4D ds; //v2
 
 		Cell();
 		Cell(CkMigrateMessage* m){}
@@ -99,7 +101,7 @@ class Cell: public CBase_Cell{
 			p|adv;
 			p|sp;
 			p|Tg;
-            p|ds;
+            p|ds; //v2
 		}
 		void update();
 		void initialize();
