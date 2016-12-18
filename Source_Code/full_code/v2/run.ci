@@ -293,7 +293,12 @@ mainmodule run{
 						when ftoi[4](int tag, flow2D f, double2D P) serial{
 							copy2D(val_r,f,ndiv);
 							copy2D(P_right,P,ndiv);
-							wall(val_l,val_r,P_left,P_right);
+							if (thisIndex.y == 5 && thisIndex.z == 5){
+								fuelinlet(val_l,val_r,P_left,P_right);
+							}
+							else{
+								wall(val_l,val_r,P_left,P_right);
+							}
 							calc();
 							fluxProxy(thisIndex.y,thisIndex.z,thisIndex.x).itof(4,flux);
 						}
