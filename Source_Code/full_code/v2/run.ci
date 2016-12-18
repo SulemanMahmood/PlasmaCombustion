@@ -219,7 +219,7 @@ mainmodule run{
 						when ftoi[0](int tag, flow2D f, double2D P) serial{
 							copy2D(val_r,f,ndiv);
 							copy2D(P_right,P,ndiv);
-							wall(val_l,val_r,P_left,P_right);
+							inlet(val_l,val_r,P_left,P_right);
 							calc();
 							fluxProxy(thisIndex.x,thisIndex.y,thisIndex.z).itof(0,flux);
 						}
@@ -228,7 +228,7 @@ mainmodule run{
 						when ftoi[1](int tag, flow2D f, double2D P) serial{
 							copy2D(val_l,f,ndiv);
 							copy2D(P_left,P,ndiv);
-							wall(val_r,val_l,P_right,P_left);
+							outlet(val_r,val_l,P_right,P_left);
 							calc();
 							fluxProxy(thisIndex.x-1,thisIndex.y,thisIndex.z).itof(1,flux);
 						}
