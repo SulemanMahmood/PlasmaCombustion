@@ -8,8 +8,8 @@
 Main::Main(CkArgMsg* m){
 	delete m;
 	dimX = 100;
-	dimY = 10;
-	dimZ = 10;
+	dimY = 5;
+	dimZ = 5;
 	ndiv = 10;
 	gma = 1.4;
 	dx = double(1)/(dimX*ndiv);
