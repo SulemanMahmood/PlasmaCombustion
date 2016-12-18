@@ -1,0 +1,293 @@
+mainmodule run{
+	//#include "utility.h"
+	readonly CProxy_Main mainProxy;
+	readonly CProxy_Cell cellProxy;
+	readonly CProxy_Flux fluxProxy;
+	readonly CProxy_Interface interfaceProxy;
+	readonly int dimX;
+	readonly int dimY;
+	readonly int dimZ;
+	readonly int t_steps;
+	readonly double dt;
+	readonly double dx;
+	readonly int ndiv;
+	readonly double gma;
+
+
+	mainchare Main{
+		entry Main(CkArgMsg* m);
+		entry [reductiontarget] void done();
+    entry [reductiontarget] void InterfaceIsUp();
+	};
+
+	array [3D] Cell{
+		entry Cell();
+		entry void ftoc(flow3D c_f);
+		entry void solve_c(){
+			serial{
+				writeOutput();
+			}
+			for (iter = 0; iter < t_steps; iter++){
+				serial {
+					CkPrintf("iterInCell: %d\n", iter);
+				}
+				serial "send_to_flux_from_cell"{
+					fluxProxy(thisIndex.x,thisIndex.y,thisIndex.z).ctof(val_old,P);
+				}
+				when ftoc(flow3D c_f) serial "receive_from_flux_to_cell"{
+					calcvar3D(val_new,val_old,c_f);
+					gaslaw();
+					copy3D(val_old,val_new,ndiv);
+				}
+				if (iter%10 == 9) serial{
+					writeOutput();
+				}
+			}
+			serial{
+				CkCallback cb(CkReductionTarget(Main,done),mainProxy);
+				contribute(cb);
+			}
+		};
+	};
+
+	array [3D] Flux{
+		entry Flux();
+		entry void itof(int tag, flow2D f);
+
+		entry void ctof(flow3D val_c, double3D Pt){
+			serial{
+				copy3D(P,Pt,ndiv);
+				copy3D(cell_val,val_c,ndiv);
+				flow2D v1, v2, v3, v4, v5, v6;
+				double2D P1, P2, P3, P4, P5, P6;
+				v1.resize(ndiv);
+				v2.resize(ndiv);
+				v3.resize(ndiv);
+				v4.resize(ndiv);
+				v5.resize(ndiv);
+				v6.resize(ndiv);
+				P1.resize(ndiv);
+				P2.resize(ndiv);
+				P3.resize(ndiv);
+				P4.resize(ndiv);
+				P5.resize(ndiv);
+				P6.resize(ndiv);
+				for (int i = 0; i < ndiv; i++){
+					v1[i].resize(ndiv);
+					v2[i].resize(ndiv);
+					v3[i].resize(ndiv);
+					v4[i].resize(ndiv);
+					v5[i].resize(ndiv);
+					v6[i].resize(ndiv);
+					P1[i].resize(ndiv);
+					P2[i].resize(ndiv);
+					P3[i].resize(ndiv);
+					P4[i].resize(ndiv);
+					P5[i].resize(ndiv);
+					P6[i].resize(ndiv);
+				}
+				for (int i = 0; i < ndiv; i++){
+					for (int j = 0; j < ndiv; j++){
+						v1[i][j] = cell_val[0][i][j];
+						v2[i][j] = cell_val[ndiv-1][i][j];
+						v3[i][j] = cell_val[j][0][i];
+						v4[i][j] = cell_val[j][ndiv-1][i];
+						v5[i][j] = cell_val[i][j][0];
+						v6[i][j] = cell_val[i][j][ndiv-1];
+						P1[i][j] = P[0][i][j];
+						P2[i][j] = P[ndiv-1][i][j];
+						P3[i][j] = P[j][0][i];
+						P4[i][j] = P[j][ndiv-1][i];
+						P5[i][j] = P[i][j][0];
+						P6[i][j] = P[i][j][ndiv-1];
+					}
+				}
+
+				interfaceProxy(0,thisIndex.x,thisIndex.y,thisIndex.z).ftoi(0,v1,P1);
+				interfaceProxy(0,thisIndex.x+1,thisIndex.y,thisIndex.z).ftoi(1,v2,P2);
+				interfaceProxy(1,thisIndex.y,thisIndex.z,thisIndex.x).ftoi(2,v3,P3);
+				interfaceProxy(1,thisIndex.y+1,thisIndex.z,thisIndex.x).ftoi(3,v4,P4);
+				interfaceProxy(2,thisIndex.z,thisIndex.x,thisIndex.y).ftoi(4,v5,P5);
+				interfaceProxy(2,thisIndex.z+1,thisIndex.x,thisIndex.y).ftoi(5,v6,P6);
+			}
+			overlap{
+				serial "flux_calc"{
+					inviscidFlux();
+				}
+				when itof[0](int tag, flow2D f)serial{
+					for (int i = 0; i < ndiv; i++){
+						for (int j = 0; j < ndiv; j++){
+							flux_f[0][0][i][j] = f[i][j];
+						}
+					}
+				}
+				when itof[1](int tag, flow2D f)serial{
+					for (int i = 0; i < ndiv; i++){
+						for (int j = 0; j < ndiv; j++){
+							flux_f[0][ndiv][i][j] = f[i][j];
+						}
+					}
+				}
+				when itof[2](int tag, flow2D f)serial{
+					for (int i = 0; i < ndiv; i++){
+						for (int j = 0; j < ndiv; j++){
+							flux_f[1][0][i][j] = f[i][j];
+						}
+					}
+				}
+				when itof[3](int tag, flow2D f)serial{
+					for (int i = 0; i < ndiv; i++){
+						for (int j = 0; j < ndiv; j++){
+							flux_f[1][ndiv][i][j] = f[i][j];
+						}
+					}
+				}
+				when itof[4](int tag, flow2D f)serial{
+					for (int i = 0; i < ndiv; i++){
+						for (int j = 0; j < ndiv; j++){
+							flux_f[2][0][i][j] = f[i][j];
+						}
+					}
+				}
+				when itof[5](int tag, flow2D f)serial{
+					for (int i = 0; i < ndiv; i++){
+						for (int j = 0; j < ndiv; j++){
+							flux_f[2][ndiv][i][j] = f[i][j];
+						}
+					}
+				}
+			}
+			serial{
+				fluxFacetoCell();
+				cellProxy(thisIndex.x,thisIndex.y,thisIndex.z).ftoc(flux_c);
+			}
+		};
+	};
+
+	array [4D] Interface{
+		entry Interface();
+		entry void ftoi(int tag, flow2D f, double2D P);
+		entry void solve_i(){
+			// Tell main that Interface is active and waiting
+			serial{
+			//	CkPrintf("Reducing to check if its working \n");
+				CkCallback cb(CkReductionTarget(Main,InterfaceIsUp),mainProxy);
+				contribute(cb);
+			}
+			for (iter = 0; iter < t_steps; iter++){
+				if (thisIndex.w == 0){
+					if (thisIndex.x == 0){
+						when ftoi[0](int tag, flow2D f, double2D P) serial{
+							copy2D(val_r,f,ndiv);
+							copy2D(P_right,P,ndiv);
+							wall(val_l,val_r,P_left,P_right);
+							calc();
+							fluxProxy(thisIndex.x,thisIndex.y,thisIndex.z).itof(0,flux);
+						}
+					}
+					else if (thisIndex.x == dimX){
+						when ftoi[1](int tag, flow2D f, double2D P) serial{
+							copy2D(val_l,f,ndiv);
+							copy2D(P_left,P,ndiv);
+							wall(val_r,val_l,P_right,P_left);
+							calc();
+							fluxProxy(thisIndex.x-1,thisIndex.y,thisIndex.z).itof(1,flux);
+						}
+					}
+					else{
+						overlap{
+							when ftoi[0](int tag, flow2D f, double2D P) serial{
+								copy2D(val_r,f,ndiv);
+								copy2D(P_right,P,ndiv);
+							}
+							when ftoi[1](int tag, flow2D f, double2D P) serial{
+								copy2D(val_l,f,ndiv);
+								copy2D(P_left,P,ndiv);
+							}
+						}
+						serial{
+							calc();
+							fluxProxy(thisIndex.x,thisIndex.y,thisIndex.z).itof(0,flux);
+							fluxProxy(thisIndex.x-1,thisIndex.y,thisIndex.z).itof(1,flux);
+						}
+					}
+				}
+				else if (thisIndex.w == 1){
+					if (thisIndex.x == 0){
+						when ftoi[2](int tag, flow2D f, double2D P) serial{
+							copy2D(val_r,f,ndiv);
+							copy2D(P_right,P,ndiv);
+							wall(val_l,val_r,P_left,P_right);
+							calc();
+							fluxProxy(thisIndex.z,thisIndex.x,thisIndex.y).itof(2,flux);
+						}
+					}
+					else if (thisIndex.x == dimY){
+						when ftoi[3](int tag, flow2D f, double2D P) serial{
+							copy2D(val_l,f,ndiv);
+							copy2D(P_left,P,ndiv);
+							wall(val_r,val_l,P_right,P_left);
+							calc();
+							fluxProxy(thisIndex.z,thisIndex.x-1,thisIndex.y).itof(3,flux);
+						}
+					}
+					else{
+						overlap{
+							when ftoi[2](int tag, flow2D f, double2D P) serial{
+								copy2D(val_r,f,ndiv);
+								copy2D(P_right,P,ndiv);
+							}
+							when ftoi[3](int tag, flow2D f, double2D P) serial{
+								copy2D(val_l,f,ndiv);
+								copy2D(P_left,P,ndiv);
+							}
+						}
+						serial{
+							calc();
+							fluxProxy(thisIndex.z,thisIndex.x,thisIndex.y).itof(2,flux);
+							fluxProxy(thisIndex.z,thisIndex.x-1,thisIndex.y).itof(3,flux);
+						}
+					}
+				}
+				else{
+					if (thisIndex.x == 0){
+						when ftoi[4](int tag, flow2D f, double2D P) serial{
+							copy2D(val_r,f,ndiv);
+							copy2D(P_right,P,ndiv);
+							wall(val_l,val_r,P_left,P_right);
+							calc();
+							fluxProxy(thisIndex.y,thisIndex.z,thisIndex.x).itof(4,flux);
+						}
+					}
+					else if (thisIndex.x == dimZ){
+						when ftoi[5](int tag, flow2D f, double2D P) serial{
+							copy2D(val_l,f,ndiv);
+							copy2D(P_left,P,ndiv);
+							wall(val_r,val_l,P_right,P_left);
+							calc();
+							fluxProxy(thisIndex.y,thisIndex.z,thisIndex.x-1).itof(5,flux);
+						}
+					}
+					else{
+						overlap{
+							when ftoi[4](int tag, flow2D f, double2D P) serial{
+								copy2D(val_r,f,ndiv);
+								copy2D(P_right,P,ndiv);
+							}
+							when ftoi[5](int tag, flow2D f, double2D P) serial{
+								copy2D(val_l,f,ndiv);
+								copy2D(P_left,P,ndiv);
+							}
+						}
+						serial{
+							calc();
+							fluxProxy(thisIndex.y,thisIndex.z,thisIndex.x).itof(4,flux);
+							fluxProxy(thisIndex.y,thisIndex.z,thisIndex.x-1).itof(5,flux);
+						}
+					}
+				}
+			}
+		};
+	};
+
+};
